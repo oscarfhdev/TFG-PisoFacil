@@ -1,5 +1,6 @@
 package com.pisofacil.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
 
+    @Column(nullable = false)
     private String nombre;
 
     @Column(unique = true, nullable = false)
@@ -63,12 +65,15 @@ public class Usuario {
     @Column(name = "perfil_lgtbi")
     private Boolean perfilLgtbi;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piso> pisos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorito> favoritos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reporte> reportes;
 

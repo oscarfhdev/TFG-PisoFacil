@@ -1,5 +1,6 @@
 package com.pisofacil.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -64,9 +65,11 @@ public class Piso {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "piso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habitacion> habitaciones;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "piso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Foto> fotos;
 

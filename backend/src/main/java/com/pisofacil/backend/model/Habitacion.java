@@ -1,8 +1,10 @@
 package com.pisofacil.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,8 +28,8 @@ public class Habitacion {
     @Column(name = "titulo_anuncio")
     private String tituloAnuncio;
 
-    @Column(name = "precio_mensual")
-    private Double precioMensual;
+    @Column(name = "precio_mensual", precision = 10, scale = 2)
+    private BigDecimal precioMensual;
 
     @Column(name = "descripcion_especifica", columnDefinition = "TEXT")
     private String descripcionEspecifica;
@@ -53,8 +55,13 @@ public class Habitacion {
     @Column(name = "tiene_aire_acondicionado")
     private Boolean tieneAireAcondicionado;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Foto> fotos;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorito> favoritos;
 
     @PrePersist
     protected void onCreate() {
