@@ -1,9 +1,14 @@
 package com.pisofacil.backend.service;
 
+import com.pisofacil.backend.dto.auth.LoginRequest;
+import com.pisofacil.backend.dto.auth.LoginResponse;
+import com.pisofacil.backend.dto.auth.RegisterRequest;
 import com.pisofacil.backend.model.Usuario;
 import com.pisofacil.backend.repository.UsuarioRepository;
+import com.pisofacil.backend.security.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,35 +19,51 @@ import java.time.LocalDateTime;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     /**
-     * Registra un nuevo usuario en el sistema.
-     * Verifica que el email no esté ya registrado.
-     * TODO: Integrar encriptación real con BCrypt cuando se configure Spring Security.
+     * Registra un nuevo usuario con contraseña encriptada con BCrypt.
      */
     @Transactional
-    public Usuario registrarUsuario(Usuario usuario) {
+    public Usuario registrarUsuario(RegisterRequest request) {
         // Verificar que el email no esté duplicado
-        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new IllegalArgumentException("Ya existe un usuario con el email: " + usuario.getEmail());
+        if (usuarioRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Ya existe un usuario con el email: " + request.email());
         }
 
-        // Simulación de encriptación de contraseña (se reemplazará por BCrypt)
-        usuario.setPassword("{noop}" + usuario.getPassword());
-
-        // Establecer fecha de registro si no viene definida
-        if (usuario.getFechaRegistro() == null) {
-            usuario.setFechaRegistro(LocalDateTime.now());
-        }
-
-        // Establecer valores por defecto para booleanos nulos
-        if (usuario.getEsAdmin() == null) usuario.setEsAdmin(false);
-        if (usuario.getEsFumador() == null) usuario.setEsFumador(false);
-        if (usuario.getTieneMascota() == null) usuario.setTieneMascota(false);
-        if (usuario.getTienePareja() == null) usuario.setTienePareja(false);
-        if (usuario.getPerfilLgtbi() == null) usuario.setPerfilLgtbi(false);
+        Usuario usuario = Usuario.builder()
+                .nombre(request.nombre())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password())) // BCrypt real
+                .fechaRegistro(LocalDateTime.now())
+                .esAdmin(false)
+                .esFumador(false)
+                .tieneMascota(false)
+                .tienePareja(false)
+                .perfilLgtbi(false)
+                .build();
 
         return usuarioRepository.save(usuario);
+    }
+
+    /**
+     * Autentica un usuario y devuelve un token JWT.
+     */
+    public LoginResponse login(LoginRequest request) {
+        // 1. Buscar por email
+        Usuario usuario = usuarioRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalArgumentException("Credenciales incorrectas"));
+
+        // 2. Comparar contraseña (raw vs hash con BCrypt)
+        if (!passwordEncoder.matches(request.password(), usuario.getPassword())) {
+            throw new IllegalArgumentException("Credenciales incorrectas");
+        }
+
+        // 3. Generar token JWT
+        String token = jwtUtil.generateToken(usuario);
+
+        return new LoginResponse(usuario.getEmail(), token, com.pisofacil.backend.mapper.UsuarioMapper.toDTO(usuario));
     }
 
     /**
@@ -80,5 +101,34 @@ public class UsuarioService {
         return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No se encontró el usuario con ID: " + idUsuario));
+    }
+
+    /**
+     * Obtiene un usuario por su email (útil para el endpoint /me).
+     */
+    public Usuario obtenerUsuarioPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No se encontró el usuario con email: " + email));
+    }
+
+    /**
+     * Cambia la contraseña de un usuario.
+     * Verifica que la contraseña actual sea correcta antes de cambiarla.
+     */
+    @Transactional
+    public void cambiarPassword(Long idUsuario, String passwordActual, String passwordNueva) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No se encontró el usuario con ID: " + idUsuario));
+
+        // Verificar que la contraseña actual es correcta
+        if (!passwordEncoder.matches(passwordActual, usuario.getPassword())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+
+        // Encriptar y guardar la nueva contraseña
+        usuario.setPassword(passwordEncoder.encode(passwordNueva));
+        usuarioRepository.save(usuario);
     }
 }

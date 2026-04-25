@@ -1,12 +1,13 @@
 package com.pisofacil.backend.controller;
 
+import com.pisofacil.backend.dto.CambioPasswordRequest;
 import com.pisofacil.backend.dto.UsuarioDTO;
 import com.pisofacil.backend.mapper.UsuarioMapper;
 import com.pisofacil.backend.model.Usuario;
 import com.pisofacil.backend.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,13 +18,14 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     /**
-     * POST /api/usuarios/registro
-     * Registra un nuevo usuario en el sistema.
+     * GET /api/usuarios/me
+     * Obtiene el perfil del usuario autenticado (sacado del JWT).
      */
-    @PostMapping("/registro")
-    public ResponseEntity<UsuarioDTO> registrarUsuario(@RequestBody Usuario usuario) {
-        Usuario registrado = usuarioService.registrarUsuario(usuario);
-        return new ResponseEntity<>(UsuarioMapper.toDTO(registrado), HttpStatus.CREATED);
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioDTO> obtenerPerfilActual(Authentication authentication) {
+        String email = authentication.getName();
+        Usuario usuario = usuarioService.obtenerUsuarioPorEmail(email);
+        return ResponseEntity.ok(UsuarioMapper.toDTO(usuario));
     }
 
     /**
@@ -45,5 +47,18 @@ public class UsuarioController {
         Usuario entidadDatos = UsuarioMapper.toEntity(datosNuevos);
         Usuario actualizado = usuarioService.actualizarPerfil(id, entidadDatos);
         return ResponseEntity.ok(UsuarioMapper.toDTO(actualizado));
+    }
+
+    /**
+     * PUT /api/usuarios/{id}/password
+     * Cambia la contraseña del usuario (requiere contraseña actual).
+     */
+    @PutMapping("/{id}/password")
+    public ResponseEntity<Void> cambiarPassword(
+            @PathVariable Long id,
+            @RequestBody CambioPasswordRequest request) {
+
+        usuarioService.cambiarPassword(id, request.getPasswordActual(), request.getPasswordNueva());
+        return ResponseEntity.ok().build();
     }
 }

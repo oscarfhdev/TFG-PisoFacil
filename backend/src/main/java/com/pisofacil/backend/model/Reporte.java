@@ -39,7 +39,7 @@ public class Reporte {
             fechaCreacion = LocalDateTime.now();
         }
         if (estado == null) {
-            estado = "PENDIENTE";
+            estado = "ABIERTO";
         }
     }
 }

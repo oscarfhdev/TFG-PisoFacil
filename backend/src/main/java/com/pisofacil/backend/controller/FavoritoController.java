@@ -7,6 +7,7 @@ import com.pisofacil.backend.service.FavoritoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,10 +26,10 @@ public class FavoritoController {
      */
     @PostMapping
     public ResponseEntity<Void> agregarFavorito(
-            @RequestParam Long idUsuario,
+            Authentication authentication,
             @RequestParam Long idHabitacion) {
 
-        favoritoService.agregarFavorito(idUsuario, idHabitacion);
+        favoritoService.agregarFavorito(authentication.getName(), idHabitacion);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -38,10 +39,10 @@ public class FavoritoController {
      */
     @DeleteMapping
     public ResponseEntity<Void> eliminarFavorito(
-            @RequestParam Long idUsuario,
+            Authentication authentication,
             @RequestParam Long idHabitacion) {
 
-        favoritoService.eliminarFavorito(idUsuario, idHabitacion);
+        favoritoService.eliminarFavorito(authentication.getName(), idHabitacion);
         return ResponseEntity.noContent().build();
     }
 
@@ -49,9 +50,9 @@ public class FavoritoController {
      * GET /api/favoritos/{idUsuario}
      * Lista todas las habitaciones favoritas de un usuario.
      */
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<HabitacionDTO>> listarFavoritos(@PathVariable Long idUsuario) {
-        List<Habitacion> favoritos = favoritoService.listarFavoritosPorUsuario(idUsuario);
+    @GetMapping
+    public ResponseEntity<List<HabitacionDTO>> listarFavoritos(Authentication authentication) {
+        List<Habitacion> favoritos = favoritoService.listarFavoritosPorUsuario(authentication.getName());
 
         List<HabitacionDTO> dtos = favoritos.stream()
                 .map(HabitacionMapper::toDTO)

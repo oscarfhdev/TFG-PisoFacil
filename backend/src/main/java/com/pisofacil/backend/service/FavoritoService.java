@@ -27,11 +27,12 @@ public class FavoritoService {
      * Verifica que ambos existan y que no haya un duplicado.
      */
     @Transactional
-    public Favorito agregarFavorito(Long idUsuario, Long idHabitacion) {
+    public Favorito agregarFavorito(String emailUsuario, Long idHabitacion) {
         // Verificar que el usuario existe
-        Usuario usuario = usuarioRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No se encontró el usuario con ID: " + idUsuario));
+                        "No se encontró el usuario con email: " + emailUsuario));
+        Long idUsuario = usuario.getIdUsuario();
 
         // Verificar que la habitación existe
         Habitacion habitacion = habitacionRepository.findById(idHabitacion)
@@ -56,7 +57,12 @@ public class FavoritoService {
      * Elimina una habitación de los favoritos de un usuario.
      */
     @Transactional
-    public void eliminarFavorito(Long idUsuario, Long idHabitacion) {
+    public void eliminarFavorito(String emailUsuario, Long idHabitacion) {
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No se encontró el usuario con email: " + emailUsuario));
+        Long idUsuario = usuario.getIdUsuario();
+
         Favorito favorito = favoritoRepository
                 .findByUsuarioIdUsuarioAndHabitacionIdHabitacion(idUsuario, idHabitacion)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -70,12 +76,12 @@ public class FavoritoService {
      * Lista todas las habitaciones favoritas de un usuario.
      * Devuelve las entidades Habitacion directamente.
      */
-    public List<Habitacion> listarFavoritosPorUsuario(Long idUsuario) {
+    public List<Habitacion> listarFavoritosPorUsuario(String emailUsuario) {
         // Verificar que el usuario existe
-        if (!usuarioRepository.existsById(idUsuario)) {
-            throw new EntityNotFoundException(
-                    "No se encontró el usuario con ID: " + idUsuario);
-        }
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No se encontró el usuario con email: " + emailUsuario));
+        Long idUsuario = usuario.getIdUsuario();
 
         return favoritoRepository.findByUsuarioIdUsuario(idUsuario)
                 .stream()

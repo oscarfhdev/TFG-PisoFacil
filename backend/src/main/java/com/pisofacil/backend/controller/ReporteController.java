@@ -1,11 +1,14 @@
 package com.pisofacil.backend.controller;
 
 import com.pisofacil.backend.dto.ReporteDTO;
+import com.pisofacil.backend.dto.ReporteRequest;
 import com.pisofacil.backend.model.Reporte;
 import com.pisofacil.backend.service.ReporteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,17 +27,24 @@ public class ReporteController {
      */
     @PostMapping
     public ResponseEntity<ReporteDTO> crearReporte(
-            @RequestParam Long idUsuario,
-            @RequestBody Reporte reporte) {
+            Authentication authentication,
+            @RequestBody ReporteRequest request) {
 
-        Reporte creado = reporteService.crearReporte(idUsuario, reporte);
+        Reporte reporte = Reporte.builder()
+                .categoria(request.getCategoria())
+                .titulo(request.getTitulo())
+                .mensaje(request.getMensaje())
+                .build();
+
+        Reporte creado = reporteService.crearReporte(authentication.getName(), reporte);
         return new ResponseEntity<>(toDTO(creado), HttpStatus.CREATED);
     }
 
     /**
      * GET /api/reportes/abiertos
-     * Lista todos los reportes abiertos (vista administrador).
+     * Lista todos los reportes abiertos (solo administradores).
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/abiertos")
     public ResponseEntity<List<ReporteDTO>> listarAbiertos() {
         List<ReporteDTO> reportes = reporteService.listarReportesAbiertos()
@@ -47,8 +57,9 @@ public class ReporteController {
 
     /**
      * PUT /api/reportes/{id}/cerrar
-     * Cierra/resuelve un reporte.
+     * Cierra/resuelve un reporte (solo administradores).
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/cerrar")
     public ResponseEntity<ReporteDTO> cerrarReporte(@PathVariable Long id) {
         Reporte cerrado = reporteService.cerrarReporte(id);
@@ -57,7 +68,6 @@ public class ReporteController {
 
     /**
      * Conversión interna Reporte → ReporteDTO.
-     * No se creó un ReporteMapper separado porque solo tiene un método.
      */
     private ReporteDTO toDTO(Reporte reporte) {
         return ReporteDTO.builder()

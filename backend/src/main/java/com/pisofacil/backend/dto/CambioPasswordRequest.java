@@ -5,17 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 /**
- * DTO de entrada para los parámetros de búsqueda de habitaciones compatibles.
+ * DTO de entrada para cambiar la contraseña.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BusquedaRequest {
+public class CambioPasswordRequest {
 
-    private String ciudad;
-    private BigDecimal precioMaximo;
+    private String passwordActual;
+    private String passwordNueva;
 }

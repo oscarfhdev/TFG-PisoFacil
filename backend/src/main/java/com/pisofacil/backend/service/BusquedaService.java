@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,20 +21,26 @@ public class BusquedaService {
     private final HabitacionRepository habitacionRepository;
 
     /**
+     * Resultado de búsqueda que incluye la habitación y su score de compatibilidad.
+     */
+    public record ResultadoBusqueda(Habitacion habitacion, int score) {}
+
+    /**
      * Busca habitaciones compatibles con el perfil del usuario.
-     * Filtra por ciudad y precio máximo, y ordena por puntuación de compatibilidad
-     * usando el sistema de "Atributos Espejo".
+     * Devuelve ResultadoBusqueda con el score incluido para que el controller pueda
+     * enviarlo al frontend.
      *
      * @param idUsuarioQueBusca ID del usuario que busca habitación
      * @param ciudad            Ciudad donde buscar
-     * @param precioMaximo      Precio máximo mensual (puede ser null para no filtrar por precio)
-     * @return Lista de habitaciones ordenadas de mayor a menor compatibilidad
+     * @param precioMaximo      Precio máximo mensual (puede ser null)
+     * @return Lista de ResultadoBusqueda ordenada de mayor a menor compatibilidad
      */
-    public List<Habitacion> buscarHabitacionesCompatibles(Long idUsuarioQueBusca, String ciudad, BigDecimal precioMaximo) {
+    public List<ResultadoBusqueda> buscarHabitacionesCompatibles(String emailUsuarioQueBusca, String ciudad, BigDecimal precioMaximo) {
         // PASO 1: Obtener el perfil del usuario que busca
-        Usuario usuario = usuarioRepository.findById(idUsuarioQueBusca)
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuarioQueBusca)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No se encontró el usuario con ID: " + idUsuarioQueBusca));
+                        "No se encontró el usuario con email: " + emailUsuarioQueBusca));
+        Long idUsuarioQueBusca = usuario.getIdUsuario();
 
         // PASO 2: Filtrar habitaciones disponibles por ciudad y precio máximo
         List<Habitacion> habitacionesFiltradas;
@@ -54,12 +59,13 @@ public class BusquedaService {
                 .filter(h -> !h.getPiso().getUsuario().getIdUsuario().equals(idUsuarioQueBusca))
                 .collect(Collectors.toList());
 
-        // PASO 3: Calcular score de compatibilidad y ordenar
-        // PASO 4: Devolver ordenado de mayor a menor compatibilidad
-        habitacionesFiltradas.sort(Comparator.comparingInt(
-                (Habitacion h) -> calcularScore(usuario, h.getPiso())).reversed());
+        // PASO 3: Calcular score y crear resultados
+        List<ResultadoBusqueda> resultados = habitacionesFiltradas.stream()
+                .map(h -> new ResultadoBusqueda(h, calcularScore(usuario, h.getPiso())))
+                .sorted(Comparator.comparingInt(ResultadoBusqueda::score).reversed())
+                .collect(Collectors.toList());
 
-        return habitacionesFiltradas;
+        return resultados;
     }
 
     /**

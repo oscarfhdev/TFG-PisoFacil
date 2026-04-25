@@ -24,11 +24,11 @@ public class ReporteService {
      * Asigna el usuario emisor, establece estado inicial "ABIERTO" y la fecha.
      */
     @Transactional
-    public Reporte crearReporte(Long idUsuario, Reporte reporte) {
+    public Reporte crearReporte(String emailUsuario, Reporte reporte) {
         // Verificar que el usuario emisor existe
-        Usuario usuario = usuarioRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No se encontró el usuario con ID: " + idUsuario));
+                        "No se encontró el usuario con email: " + emailUsuario));
 
         reporte.setUsuarioEmisor(usuario);
         reporte.setEstado("ABIERTO");
