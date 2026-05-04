@@ -1,59 +1,26 @@
 package com.pisofacil.backend.mapper;
 
-import com.pisofacil.backend.dto.AnuncioRequest;
-import com.pisofacil.backend.dto.PisoDTO;
+import com.pisofacil.backend.dto.PisoRequestDTO;
+import com.pisofacil.backend.dto.PisoResponseDTO;
 import com.pisofacil.backend.model.Piso;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class PisoMapper {
+import java.util.List;
 
-    private PisoMapper() {
-    }
+@Mapper(componentModel = "spring")
+public interface PisoMapper {
 
-    public static PisoDTO toDTO(Piso piso) {
-        if (piso == null) return null;
+    @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "idPiso", ignore = true)
+    @Mapping(target = "fechaCreacion", ignore = true)
+    @Mapping(target = "habitaciones", ignore = true)
+    @Mapping(target = "fotos", ignore = true)
+    Piso toEntity(PisoRequestDTO dto);
 
-        return PisoDTO.builder()
-                .idPiso(piso.getIdPiso())
-                .idUsuario(piso.getUsuario() != null ? piso.getUsuario().getIdUsuario() : null)
-                .direccion(piso.getDireccion())
-                .ciudad(piso.getCiudad())
-                .codigoPostal(piso.getCodigoPostal())
-                .numHabitacionesTotal(piso.getNumHabitacionesTotal())
-                .numBanos(piso.getNumBanos())
-                .planta(piso.getPlanta())
-                .superficieTotalM2(piso.getSuperficieTotalM2())
-                .tieneWifi(piso.getTieneWifi())
-                .tieneAscensor(piso.getTieneAscensor())
-                .descripcionGlobal(piso.getDescripcionGlobal())
-                .admiteFumadores(piso.getAdmiteFumadores())
-                .admiteMascotas(piso.getAdmiteMascotas())
-                .admiteParejas(piso.getAdmiteParejas())
-                .lgtbiFriendly(piso.getLgtbiFriendly())
-                .fechaCreacion(piso.getFechaCreacion())
-                .build();
-    }
+    @Mapping(source = "usuario.idUsuario", target = "idUsuario")
+    @Mapping(source = "usuario.nombre", target = "nombreUsuario")
+    PisoResponseDTO toResponseDTO(Piso entity);
 
-    /**
-     * Extrae los campos del piso desde un AnuncioRequest.
-     */
-    public static Piso fromAnuncioRequest(AnuncioRequest request) {
-        if (request == null) return null;
-
-        return Piso.builder()
-                .direccion(request.getDireccion())
-                .ciudad(request.getCiudad())
-                .codigoPostal(request.getCodigoPostal())
-                .numHabitacionesTotal(request.getNumHabitacionesTotal())
-                .numBanos(request.getNumBanos())
-                .planta(request.getPlanta())
-                .superficieTotalM2(request.getSuperficieTotalM2())
-                .tieneWifi(request.getTieneWifi())
-                .tieneAscensor(request.getTieneAscensor())
-                .descripcionGlobal(request.getDescripcionGlobal())
-                .admiteFumadores(request.getAdmiteFumadores())
-                .admiteMascotas(request.getAdmiteMascotas())
-                .admiteParejas(request.getAdmiteParejas())
-                .lgtbiFriendly(request.getLgtbiFriendly())
-                .build();
-    }
+    List<PisoResponseDTO> toResponseDTOList(List<Piso> entities);
 }
