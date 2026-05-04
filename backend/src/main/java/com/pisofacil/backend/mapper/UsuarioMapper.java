@@ -1,55 +1,25 @@
 package com.pisofacil.backend.mapper;
 
-import com.pisofacil.backend.dto.UsuarioDTO;
+import com.pisofacil.backend.dto.UsuarioRequestDTO;
+import com.pisofacil.backend.dto.UsuarioResponseDTO;
 import com.pisofacil.backend.model.Usuario;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class UsuarioMapper {
+import java.util.List;
 
-    private UsuarioMapper() {
-        // Clase de utilidad, no instanciable
-    }
+@Mapper(componentModel = "spring")
+public interface UsuarioMapper {
 
-    public static UsuarioDTO toDTO(Usuario usuario) {
-        if (usuario == null) return null;
+    @Mapping(target = "idUsuario", ignore = true)
+    @Mapping(target = "fechaRegistro", ignore = true)
+    @Mapping(target = "esAdmin", ignore = true)
+    @Mapping(target = "pisos", ignore = true)
+    @Mapping(target = "favoritos", ignore = true)
+    @Mapping(target = "reportes", ignore = true)
+    Usuario toEntity(UsuarioRequestDTO dto);
 
-        return UsuarioDTO.builder()
-                .idUsuario(usuario.getIdUsuario())
-                .nombre(usuario.getNombre())
-                .email(usuario.getEmail())
-                .esAdmin(usuario.getEsAdmin())
-                .fechaNacimiento(usuario.getFechaNacimiento())
-                .genero(usuario.getGenero())
-                .estudios(usuario.getEstudios())
-                .biografia(usuario.getBiografia())
-                .fotoPerfilUrl(usuario.getFotoPerfilUrl())
-                .instagramUrl(usuario.getInstagramUrl())
-                .fechaRegistro(usuario.getFechaRegistro())
-                .esFumador(usuario.getEsFumador())
-                .tieneMascota(usuario.getTieneMascota())
-                .tienePareja(usuario.getTienePareja())
-                .perfilLgtbi(usuario.getPerfilLgtbi())
-                .build();
-    }
+    UsuarioResponseDTO toResponseDTO(Usuario entity);
 
-    /**
-     * Convierte un DTO a entidad para actualización de perfil.
-     * No incluye password ni email (esos no se actualizan desde el perfil).
-     */
-    public static Usuario toEntity(UsuarioDTO dto) {
-        if (dto == null) return null;
-
-        return Usuario.builder()
-                .nombre(dto.getNombre())
-                .fechaNacimiento(dto.getFechaNacimiento())
-                .genero(dto.getGenero())
-                .estudios(dto.getEstudios())
-                .biografia(dto.getBiografia())
-                .fotoPerfilUrl(dto.getFotoPerfilUrl())
-                .instagramUrl(dto.getInstagramUrl())
-                .esFumador(dto.getEsFumador())
-                .tieneMascota(dto.getTieneMascota())
-                .tienePareja(dto.getTienePareja())
-                .perfilLgtbi(dto.getPerfilLgtbi())
-                .build();
-    }
+    List<UsuarioResponseDTO> toResponseDTOList(List<Usuario> entities);
 }
