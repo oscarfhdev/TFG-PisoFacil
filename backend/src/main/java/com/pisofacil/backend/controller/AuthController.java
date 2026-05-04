@@ -1,44 +1,80 @@
 package com.pisofacil.backend.controller;
 
-import com.pisofacil.backend.dto.auth.LoginRequest;
-import com.pisofacil.backend.dto.auth.LoginResponse;
-import com.pisofacil.backend.dto.auth.RegisterRequest;
-import com.pisofacil.backend.dto.auth.RegisterResponse;
-import com.pisofacil.backend.service.UsuarioService;
+import com.pisofacil.backend.dto.LoginRequestDTO;
+import com.pisofacil.backend.dto.LoginResponseDTO;
+import com.pisofacil.backend.dto.RegisterRequestDTO;
+import com.pisofacil.backend.dto.RegisterResponseDTO;
+import com.pisofacil.backend.model.Usuario;
+import com.pisofacil.backend.repository.UsuarioRepository;
+import com.pisofacil.backend.security.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    /**
-     * POST /api/auth/login
-     * Autentica un usuario y devuelve un token JWT.
-     */
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(usuarioService.login(request));
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) {
+        if (usuarioRepository.existsByEmail(request.email())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está en uso");
+        }
+
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setNombre(request.nombre());
+        nuevoUsuario.setEmail(request.email());
+        nuevoUsuario.setPassword(passwordEncoder.encode(request.password()));
+        // Por defecto, no es admin (ya se maneja en @PrePersist de Usuario)
+
+        Usuario guardado = usuarioRepository.save(nuevoUsuario);
+
+        RegisterResponseDTO response = new RegisterResponseDTO(
+                guardado.getIdUsuario(),
+                guardado.getNombre(),
+                guardado.getEmail(),
+                "Usuario registrado exitosamente");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * POST /api/auth/registro
-     * Registra un nuevo usuario (ruta pública).
-     */
-    @PostMapping("/registro")
-    public ResponseEntity<RegisterResponse> registro(@Valid @RequestBody RegisterRequest request) {
-        usuarioService.registrarUsuario(request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new RegisterResponse(request.email(), "Usuario registrado correctamente"));
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO request) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.email());
+
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+
+        if (!passwordEncoder.matches(request.password(), usuario.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+        }
+
+        String token = jwtUtil.generateToken(usuario);
+        String role = Boolean.TRUE.equals(usuario.getEsAdmin()) ? "ADMIN" : "USER";
+
+        LoginResponseDTO response = new LoginResponseDTO(
+                token,
+                usuario.getIdUsuario(),
+                usuario.getNombre(),
+                usuario.getEmail(),
+                role);
+
+        return ResponseEntity.ok(response);
     }
 }
