@@ -1,21 +1,24 @@
 package com.pisofacil.backend.mapper;
 
-import com.pisofacil.backend.dto.FotoDTO;
+import com.pisofacil.backend.dto.FotoRequestDTO;
+import com.pisofacil.backend.dto.FotoResponseDTO;
 import com.pisofacil.backend.model.Foto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class FotoMapper {
+import java.util.List;
 
-    private FotoMapper() {
-    }
+@Mapper(componentModel = "spring")
+public interface FotoMapper {
 
-    public static FotoDTO toDTO(Foto foto) {
-        if (foto == null) return null;
+    @Mapping(target = "idFoto", ignore = true)
+    @Mapping(target = "piso", ignore = true)
+    @Mapping(target = "habitacion", ignore = true)
+    Foto toEntity(FotoRequestDTO dto);
 
-        return FotoDTO.builder()
-                .idFoto(foto.getIdFoto())
-                .idPiso(foto.getPiso() != null ? foto.getPiso().getIdPiso() : null)
-                .idHabitacion(foto.getHabitacion() != null ? foto.getHabitacion().getIdHabitacion() : null)
-                .urlAlmacenamiento(foto.getUrlAlmacenamiento())
-                .build();
-    }
+    @Mapping(source = "piso.idPiso", target = "idPiso")
+    @Mapping(source = "habitacion.idHabitacion", target = "idHabitacion")
+    FotoResponseDTO toResponseDTO(Foto entity);
+
+    List<FotoResponseDTO> toResponseDTOList(List<Foto> entities);
 }
