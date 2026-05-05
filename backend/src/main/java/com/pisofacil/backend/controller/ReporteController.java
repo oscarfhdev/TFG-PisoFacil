@@ -1,84 +1,48 @@
 package com.pisofacil.backend.controller;
 
-import com.pisofacil.backend.dto.ReporteDTO;
-import com.pisofacil.backend.dto.ReporteRequest;
-import com.pisofacil.backend.model.Reporte;
+import com.pisofacil.backend.dto.ReporteRequestDTO;
+import com.pisofacil.backend.dto.ReporteResponseDTO;
 import com.pisofacil.backend.service.ReporteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/reportes")
+@RequestMapping("/reportes")
 @RequiredArgsConstructor
 public class ReporteController {
 
     private final ReporteService reporteService;
 
-    /**
-     * POST /api/reportes?idUsuario=X
-     * Crea un nuevo reporte.
-     */
+    @GetMapping
+    public ResponseEntity<List<ReporteResponseDTO>> findAll() {
+        return ResponseEntity.ok(reporteService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReporteResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(reporteService.findById(id));
+    }
+
     @PostMapping
-    public ResponseEntity<ReporteDTO> crearReporte(
-            Authentication authentication,
-            @RequestBody ReporteRequest request) {
-
-        Reporte reporte = Reporte.builder()
-                .categoria(request.getCategoria())
-                .titulo(request.getTitulo())
-                .mensaje(request.getMensaje())
-                .build();
-
-        Reporte creado = reporteService.crearReporte(authentication.getName(), reporte);
-        return new ResponseEntity<>(toDTO(creado), HttpStatus.CREATED);
+    public ResponseEntity<ReporteResponseDTO> create(@Valid @RequestBody ReporteRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reporteService.create(dto));
     }
 
-    /**
-     * GET /api/reportes/abiertos
-     * Lista todos los reportes abiertos (solo administradores).
-     */
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/abiertos")
-    public ResponseEntity<List<ReporteDTO>> listarAbiertos() {
-        List<ReporteDTO> reportes = reporteService.listarReportesAbiertos()
-                .stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(reportes);
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<ReporteResponseDTO> updateEstado(
+            @PathVariable Long id,
+            @RequestParam String estado) {
+        return ResponseEntity.ok(reporteService.updateEstado(id, estado));
     }
 
-    /**
-     * PUT /api/reportes/{id}/cerrar
-     * Cierra/resuelve un reporte (solo administradores).
-     */
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}/cerrar")
-    public ResponseEntity<ReporteDTO> cerrarReporte(@PathVariable Long id) {
-        Reporte cerrado = reporteService.cerrarReporte(id);
-        return ResponseEntity.ok(toDTO(cerrado));
-    }
-
-    /**
-     * Conversión interna Reporte → ReporteDTO.
-     */
-    private ReporteDTO toDTO(Reporte reporte) {
-        return ReporteDTO.builder()
-                .idReporte(reporte.getIdReporte())
-                .idUsuarioEmisor(reporte.getUsuarioEmisor() != null
-                        ? reporte.getUsuarioEmisor().getIdUsuario() : null)
-                .categoria(reporte.getCategoria())
-                .titulo(reporte.getTitulo())
-                .mensaje(reporte.getMensaje())
-                .fechaCreacion(reporte.getFechaCreacion())
-                .estado(reporte.getEstado())
-                .build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reporteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
