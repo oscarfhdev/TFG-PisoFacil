@@ -12,9 +12,13 @@ module.exports = {
         accent: '#F39C12',
         fondo: '#FFFFFF',
         texto: '#333333',
-        'fondo-dark': '#121A21',
-        'tarjeta-dark': '#1E2833',
+        'fondo-dark': '#0B1117',
+        'card-dark': '#161B22',
         'texto-dark': '#F0F0F0'
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        lato: ['Lato', 'sans-serif'],
       }
     },
   },
