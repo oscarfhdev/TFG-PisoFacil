@@ -24,3 +24,16 @@ hs_err_pid*
 replay_pid*
 
 .agents/
+
+# Editores de código
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Datos de la base de datos local (Docker)
+/backend/data/
