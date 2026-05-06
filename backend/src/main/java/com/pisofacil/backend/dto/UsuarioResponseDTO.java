@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class UsuarioResponseDTO {
     private Long idUsuario;
     private String nombre;
+    private String apellidos;
     private String email;
     private Boolean esAdmin;
     private LocalDate fechaNacimiento;
@@ -26,4 +27,5 @@ public class UsuarioResponseDTO {
     private Boolean tieneMascota;
     private Boolean tienePareja;
     private Boolean perfilLgtbi;
+    private Boolean cuentaActiva;
 }

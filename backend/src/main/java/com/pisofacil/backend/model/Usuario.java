@@ -24,6 +24,9 @@ public class Usuario {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
+    private String apellidos;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -33,6 +36,10 @@ public class Usuario {
     @Builder.Default
     @Column(name = "es_admin")
     private Boolean esAdmin = false;
+
+    @Builder.Default
+    @Column(name = "cuenta_activa")
+    private Boolean cuentaActiva = true;
 
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
@@ -84,6 +91,9 @@ public class Usuario {
         }
         if (esAdmin == null) {
             esAdmin = false;
+        }
+        if (cuentaActiva == null) {
+            cuentaActiva = true;
         }
     }
 }

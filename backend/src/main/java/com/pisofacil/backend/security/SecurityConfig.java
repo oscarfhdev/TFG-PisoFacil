@@ -34,12 +34,12 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas de autenticación
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 
                 // Rutas públicas de lectura (visitantes)
-                .requestMatchers(HttpMethod.GET, "/api/pisos/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/habitaciones/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/fotos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/pisos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/habitaciones/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/fotos/**").permitAll()
                 
                 // Todo lo demás: requiere autenticación
                 .anyRequest().authenticated()
@@ -65,7 +65,7 @@ public class SecurityConfig {
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }

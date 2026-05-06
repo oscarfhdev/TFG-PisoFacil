@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -38,9 +41,24 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.update(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<UsuarioResponseDTO> toggleEstadoCuenta(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.toggleEstadoCuenta(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/foto-perfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UsuarioResponseDTO> uploadFotoPerfil(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        // Implementación temporal simple: solo retornamos el usuario existente
+        // En un futuro se guardará en S3 o disco local
+        return ResponseEntity.ok(usuarioService.findById(id));
     }
 }

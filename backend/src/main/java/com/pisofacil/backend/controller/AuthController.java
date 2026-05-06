@@ -30,14 +30,22 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) {
-        if (usuarioRepository.existsByEmail(request.email())) {
+        if (usuarioRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está en uso");
         }
 
         Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombre(request.nombre());
-        nuevoUsuario.setEmail(request.email());
-        nuevoUsuario.setPassword(passwordEncoder.encode(request.password()));
+        nuevoUsuario.setNombre(request.getNombre());
+        nuevoUsuario.setApellidos(request.getApellidos());
+        nuevoUsuario.setEmail(request.getEmail());
+        nuevoUsuario.setPassword(passwordEncoder.encode(request.getPassword()));
+        nuevoUsuario.setFechaNacimiento(request.getFechaNacimiento());
+        nuevoUsuario.setEstudios(request.getEstudios());
+        nuevoUsuario.setBiografia(request.getBiografia());
+        nuevoUsuario.setEsFumador(request.getEsFumador());
+        nuevoUsuario.setTieneMascota(request.getTieneMascota());
+        nuevoUsuario.setTienePareja(request.getTienePareja());
+        nuevoUsuario.setPerfilLgtbi(request.getPerfilLgtbi());
         // Por defecto, no es admin (ya se maneja en @PrePersist de Usuario)
 
         Usuario guardado = usuarioRepository.save(nuevoUsuario);

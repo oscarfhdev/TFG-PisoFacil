@@ -47,6 +47,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
 
         usuario.setNombre(dto.getNombre());
+        usuario.setApellidos(dto.getApellidos());
         usuario.setEmail(dto.getEmail());
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -62,6 +63,14 @@ public class UsuarioService {
         usuario.setTienePareja(dto.getTienePareja());
         usuario.setPerfilLgtbi(dto.getPerfilLgtbi());
 
+        return usuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    @Transactional
+    public UsuarioResponseDTO toggleEstadoCuenta(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
+        usuario.setCuentaActiva(!Boolean.TRUE.equals(usuario.getCuentaActiva()));
         return usuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
     }
 

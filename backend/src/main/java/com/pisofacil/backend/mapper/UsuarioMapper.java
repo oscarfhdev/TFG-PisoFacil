@@ -17,6 +17,7 @@ public interface UsuarioMapper {
     @Mapping(target = "pisos", ignore = true)
     @Mapping(target = "favoritos", ignore = true)
     @Mapping(target = "reportes", ignore = true)
+    @Mapping(target = "cuentaActiva", ignore = true)
     Usuario toEntity(UsuarioRequestDTO dto);
 
     UsuarioResponseDTO toResponseDTO(Usuario entity);
