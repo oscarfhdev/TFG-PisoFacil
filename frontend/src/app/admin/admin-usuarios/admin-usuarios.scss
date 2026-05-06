@@ -1,0 +1,28 @@
+/* Overrides para Angular Material Table & Paginator en Modo Oscuro */
+:host {
+  display: block;
+}
+
+.material-dark-table {
+  /* Paginator overrides */
+  ::ng-deep .mat-mdc-paginator {
+    background-color: transparent !important;
+    color: #94a3b8 !important; /* slate-400 */
+  }
+
+  ::ng-deep .mat-mdc-paginator-icon {
+    fill: #94a3b8 !important;
+  }
+
+  ::ng-deep .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
+    fill: #475569 !important; /* slate-600 */
+  }
+
+  ::ng-deep .mat-mdc-select-value {
+    color: #94a3b8 !important;
+  }
+
+  ::ng-deep .mat-mdc-select-arrow {
+    color: #94a3b8 !important;
+  }
+}
