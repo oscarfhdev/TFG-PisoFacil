@@ -13,8 +13,16 @@ export interface LoginResponse {
 
 export interface RegisterRequest {
   nombre: string;
+  apellidos?: string;
   email: string;
   password: string;
+  fechaNacimiento?: string;
+  estudios?: string;
+  biografia?: string;
+  esFumador?: boolean;
+  tieneMascota?: boolean;
+  tienePareja?: boolean;
+  perfilLgtbi?: boolean;
 }
 
 export interface RegisterResponse {

@@ -7,6 +7,7 @@ import { PublicarAnuncio } from './pages/publicar-anuncio/publicar-anuncio';
 import { MisFavoritos } from './pages/mis-favoritos/mis-favoritos';
 import { Perfil } from './pages/perfil/perfil';
 import { NotFound } from './pages/not-found/not-found';
+import { AdminLayout } from './admin/admin-layout/admin-layout';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminReportes } from './admin/admin-reportes/admin-reportes';
 import { AdminUsuarios } from './admin/admin-usuarios/admin-usuarios';
@@ -26,9 +27,16 @@ export const routes: Routes = [
   { path: 'perfil', component: Perfil, canActivate: [authGuard] },
   
   // Rutas de administración
-  { path: 'admin', component: AdminDashboard, canActivate: [adminGuard] },
-  { path: 'admin/reportes', component: AdminReportes, canActivate: [adminGuard] },
-  { path: 'admin/usuarios', component: AdminUsuarios, canActivate: [adminGuard] },
+  { 
+    path: 'admin', 
+    component: AdminLayout, 
+    canActivate: [adminGuard],
+    children: [
+      { path: '', component: AdminDashboard },
+      { path: 'usuarios', component: AdminUsuarios },
+      { path: 'reportes', component: AdminReportes },
+    ]
+  },
   
   // Wildcard (404)
   { path: '**', component: NotFound }

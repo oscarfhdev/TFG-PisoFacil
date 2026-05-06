@@ -49,6 +49,12 @@ export class AuthService {
     return this.http.post<RegisterResponse>('/api/auth/register', data);
   }
 
+  uploadProfilePhoto(userId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`/api/usuarios/${userId}/foto-perfil`, formData);
+  }
+
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

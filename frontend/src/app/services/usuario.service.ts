@@ -26,6 +26,10 @@ export class UsuarioService {
     return this.http.put<UsuarioResponse>(`${this.apiUrl}/${id}`, data);
   }
 
+  toggleEstadoCuenta(id: number): Observable<UsuarioResponse> {
+    return this.http.put<UsuarioResponse>(`${this.apiUrl}/${id}/estado`, {});
+  }
+
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

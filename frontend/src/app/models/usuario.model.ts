@@ -1,5 +1,6 @@
 export interface UsuarioRequest {
   nombre: string;
+  apellidos?: string;
   email: string;
   password: string;
   fechaNacimiento?: string;
@@ -17,6 +18,7 @@ export interface UsuarioRequest {
 export interface UsuarioResponse {
   idUsuario: number;
   nombre: string;
+  apellidos?: string;
   email: string;
   esAdmin: boolean;
   fechaNacimiento?: string;
@@ -30,4 +32,5 @@ export interface UsuarioResponse {
   tieneMascota?: boolean;
   tienePareja?: boolean;
   perfilLgtbi?: boolean;
+  cuentaActiva: boolean;
 }
