@@ -1,1 +1,226 @@
-<p>register works!</p>
+<div class="min-h-screen bg-fondo dark:bg-fondo-dark font-lato flex items-center justify-center p-4 transition-colors duration-300">
+  <div class="bg-white dark:bg-card-dark rounded-2xl border border-gray-100 dark:border-slate-800 shadow-2xl w-full max-w-2xl p-6 md:p-10 relative overflow-hidden transition-colors duration-300">
+    
+    <!-- Header / Logo -->
+    <div class="text-center mb-8 relative z-10">
+      <h1 class="text-3xl font-extrabold text-texto dark:text-white font-poppins mb-2 transition-colors">PisoFácil</h1>
+      <p class="text-gray-500 dark:text-slate-400 transition-colors">Crea tu cuenta en 4 sencillos pasos</p>
+    </div>
+
+    <!-- Stepper Visual -->
+    <div class="flex items-center justify-between mb-8 relative z-10">
+      <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-700 -z-10">
+        <div class="h-full bg-accent transition-all duration-500" [style.width.%]="(currentStep() / 3) * 100"></div>
+      </div>
+      
+      <!-- Paso 0 -->
+      <div class="flex flex-col items-center">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
+             [class.bg-green-500]="currentStep() > 0" [class.border-green-500]="currentStep() > 0" [class.text-white]="currentStep() >= 0"
+             [class.bg-accent]="currentStep() === 0" [class.border-accent]="currentStep() === 0"
+             [class.bg-slate-800]="currentStep() < 0" [class.border-slate-700]="currentStep() < 0" [class.text-slate-500]="currentStep() < 0">
+          @if (currentStep() > 0) { ✓ } @else { 1 }
+        </div>
+        <span class="text-xs mt-2 text-slate-400 hidden sm:block">Cuenta</span>
+      </div>
+
+      <!-- Paso 1 -->
+      <div class="flex flex-col items-center">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
+             [class.bg-green-500]="currentStep() > 1" [class.border-green-500]="currentStep() > 1" [class.text-white]="currentStep() >= 1"
+             [class.bg-accent]="currentStep() === 1" [class.border-accent]="currentStep() === 1"
+             [class.bg-slate-800]="currentStep() < 1" [class.border-slate-700]="currentStep() < 1" [class.text-slate-500]="currentStep() < 1">
+          @if (currentStep() > 1) { ✓ } @else { 2 }
+        </div>
+        <span class="text-xs mt-2 text-slate-400 hidden sm:block">Personal</span>
+      </div>
+
+      <!-- Paso 2 -->
+      <div class="flex flex-col items-center">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
+             [class.bg-green-500]="currentStep() > 2" [class.border-green-500]="currentStep() > 2" [class.text-white]="currentStep() >= 2"
+             [class.bg-accent]="currentStep() === 2" [class.border-accent]="currentStep() === 2"
+             [class.bg-slate-800]="currentStep() < 2" [class.border-slate-700]="currentStep() < 2" [class.text-slate-500]="currentStep() < 2">
+          @if (currentStep() > 2) { ✓ } @else { 3 }
+        </div>
+        <span class="text-xs mt-2 text-slate-400 hidden sm:block">Afinidad</span>
+      </div>
+
+      <!-- Paso 3 -->
+      <div class="flex flex-col items-center">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
+             [class.bg-green-500]="currentStep() > 3" [class.border-green-500]="currentStep() > 3" [class.text-white]="currentStep() >= 3"
+             [class.bg-accent]="currentStep() === 3" [class.border-accent]="currentStep() === 3"
+             [class.bg-slate-800]="currentStep() < 3" [class.border-slate-700]="currentStep() < 3" [class.text-slate-500]="currentStep() < 3">
+          @if (currentStep() > 3) { ✓ } @else { 4 }
+        </div>
+        <span class="text-xs mt-2 text-slate-400 hidden sm:block">Foto</span>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    @if (error()) {
+      <div class="bg-red-900/30 border border-red-500/50 text-red-200 p-4 rounded-lg mb-6">
+        {{ error() }}
+      </div>
+    }
+
+    <!-- Form Content -->
+    <div class="relative min-h-[300px]">
+      
+      <!-- Paso 0: Cuenta -->
+      @if (currentStep() === 0) {
+        <form [formGroup]="step0Form" (ngSubmit)="nextStep()" class="space-y-4 animate-fade-in">
+          <div>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Email *</label>
+            <input type="email" formControlName="email" 
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   placeholder="tu@email.com">
+          </div>
+          <div>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Contraseña *</label>
+            <input type="password" formControlName="password" 
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   placeholder="Mínimo 6 caracteres">
+          </div>
+          <div>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Confirmar Contraseña *</label>
+            <input type="password" formControlName="confirmPassword" 
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   placeholder="Repite la contraseña">
+            @if (step0Form.hasError('mismatch')) {
+              <p class="text-red-400 text-xs mt-1">Las contraseñas no coinciden.</p>
+            }
+          </div>
+          <div class="pt-4 flex justify-end">
+            <button type="submit" [disabled]="step0Form.invalid" 
+                    class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- Paso 1: Personal -->
+      @if (currentStep() === 1) {
+        <form [formGroup]="step1Form" (ngSubmit)="nextStep()" class="space-y-4 animate-fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-300 mb-1 text-sm">Nombre *</label>
+              <input type="text" formControlName="nombre" 
+                     class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 text-sm">Apellidos</label>
+              <input type="text" formControlName="apellidos" 
+                     class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 text-sm">Fecha de Nacimiento</label>
+            <input type="date" formControlName="fechaNacimiento" 
+                   class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors [color-scheme:dark]">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 text-sm">Estudios/Profesión</label>
+            <input type="text" formControlName="estudios" 
+                   class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   placeholder="Ej. Ingeniería Informática">
+          </div>
+          <div class="pt-4 flex justify-between">
+            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="submit" [disabled]="step1Form.invalid" 
+                    class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- Paso 2: Afinidad -->
+      @if (currentStep() === 2) {
+        <form [formGroup]="step2Form" (ngSubmit)="nextStep()" class="space-y-6 animate-fade-in">
+          
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Toggles (Custom CSS switches) -->
+            <label class="flex items-center gap-3 cursor-pointer p-3 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+              <input type="checkbox" formControlName="esFumador" class="w-5 h-5 accent-accent bg-gray-100 dark:bg-slate-800 border-gray-300 dark:border-slate-600 rounded">
+              <span class="text-gray-700 dark:text-slate-300">Soy fumador</span>
+            </label>
+            
+            <label class="flex items-center gap-3 cursor-pointer p-3 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+              <input type="checkbox" formControlName="tieneMascota" class="w-5 h-5 accent-accent bg-gray-100 dark:bg-slate-800 border-gray-300 dark:border-slate-600 rounded">
+              <span class="text-gray-700 dark:text-slate-300">Tengo mascota</span>
+            </label>
+            
+            <label class="flex items-center gap-3 cursor-pointer p-3 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+              <input type="checkbox" formControlName="tienePareja" class="w-5 h-5 accent-accent bg-gray-100 dark:bg-slate-800 border-gray-300 dark:border-slate-600 rounded">
+              <span class="text-gray-700 dark:text-slate-300">Tengo pareja</span>
+            </label>
+            
+            <label class="flex items-center gap-3 cursor-pointer p-3 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+              <input type="checkbox" formControlName="perfilLgtbi" class="w-5 h-5 accent-accent bg-gray-100 dark:bg-slate-800 border-gray-300 dark:border-slate-600 rounded">
+              <span class="text-gray-700 dark:text-slate-300">LGTBI+ Friendly</span>
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Biografía breve</label>
+            <textarea formControlName="biografia" rows="3"
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   placeholder="Cuéntanos un poco sobre ti..."></textarea>
+          </div>
+
+          <div class="pt-4 flex justify-between">
+            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="submit" [disabled]="step2Form.invalid" 
+                    class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- Paso 3: Foto y Submit -->
+      @if (currentStep() === 3) {
+        <div class="space-y-6 animate-fade-in text-center">
+          <p class="text-gray-600 dark:text-slate-300 mb-4 transition-colors">Sube una foto de perfil para que tus futuros compañeros te reconozcan.</p>
+          
+          <div class="flex flex-col items-center justify-center">
+            @if (previewUrl()) {
+              <img [src]="previewUrl()" alt="Preview" class="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-slate-700 mb-4 shadow-lg">
+            } @else {
+              <div class="w-32 h-32 rounded-full bg-gray-100 dark:bg-slate-800 border-4 border-gray-200 dark:border-slate-700 flex items-center justify-center text-4xl mb-4 text-gray-400 dark:text-slate-500">
+                📷
+              </div>
+            }
+            
+            <label class="cursor-pointer bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 border border-gray-300 dark:border-slate-600 text-texto dark:text-white py-2 px-6 rounded-full transition-colors inline-block">
+              Seleccionar Imagen
+              <input type="file" class="hidden" accept="image/*" (change)="onFileSelected($event)">
+            </label>
+          </div>
+
+          <div class="pt-8 flex justify-between mt-auto">
+            <button type="button" (click)="prevStep()" [disabled]="loading()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="button" (click)="onSubmit()" [disabled]="loading()" 
+                    class="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 flex items-center gap-2">
+              @if (loading()) {
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                Registrando...
+              } @else {
+                Completar Registro
+              }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Login Link -->
+    <div class="mt-8 text-center text-gray-600 dark:text-slate-400 text-sm border-t border-gray-200 dark:border-slate-800/50 pt-6 transition-colors">
+      ¿Ya tienes una cuenta? <a routerLink="/login" class="text-primary hover:text-primary/80 dark:hover:text-white font-bold transition-colors">Inicia sesión</a>
+    </div>
+
+  </div>
+</div>

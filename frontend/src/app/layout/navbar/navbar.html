@@ -1,1 +1,56 @@
-<p>navbar works!</p>
+<nav class="sticky top-0 z-50 bg-fondo dark:bg-fondo-dark shadow-sm border-b dark:border-gray-800 transition-colors duration-300">
+  <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+    
+    <!-- Izquierda (Logo) -->
+    <a routerLink="/" class="flex items-center">
+      <img src="/logo-pisofacil-light.png" alt="PisoFácil" class="h-8 dark:hidden" />
+      <img src="/logo-pisofacil-dark.png" alt="PisoFácil" class="h-8 hidden dark:block" />
+    </a>
+
+    <!-- Derecha (Acciones) -->
+    <div class="flex items-center gap-4">
+      
+      <!-- Botón Modo Oscuro -->
+      <button (click)="toggleDarkMode()" class="text-2xl hover:opacity-80 transition" aria-label="Toggle Dark Mode" title="Cambiar tema">
+        @if (isDarkMode()) {
+          ☀️
+        } @else {
+          🌙
+        }
+      </button>
+
+      <!-- Lógica de Usuario -->
+      @if (authService.isLoggedIn()) {
+        <span class="text-sm font-medium text-texto dark:text-texto-dark hidden sm:inline">
+          Hola, {{ authService.currentUser()?.nombre }}
+        </span>
+        
+        <a routerLink="/favoritos" class="text-texto dark:text-texto-dark font-medium hover:underline">
+          Favoritos
+        </a>
+        
+        <a routerLink="/publicar" class="bg-accent text-white px-4 py-2 rounded-full hover:opacity-90 transition font-medium">
+          Publicar
+        </a>
+        
+        @if (authService.isAdmin()) {
+          <a routerLink="/admin" class="text-red-500 font-bold hover:underline">
+            Panel Admin
+          </a>
+        }
+        
+        <button (click)="logout()" class="text-gray-500 dark:text-gray-400 font-medium hover:underline">
+          Salir
+        </button>
+      } @else {
+        <a routerLink="/login" class="text-texto dark:text-texto-dark font-medium hover:underline">
+          Entrar
+        </a>
+        <a routerLink="/register" class="bg-primary text-white px-4 py-2 rounded-full hover:opacity-90 transition font-medium">
+          Regístrate
+        </a>
+      }
+    </div>
+
+  </div>
+</nav>
