@@ -36,6 +36,9 @@ public class SecurityConfig {
                 // Rutas públicas de autenticación
                 .requestMatchers("/auth/**").permitAll()
                 
+                // Rutas protegidas explícitas antes de las públicas
+                .requestMatchers(HttpMethod.GET, "/pisos/me").authenticated()
+
                 // Rutas públicas de lectura (visitantes)
                 .requestMatchers(HttpMethod.GET, "/pisos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/habitaciones/**").permitAll()
@@ -57,7 +60,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200")); // Permitir Angular
+        config.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://192.168.1.130:4200", "http://127.0.0.1:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization")); // Para que Angular lea el token

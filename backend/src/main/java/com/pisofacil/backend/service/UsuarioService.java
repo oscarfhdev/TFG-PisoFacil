@@ -1,5 +1,7 @@
 package com.pisofacil.backend.service;
 
+import com.pisofacil.backend.dto.PerfilUpdateRequestDTO;
+import com.pisofacil.backend.dto.CambiarPasswordRequestDTO;
 import com.pisofacil.backend.dto.UsuarioRequestDTO;
 import com.pisofacil.backend.dto.UsuarioResponseDTO;
 import com.pisofacil.backend.mapper.UsuarioMapper;
@@ -72,6 +74,47 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
         usuario.setCuentaActiva(!Boolean.TRUE.equals(usuario.getCuentaActiva()));
         return usuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponseDTO findByEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + email));
+        return usuarioMapper.toResponseDTO(usuario);
+    }
+
+    @Transactional
+    public UsuarioResponseDTO updatePerfil(Long id, PerfilUpdateRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
+
+        usuario.setNombre(dto.getNombre());
+        usuario.setApellidos(dto.getApellidos());
+        usuario.setEmail(dto.getEmail());
+        usuario.setFechaNacimiento(dto.getFechaNacimiento());
+        usuario.setGenero(dto.getGenero());
+        usuario.setEstudios(dto.getEstudios());
+        usuario.setBiografia(dto.getBiografia());
+        usuario.setInstagramUrl(dto.getInstagramUrl());
+        usuario.setEsFumador(dto.getEsFumador());
+        usuario.setTieneMascota(dto.getTieneMascota());
+        usuario.setTienePareja(dto.getTienePareja());
+        usuario.setPerfilLgtbi(dto.getPerfilLgtbi());
+
+        return usuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    @Transactional
+    public void cambiarPassword(Long id, CambiarPasswordRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
+
+        if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getPassword())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+
+        usuario.setPassword(passwordEncoder.encode(dto.getPasswordNueva()));
+        usuarioRepository.save(usuario);
     }
 
     @Transactional

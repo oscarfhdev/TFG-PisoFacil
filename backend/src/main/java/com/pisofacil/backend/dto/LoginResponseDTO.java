@@ -5,6 +5,7 @@ public record LoginResponseDTO(
         Long idUsuario,
         String nombre,
         String email,
-        String role
+        String role,
+        String fotoPerfilUrl
 ) {
 }

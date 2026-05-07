@@ -1,1 +1,174 @@
-<p>perfil works!</p>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <!-- Header Perfil -->
+  <div class="flex items-center gap-6 mb-8 bg-card dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-border dark:border-border-dark">
+    <div class="relative">
+      @if (usuario()?.fotoPerfilUrl) {
+        <img [src]="usuario()!.fotoPerfilUrl" class="w-24 h-24 rounded-full object-cover shadow-md" alt="Avatar">
+      } @else {
+        <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow-md">
+          <mat-icon class="text-4xl text-gray-500 dark:text-gray-400">person</mat-icon>
+        </div>
+      }
+      <!-- Botón para cambiar foto (futuro) -->
+      <button class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-lg hover:opacity-90 transition">
+        <mat-icon class="text-sm w-4 h-4 text-center leading-none">edit</mat-icon>
+      </button>
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold text-texto dark:text-texto-dark">{{ usuario()?.nombre }} {{ usuario()?.apellidos }}</h1>
+      <p class="text-gray-500 dark:text-gray-400">{{ usuario()?.email }}</p>
+      <div class="mt-2 flex gap-2">
+        @if (usuario()?.esAdmin) {
+          <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Admin</span>
+        }
+        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">Miembro desde {{ usuario()?.fechaRegistro | date:'yyyy' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="bg-card dark:bg-card-dark rounded-2xl shadow-sm border border-border dark:border-border-dark overflow-hidden">
+    <mat-tab-group animationDuration="0ms" class="dark-theme-tabs">
+      
+      <!-- Tab 1: Datos Personales -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="mr-2">manage_accounts</mat-icon>
+          Datos Personales
+        </ng-template>
+        
+        <div class="p-6 md:p-8">
+          <form [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Nombre -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Nombre *</label>
+                <input type="text" formControlName="nombre" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+              </div>
+              
+              <!-- Apellidos -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Apellidos</label>
+                <input type="text" formControlName="apellidos" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Email *</label>
+                <input type="email" formControlName="email" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+              </div>
+
+              <!-- Fecha Nacimiento -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Fecha de Nacimiento</label>
+                <input type="date" formControlName="fechaNacimiento" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition [color-scheme:light] dark:[color-scheme:dark]">
+              </div>
+
+              <!-- Género -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Género</label>
+                <select formControlName="genero" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                  <option value="">Prefiero no decirlo</option>
+                  <option value="Hombre">Hombre</option>
+                  <option value="Mujer">Mujer</option>
+                  <option value="No binario">No binario</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+
+              <!-- Estudios -->
+              <div>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Estudios / Ocupación</label>
+                <input type="text" formControlName="estudios" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: Estudiante Ingeniería">
+              </div>
+
+              <!-- Instagram -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Enlace de Instagram</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500">@</span>
+                  </div>
+                  <input type="text" formControlName="instagramUrl" class="w-full pl-8 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: https://instagram.com/usuario">
+                </div>
+              </div>
+
+              <!-- Biografía -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Sobre ti</label>
+                <textarea formControlName="biografia" rows="4" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Cuéntanos un poco sobre ti, tus aficiones, cómo eres conviviendo..."></textarea>
+              </div>
+            </div>
+
+            <hr class="my-6 border-gray-200 dark:border-gray-700">
+
+            <h3 class="text-lg font-semibold text-texto dark:text-texto-dark mb-4">Preferencias de Convivencia</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                <input type="checkbox" formControlName="esFumador" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
+                <span class="text-texto dark:text-texto-dark">Soy fumador/a</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                <input type="checkbox" formControlName="tieneMascota" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
+                <span class="text-texto dark:text-texto-dark">Tengo mascota</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                <input type="checkbox" formControlName="tienePareja" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
+                <span class="text-texto dark:text-texto-dark">Tengo pareja</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                <input type="checkbox" formControlName="perfilLgtbi" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
+                <span class="text-texto dark:text-texto-dark">LGTBI+ Friendly</span>
+              </label>
+            </div>
+
+            <div class="mt-8 flex justify-end">
+              <button type="submit" [disabled]="perfilForm.invalid" class="bg-primary hover:opacity-90 disabled:opacity-50 text-white font-medium py-2.5 px-6 rounded-full transition flex items-center gap-2">
+                <mat-icon>save</mat-icon>
+                Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <!-- Tab 2: Contraseña -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="mr-2">lock</mat-icon>
+          Seguridad
+        </ng-template>
+        
+        <div class="p-6 md:p-8">
+          <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()" class="space-y-6 max-w-md">
+            
+            <div>
+              <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Contraseña Actual *</label>
+              <input type="password" formControlName="passwordActual" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Nueva Contraseña *</label>
+              <input type="password" formControlName="passwordNueva" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Mínimo 6 caracteres">
+              @if (passwordForm.get('passwordNueva')?.errors?.['minlength'] && passwordForm.get('passwordNueva')?.touched) {
+                <p class="text-red-500 text-xs mt-1">La contraseña debe tener al menos 6 caracteres.</p>
+              }
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+              <button type="submit" [disabled]="passwordForm.invalid" class="bg-accent hover:opacity-90 disabled:opacity-50 text-white font-medium py-2.5 px-6 rounded-full transition flex items-center gap-2">
+                <mat-icon>key</mat-icon>
+                Actualizar Contraseña
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

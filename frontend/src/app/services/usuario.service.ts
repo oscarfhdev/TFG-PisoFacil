@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioRequest, UsuarioResponse } from '../models/usuario.model';
+import { PerfilUpdateRequest, CambiarPasswordRequest } from '../models/perfil-update.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,6 +13,18 @@ export class UsuarioService {
 
   findAll(): Observable<UsuarioResponse[]> {
     return this.http.get<UsuarioResponse[]>(this.apiUrl);
+  }
+
+  getMyProfile(): Observable<UsuarioResponse> {
+    return this.http.get<UsuarioResponse>(`${this.apiUrl}/me`);
+  }
+
+  updateMyProfile(data: PerfilUpdateRequest): Observable<UsuarioResponse> {
+    return this.http.put<UsuarioResponse>(`${this.apiUrl}/me`, data);
+  }
+
+  changePassword(data: CambiarPasswordRequest): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/me/password`, data);
   }
 
   findById(id: number): Observable<UsuarioResponse> {

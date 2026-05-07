@@ -81,7 +81,8 @@ public class AuthController {
                 usuario.getIdUsuario(),
                 usuario.getNombre(),
                 usuario.getEmail(),
-                role);
+                role,
+                usuario.getFotoPerfilUrl());
 
         return ResponseEntity.ok(response);
     }

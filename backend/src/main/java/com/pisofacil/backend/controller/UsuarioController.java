@@ -2,6 +2,8 @@ package com.pisofacil.backend.controller;
 
 import com.pisofacil.backend.dto.UsuarioRequestDTO;
 import com.pisofacil.backend.dto.UsuarioResponseDTO;
+import com.pisofacil.backend.dto.PerfilUpdateRequestDTO;
+import com.pisofacil.backend.dto.CambiarPasswordRequestDTO;
 import com.pisofacil.backend.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +53,31 @@ public class UsuarioController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioResponseDTO> getMyProfile() {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(usuarioService.findByEmail(email));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UsuarioResponseDTO> updateMyProfile(@Valid @RequestBody PerfilUpdateRequestDTO dto) {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        UsuarioResponseDTO user = usuarioService.findByEmail(email);
+        return ResponseEntity.ok(usuarioService.updatePerfil(user.getIdUsuario(), dto));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<?> changeMyPassword(@Valid @RequestBody CambiarPasswordRequestDTO dto) {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        UsuarioResponseDTO user = usuarioService.findByEmail(email);
+        try {
+            usuarioService.cambiarPassword(user.getIdUsuario(), dto);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/{id}/foto-perfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
