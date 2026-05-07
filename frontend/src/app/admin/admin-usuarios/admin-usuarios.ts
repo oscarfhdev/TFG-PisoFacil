@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -6,6 +7,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioResponse } from '../../models/usuario.model';
+import { AdminUsuarioEditModal } from '../admin-usuario-edit-modal/admin-usuario-edit-modal';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -17,6 +19,7 @@ import { UsuarioResponse } from '../../models/usuario.model';
 export class AdminUsuarios implements OnInit {
   private usuarioService = inject(UsuarioService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['avatar', 'nombre', 'email', 'fechaRegistro', 'esAdmin', 'estado', 'acciones'];
   dataSource = new MatTableDataSource<UsuarioResponse>();
@@ -49,8 +52,23 @@ export class AdminUsuarios implements OnInit {
   }
 
   verDetalles(usuario: UsuarioResponse) {
-    // Aquí se abriría un modal o navegaría a los detalles
-    console.log('Ver detalles de', usuario);
+    const dialogRef = this.dialog.open(AdminUsuarioEditModal, {
+      width: '600px',
+      maxWidth: '95vw',
+      data: { usuario },
+      panelClass: 'dark:bg-card-dark' // Asegura buen fondo en modo oscuro
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.updatedUser) {
+        // Update the user in the table data
+        const idx = this.dataSource.data.findIndex(u => u.idUsuario === result.updatedUser.idUsuario);
+        if (idx !== -1) {
+          this.dataSource.data[idx] = result.updatedUser;
+          this.dataSource.data = [...this.dataSource.data];
+        }
+      }
+    });
   }
 
   toggleEstado(usuario: UsuarioResponse) {

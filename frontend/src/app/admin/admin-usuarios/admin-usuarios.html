@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors">
+  <div class="material-dark-table bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors">
     <div class="overflow-x-auto">
       <table mat-table [dataSource]="dataSource" matSort class="w-full text-left bg-transparent">
 
@@ -105,8 +105,8 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 dark:hover:bg-slate-800/30 transition-colors"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!bg-transparent"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="!bg-transparent hover:bg-gray-50 dark:hover:bg-slate-800/30 transition-colors"></tr>
 
         <!-- Fila que se muestra si no hay coincidencias -->
         <tr class="mat-row" *matNoDataRow>

@@ -2,8 +2,6 @@ import { PisoResponse } from './piso.model';
 import { HabitacionResponse } from './habitacion.model';
 
 export interface PublicarAnuncioRequest {
-  idUsuario: number;
-  
   // Campos Piso
   direccion: string;
   ciudad: string;
@@ -33,6 +31,7 @@ export interface PublicarAnuncioRequest {
 }
 
 export interface PublicarAnuncioResponse {
+  mensaje: string;
   piso: PisoResponse;
   habitacion: HabitacionResponse;
 }

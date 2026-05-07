@@ -12,6 +12,18 @@ export interface HabitacionRequest {
   tieneAireAcondicionado?: boolean;
 }
 
+export interface BusquedaFiltros {
+  ciudad?: string;
+  precioMin?: number;
+  precioMax?: number;
+  tieneBanoPrivado?: boolean;
+  exterior?: boolean;
+  tieneAireAcondicionado?: boolean;
+  admiteMascotas?: boolean;
+  admiteFumadores?: boolean;
+  lgtbiFriendly?: boolean;
+}
+
 export interface HabitacionResponse {
   idHabitacion: number;
   idPiso: number;

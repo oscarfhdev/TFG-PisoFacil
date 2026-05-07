@@ -1,0 +1,21 @@
+::ng-deep .mat-mdc-slider {
+  --mdc-slider-active-track-color: var(--primary-color, #64A7C5);
+  --mdc-slider-handle-color: var(--primary-color, #64A7C5);
+  --mdc-slider-focus-handle-color: var(--primary-color, #64A7C5);
+  --mdc-slider-hover-handle-color: var(--primary-color, #64A7C5);
+}
+
+::ng-deep .dark {
+  .mat-mdc-slider {
+    --mdc-slider-inactive-track-color: #334155; // slate-700
+  }
+  
+  .mdc-text-field--outlined {
+    --mdc-outlined-text-field-container-color: #0B1117;
+    --mdc-outlined-text-field-outline-color: #1e293b;
+    --mdc-outlined-text-field-input-text-color: #F0F0F0;
+    --mdc-outlined-text-field-label-text-color: #94a3b8;
+    --mdc-outlined-text-field-focus-outline-color: #64A7C5;
+    --mdc-outlined-text-field-focus-label-text-color: #64A7C5;
+  }
+}

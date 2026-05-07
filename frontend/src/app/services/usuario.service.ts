@@ -46,4 +46,12 @@ export class UsuarioService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  adminUpdateUser(id: number, data: PerfilUpdateRequest): Observable<UsuarioResponse> {
+    return this.http.put<UsuarioResponse>(`${this.apiUrl}/${id}/admin-update`, data);
+  }
+
+  adminResetPassword(id: number, passwordNueva: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/reset-password`, { passwordNueva });
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { HabitacionRequest, HabitacionResponse } from '../models/habitacion.model';
+import { HabitacionRequest, HabitacionResponse, BusquedaFiltros } from '../models/habitacion.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -22,11 +22,17 @@ export class HabitacionService {
     return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/disponibles`);
   }
 
-  buscar(ciudad: string, precioMax?: number): Observable<HabitacionResponse[]> {
-    let params = new HttpParams().set('ciudad', ciudad);
-    if (precioMax !== undefined) {
-      params = params.set('precioMax', precioMax.toString());
-    }
+  findDestacadas(): Observable<HabitacionResponse[]> {
+    return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/destacadas`);
+  }
+
+  buscarAvanzado(filtros: BusquedaFiltros): Observable<HabitacionResponse[]> {
+    let params = new HttpParams();
+    Object.entries(filtros).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.set(key, value.toString());
+      }
+    });
     return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/buscar`, { params });
   }
 

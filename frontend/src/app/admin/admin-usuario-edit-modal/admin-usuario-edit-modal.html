@@ -1,0 +1,136 @@
+<div class="bg-white dark:bg-card-dark rounded-xl overflow-hidden shadow-2xl max-w-2xl w-full">
+    <!-- Header -->
+    <div class="bg-gray-50 dark:bg-slate-800 px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
+      <h2 class="text-xl font-bold text-texto dark:text-white flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+        </svg>          
+        Editar Usuario: {{ data.usuario.nombre }}
+      </h2>
+      <button (click)="close()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  
+    <div class="p-6 overflow-y-auto max-h-[80vh]">
+        <div class="grid grid-cols-1 gap-8">
+            <!-- Sección de Edición de Perfil -->
+            <section class="bg-gray-50/50 dark:bg-slate-800/30 rounded-lg p-5 border border-gray-100 dark:border-slate-700/50">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 border-b border-gray-200 dark:border-slate-700 pb-2">Información del Perfil</h3>
+                <form [formGroup]="editForm" (ngSubmit)="onSaveDetails()" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nombre</label>
+                            <input formControlName="nombre" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Apellidos</label>
+                            <input formControlName="apellidos" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                        </div>
+                        <div class="flex flex-col md:col-span-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email</label>
+                            <input formControlName="email" type="email" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Fecha de Nacimiento</label>
+                            <input formControlName="fechaNacimiento" type="date" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Género</label>
+                            <select formControlName="genero" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white">
+                                <option value="">No especificado</option>
+                                <option value="HOMBRE">Hombre</option>
+                                <option value="MUJER">Mujer</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Estudios/Trabajo</label>
+                            <input formControlName="estudios" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Instagram URL</label>
+                            <input formControlName="instagramUrl" type="url" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" placeholder="https://instagram.com/..." />
+                        </div>
+
+                        <div class="flex flex-col md:col-span-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Biografía</label>
+                            <textarea formControlName="biografia" rows="3" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white"></textarea>
+                        </div>
+
+                        <!-- Opciones Adicionales -->
+                        <div class="md:col-span-2 mt-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2 block">Preferencias y Detalles</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-slate-300 cursor-pointer">
+                                    <input formControlName="esFumador" type="checkbox" class="rounded text-accent focus:ring-accent border-gray-300 dark:border-slate-600 dark:bg-slate-800">
+                                    <span>Es Fumador</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-slate-300 cursor-pointer">
+                                    <input formControlName="tieneMascota" type="checkbox" class="rounded text-accent focus:ring-accent border-gray-300 dark:border-slate-600 dark:bg-slate-800">
+                                    <span>Tiene Mascota</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-slate-300 cursor-pointer">
+                                    <input formControlName="tienePareja" type="checkbox" class="rounded text-accent focus:ring-accent border-gray-300 dark:border-slate-600 dark:bg-slate-800">
+                                    <span>Tiene Pareja</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-slate-300 cursor-pointer">
+                                    <input formControlName="perfilLgtbi" type="checkbox" class="rounded text-accent focus:ring-accent border-gray-300 dark:border-slate-600 dark:bg-slate-800">
+                                    <span>Perfil LGTBI+</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" [disabled]="editForm.invalid || loadingEdit" class="bg-accent hover:bg-accent-light text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            @if (loadingEdit) {
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Guardando...
+                            } @else {
+                                Guardar Cambios
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Sección de Reseteo de Contraseña -->
+            <section class="bg-red-50/50 dark:bg-red-900/10 rounded-lg p-5 border border-red-100 dark:border-red-900/30">
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-400 mb-4 border-b border-red-200 dark:border-red-900/50 pb-2">Resetear Contraseña</h3>
+                <p class="text-sm text-gray-600 dark:text-slate-400 mb-4">Como administrador, puedes forzar el cambio de contraseña de este usuario. El usuario no será notificado automáticamente.</p>
+                
+                <form [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="space-y-4">
+                    <div class="flex flex-col">
+                        <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nueva Contraseña</label>
+                        <input formControlName="passwordNueva" type="password" placeholder="Min. 6 caracteres" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:text-white max-w-md" />
+                    </div>
+                    <div>
+                        <button type="submit" [disabled]="resetPasswordForm.invalid || loadingReset" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            @if (loadingReset) {
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Reseteando...
+                            } @else {
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                                </svg>
+                                Forzar Nueva Contraseña
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

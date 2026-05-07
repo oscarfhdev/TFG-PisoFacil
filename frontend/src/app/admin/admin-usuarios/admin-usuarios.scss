@@ -4,25 +4,32 @@
 }
 
 .material-dark-table {
-  /* Paginator overrides */
-  ::ng-deep .mat-mdc-paginator {
-    background-color: transparent !important;
-    color: #94a3b8 !important; /* slate-400 */
-  }
+  ::ng-deep {
+    .mat-mdc-table, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-cell, .mat-mdc-header-cell {
+      background-color: transparent !important;
+    }
 
-  ::ng-deep .mat-mdc-paginator-icon {
-    fill: #94a3b8 !important;
-  }
+    /* Paginator overrides */
+    .mat-mdc-paginator {
+      background-color: transparent !important;
+      color: inherit !important;
+    }
 
-  ::ng-deep .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
-    fill: #475569 !important; /* slate-600 */
-  }
+    .mat-mdc-paginator-icon {
+      fill: currentColor !important;
+    }
 
-  ::ng-deep .mat-mdc-select-value {
-    color: #94a3b8 !important;
-  }
+    .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
+      opacity: 0.4 !important;
+    }
 
-  ::ng-deep .mat-mdc-select-arrow {
-    color: #94a3b8 !important;
+    .mat-mdc-select-value, .mat-mdc-select-arrow, .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
+      color: inherit !important;
+    }
+
+    /* Fix sort arrows contrast */
+    .mat-sort-header-arrow {
+      color: #94a3b8 !important;
+    }
   }
 }

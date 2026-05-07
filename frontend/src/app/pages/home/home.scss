@@ -1,0 +1,52 @@
+.carousel-wrapper {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem; /* gap-6 de Tailwind */
+  width: max-content;
+}
+
+.animate-marquee {
+  /* De derecha a izquierda (estándar) */
+  /* animation: marquee 40s linear infinite; */
+  
+  /* De izquierda a derecha (como pidió el usuario) */
+  animation: marquee-reverse 60s linear infinite;
+}
+
+.hover\:pause:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

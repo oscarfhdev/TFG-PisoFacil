@@ -1,4 +1,4 @@
-<div class="flex h-screen bg-fondo dark:bg-fondo-dark font-lato overflow-hidden">
+<div class="flex h-screen bg-fondo dark:bg-fondo-dark font-lato overflow-hidden" [class.dark]="isDarkMode()">
   
   <!-- Overlay Móvil -->
   @if (sidebarOpen()) {
