@@ -61,4 +61,26 @@ public class FavoritoService {
         }
         favoritoRepository.deleteById(id);
     }
+
+    @Transactional
+    public boolean toggle(Long idUsuario, Long idHabitacion) {
+        if (favoritoRepository.existsByUsuarioIdUsuarioAndHabitacionIdHabitacion(idUsuario, idHabitacion)) {
+            Favorito favorito = favoritoRepository.findByUsuarioIdUsuarioAndHabitacionIdHabitacion(idUsuario, idHabitacion)
+                    .orElseThrow(() -> new ResourceNotFoundException("Favorito no encontrado"));
+            favoritoRepository.delete(favorito);
+            return false;
+        } else {
+            Usuario usuario = usuarioRepository.findById(idUsuario)
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + idUsuario));
+            Habitacion habitacion = habitacionRepository.findById(idHabitacion)
+                    .orElseThrow(() -> new ResourceNotFoundException("Habitación no encontrada con ID: " + idHabitacion));
+
+            Favorito favorito = Favorito.builder()
+                    .usuario(usuario)
+                    .habitacion(habitacion)
+                    .build();
+            favoritoRepository.save(favorito);
+            return true;
+        }
+    }
 }

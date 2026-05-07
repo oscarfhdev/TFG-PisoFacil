@@ -10,4 +10,12 @@ export interface FavoritoResponse {
   tituloAnuncio: string;
   precioMensual: number;
   ciudad: string;
+  direccion?: string;
+  fotoPrincipal?: string;
+  superficieM2?: number;
+  estaDisponible?: boolean;
+  admiteMascotas?: boolean;
+  admiteFumadores?: boolean;
+  lgtbiFriendly?: boolean;
+  fotoPerfilUrlPropietario?: string;
 }
