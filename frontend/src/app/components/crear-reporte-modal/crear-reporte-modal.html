@@ -1,0 +1,77 @@
+<div class="bg-white dark:bg-card-dark font-lato transition-colors duration-300">
+  
+  <!-- Header: Estilo Registro -->
+  <div class="p-8 pb-4 text-center">
+    <h2 class="text-3xl font-extrabold text-texto dark:text-white font-poppins mb-2 transition-colors">
+      Soporte Técnico
+    </h2>
+    <p class="text-gray-500 dark:text-slate-400 transition-colors">
+      ¿Tienes algún problema? Estamos aquí para ayudarte.
+    </p>
+  </div>
+
+  <!-- Content: Estilo Registro -->
+  <div class="px-8 py-4">
+    <form [formGroup]="reporteForm" class="space-y-6">
+      
+      <!-- Info Box: Estilo Alerta del Registro -->
+      <div class="bg-primary/10 border border-primary/20 p-4 rounded-xl flex gap-3 items-center">
+        <span class="text-2xl">💡</span>
+        <p class="m-0 text-gray-600 dark:text-slate-300 text-xs font-medium leading-relaxed">
+          Tu reporte ayuda a que PisoFácil sea mejor. Revisamos cada incidencia manualmente.
+        </p>
+      </div>
+
+      <!-- Select Personalizado (Estilo Registro) -->
+      <div>
+        <label class="block text-gray-700 dark:text-slate-300 mb-2 text-sm font-bold transition-colors uppercase tracking-wide">
+          ¿Qué ha sucedido? *
+        </label>
+        <select formControlName="categoria" 
+                class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
+          <option value="" disabled selected>Selecciona un motivo...</option>
+          @for (categoria of categorias; track categoria) {
+            <option [value]="categoria">{{ categoria }}</option>
+          }
+        </select>
+        @if (reporteForm.get('categoria')?.touched && reporteForm.get('categoria')?.hasError('required')) {
+          <p class="text-red-500 text-xs mt-1 animate-fade-in">Por favor, selecciona un motivo.</p>
+        }
+      </div>
+
+      <!-- Textarea Personalizado (Estilo Registro) -->
+      <div>
+        <label class="block text-gray-700 dark:text-slate-300 mb-2 text-sm font-bold transition-colors uppercase tracking-wide">
+          Cuéntanos los detalles *
+        </label>
+        <textarea formControlName="mensaje" rows="4" 
+                  class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors resize-none"
+                  placeholder="Describe el error o sugerencia detalladamente..."></textarea>
+        @if (reporteForm.get('mensaje')?.touched && reporteForm.get('mensaje')?.invalid) {
+          <p class="text-red-500 text-xs mt-1 animate-fade-in">
+            @if (reporteForm.get('mensaje')?.hasError('required')) { La descripción es obligatoria. }
+            @else { Necesitamos al menos 10 caracteres. }
+          </p>
+        }
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Footer / Actions: Botones Estilo Registro -->
+  <div class="p-8 pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+    <button (click)="onSubmit()" [disabled]="reporteForm.invalid || loading" 
+            class="w-full sm:w-auto order-1 sm:order-2 bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-10 rounded-full shadow-lg shadow-accent/20 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+      @if (loading) {
+        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        Enviando...
+      } @else {
+        <span>Enviar Reporte</span>
+      }
+    </button>
+    <button (click)="close()" [disabled]="loading" 
+            class="w-full sm:w-auto order-2 sm:order-1 text-slate-400 hover:text-texto dark:hover:text-white font-bold px-6 py-2 transition-colors">
+      Cancelar
+    </button>
+  </div>
+</div>

@@ -35,10 +35,7 @@ public class ReporteService {
     }
 
     @Transactional
-    public ReporteResponseDTO create(ReporteRequestDTO dto) {
-        Usuario emisor = usuarioRepository.findById(dto.getIdUsuarioEmisor())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + dto.getIdUsuarioEmisor()));
-
+    public ReporteResponseDTO create(ReporteRequestDTO dto, Usuario emisor) {
         Reporte reporte = reporteMapper.toEntity(dto);
         reporte.setUsuarioEmisor(emisor);
 

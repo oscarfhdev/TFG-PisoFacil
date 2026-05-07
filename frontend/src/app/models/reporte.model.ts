@@ -1,5 +1,4 @@
 export interface ReporteRequest {
-  idUsuarioEmisor: number;
   categoria: string;
   titulo: string;
   mensaje: string;

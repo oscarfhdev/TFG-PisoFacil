@@ -1,11 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+import { CrearReporteModal } from '../../components/crear-reporte-modal/crear-reporte-modal';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  standalone: true,
+  imports: [MatDialogModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
 export class Footer {
+  private dialog = inject(MatDialog);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
+  abrirReporte() {
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Debes iniciar sesión para reportar un problema', 'OK', { duration: 4000 });
+      return;
+    }
+    this.dialog.open(CrearReporteModal, {
+      width: '500px',
+      panelClass: ['premium-dialog-container', 'dark-dialog']
+    });
+  }
 }

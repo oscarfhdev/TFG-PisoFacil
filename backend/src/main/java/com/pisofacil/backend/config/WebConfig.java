@@ -1,22 +1,23 @@
 package com.pisofacil.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    // Ruta absoluta al directorio de uploads, configurada en application.properties
+    @Value("${app.uploads.dir}")
+    private String uploadsDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Exponer la carpeta local 'uploads/fotos' en la ruta URL '/uploads/fotos/**'
-        Path uploadDir = Paths.get("uploads/fotos");
-        String uploadPath = uploadDir.toFile().getAbsolutePath();
+        // Normalizar: asegurarse de que termina con separador de directorio
+        String location = uploadsDir.endsWith("/") ? uploadsDir : uploadsDir + "/";
 
         registry.addResourceHandler("/uploads/fotos/**")
-                .addResourceLocations("file:" + uploadPath + "/");
+                .addResourceLocations("file:" + location);
     }
 }

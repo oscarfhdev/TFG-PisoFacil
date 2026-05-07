@@ -2,6 +2,7 @@ package com.pisofacil.backend.service;
 
 import com.pisofacil.backend.exception.StorageException;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,11 @@ import java.util.UUID;
 @Service
 public class StorageService {
 
-    private final Path rootLocation = Paths.get("uploads/fotos");
+    private final Path rootLocation;
+
+    public StorageService(@Value("${app.uploads.dir}") String uploadsDir) {
+        this.rootLocation = Paths.get(uploadsDir);
+    }
 
     @PostConstruct
     public void init() {

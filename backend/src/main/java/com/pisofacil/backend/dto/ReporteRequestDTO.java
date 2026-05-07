@@ -10,9 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ReporteRequestDTO {
-    @NotNull(message = "El id del emisor es obligatorio")
-    private Long idUsuarioEmisor;
-
     @NotBlank(message = "La categoría es obligatoria")
     private String categoria;
 

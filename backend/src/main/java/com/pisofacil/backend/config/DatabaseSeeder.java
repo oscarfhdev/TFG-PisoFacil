@@ -54,7 +54,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .genero("Masculino")
                 .estudios("Ingeniería Informática")
                 .biografia("Administrador de la plataforma PisoFácil.")
-                .fotoPerfilUrl("https://ui-avatars.com/api/?name=Administrador&background=6366f1&color=fff&size=200")
+                .fotoPerfilUrl("/api/uploads/fotos/usuarios/hombre/16.jpg")
                 .esFumador(false)
                 .tieneMascota(false)
                 .tienePareja(false)
@@ -73,7 +73,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .genero("Femenino")
                 .estudios("Psicología")
                 .biografia("Buscando piso compartido para el próximo curso universitario.")
-                .fotoPerfilUrl("https://ui-avatars.com/api/?name=Usuario+Normal&background=ec4899&color=fff&size=200")
+                .fotoPerfilUrl("/api/uploads/fotos/usuarios/mujer/16.jpg")
                 .esFumador(false)
                 .tieneMascota(true)
                 .tienePareja(false)
@@ -133,7 +133,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 "Fan de la repostería. Aviso: habrá tartas caseras frecuentemente 🍰",
                 "Alérgico al desorden. Me gusta que las zonas comunes estén impecables.",
                 "Skater y fotógrafo/a amateur. Busco piso con buena luz natural.",
-                "Práctica yoga y meditación. Ambiente zen asegurado.",
+                "Practica yoga y meditación. Ambiente zen asegurado.",
                 "Gamer nocturno pero con auriculares. No molesto a nadie, prometido.",
                 "Me encanta viajar. Algunos fines de semana no estaré en el piso.",
                 "Persona tranquila que valora su intimidad pero siempre dispuesta a ayudar."
@@ -141,30 +141,32 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         List<Usuario> usuarios = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            String nombre = nombres[i];
-            String avatarUrl = "https://ui-avatars.com/api/?name=" + nombre.replace(" ", "+")
-                    + "&background=" + getRandomColor(random) + "&color=fff&size=200";
-
-            String[] partes = nombre.split(" ", 2);
-            String soloNombre = partes[0];
+            String nombreCompleto = nombres[i];
+            String[] partes = nombreCompleto.split(" ", 2);
+            String nombre = partes[0];
             String apellidos = partes.length > 1 ? partes[1] : "";
 
+            String genero = (i % 2 == 0) ? "Femenino" : "Masculino";
+            String carpetaGenero = (i % 2 == 0) ? "mujer" : "hombre";
+            int fotoNum = (i / 2) + 1;
+            String fotoUrl = "/api/uploads/fotos/usuarios/" + carpetaGenero + "/" + fotoNum + ".jpg";
+
             Usuario u = Usuario.builder()
-                    .nombre(soloNombre)
+                    .nombre(nombre)
                     .apellidos(apellidos)
-                    .email(nombre.toLowerCase().replace(" ", ".").replace("á", "a")
+                    .email(nombreCompleto.toLowerCase().replace(" ", ".").replace("á", "a")
                             .replace("é", "e").replace("í", "i").replace("ó", "o")
-                            .replace("ú", "u") + "@correo.com")
+                            .replace("ú", "u") + i + "@correo.com")
                     .password(passwordEncoder.encode("password123"))
                     .esAdmin(false)
                     .fechaNacimiento(LocalDate.of(
-                            1996 + random.nextInt(7),  // Nacidos entre 1996-2002
+                            1996 + random.nextInt(7),
                             1 + random.nextInt(12),
                             1 + random.nextInt(28)))
-                    .genero(generos[random.nextInt(generos.length)])
+                    .genero(genero)
                     .estudios(estudios[i])
                     .biografia(biografias[i])
-                    .fotoPerfilUrl(avatarUrl)
+                    .fotoPerfilUrl(fotoUrl)
                     .esFumador(random.nextBoolean())
                     .tieneMascota(random.nextBoolean())
                     .tienePareja(random.nextBoolean())
@@ -350,7 +352,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                 Foto fotoPiso = Foto.builder()
                         .piso(pisoGuardado)
                         .habitacion(null)
-                        .urlAlmacenamiento("http://localhost:8080/uploads/fotos/piso-" + pisoNum + "/" + f + ".jpg")
+                        .urlAlmacenamiento("/api/uploads/fotos/piso-" + pisoNum + "/" + f + ".jpg")
+                        .esPrincipal(f == 1) // La primera foto es la portada del piso
                         .build();
                 fotoRepository.save(fotoPiso);
             }
@@ -387,7 +390,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                     Foto fotoHab = Foto.builder()
                             .piso(pisoGuardado)
                             .habitacion(habGuardada)
-                            .urlAlmacenamiento("http://localhost:8080/uploads/fotos/hab-" + carpetaHab + "/" + fh + ".jpg")
+                            .urlAlmacenamiento("/api/uploads/fotos/hab-" + carpetaHab + "/" + fh + ".jpg")
+                            .esPrincipal(false) // Solo los pisos tienen foto principal en el E-R
                             .build();
                     fotoRepository.save(fotoHab);
                 }

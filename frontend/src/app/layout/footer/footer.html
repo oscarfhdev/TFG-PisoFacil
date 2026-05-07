@@ -33,6 +33,11 @@
           <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Quiénes somos</a></li>
           <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Contacto</a></li>
           <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Blog</a></li>
+          <li>
+            <a (click)="abrirReporte()" class="text-slate-400 hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5">
+              <i class="material-icons text-sm">bug_report</i> Reportar un problema
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -52,10 +57,6 @@
       <p class="text-slate-500 text-sm">
         © 2026 PisoFácil. Todos los derechos reservados.
       </p>
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-        <span class="text-slate-500 text-xs uppercase tracking-wider">Estado del Sistema: Operativo</span>
-      </div>
     </div>
   </div>
 </footer>

@@ -26,4 +26,7 @@ public class Foto {
 
     @Column(name = "url_almacenamiento", nullable = false)
     private String urlAlmacenamiento;
+
+    @Column(name = "es_principal")
+    private Boolean esPrincipal;
 }

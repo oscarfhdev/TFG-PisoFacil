@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/pisos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/habitaciones/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/fotos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                 
                 // Todo lo demás: requiere autenticación
                 .anyRequest().authenticated()

@@ -9,10 +9,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import com.pisofacil.backend.model.Foto;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.Builder;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface HabitacionMapper {
 
     @Mapping(target = "piso", ignore = true)
@@ -40,6 +42,10 @@ public interface HabitacionMapper {
     @Mapping(source = "piso.usuario.nombre", target = "nombrePropietario")
     @Mapping(source = "piso.usuario.fotoPerfilUrl", target = "fotoPerfilUrlPropietario")
     @Mapping(source = "piso.usuario.instagramUrl", target = "instagramUrlPropietario")
+    
+    // Fotos se mapean en @AfterMapping
+    @Mapping(target = "fotosHabitacion", ignore = true)
+    @Mapping(target = "fotosPiso", ignore = true)
     HabitacionResponseDTO toResponseDTO(Habitacion entity);
 
     @AfterMapping
@@ -48,11 +54,18 @@ public interface HabitacionMapper {
             dto.setFotosHabitacion(entity.getFotos().stream()
                     .map(Foto::getUrlAlmacenamiento)
                     .collect(Collectors.toList()));
+        } else {
+            dto.setFotosHabitacion(Collections.emptyList());
         }
         if (entity.getPiso() != null && entity.getPiso().getFotos() != null) {
+            // Solo incluir las fotos del piso en sí (habitacion == null),
+            // no las fotos que pertenecen a una habitación específica
             dto.setFotosPiso(entity.getPiso().getFotos().stream()
+                    .filter(f -> f.getHabitacion() == null)
                     .map(Foto::getUrlAlmacenamiento)
                     .collect(Collectors.toList()));
+        } else {
+            dto.setFotosPiso(Collections.emptyList());
         }
     }
 
