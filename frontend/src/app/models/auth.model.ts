@@ -9,6 +9,7 @@ export interface LoginResponse {
   nombre: string;
   email: string;
   role: string;
+  fotoPerfilUrl?: string;
 }
 
 export interface RegisterRequest {

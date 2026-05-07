@@ -5,6 +5,7 @@ import { Register } from './pages/register/register';
 import { HabitacionDetail } from './pages/habitacion-detail/habitacion-detail';
 import { PublicarAnuncio } from './pages/publicar-anuncio/publicar-anuncio';
 import { MisFavoritos } from './pages/mis-favoritos/mis-favoritos';
+import { MisAnuncios } from './pages/mis-anuncios/mis-anuncios';
 import { Perfil } from './pages/perfil/perfil';
 import { NotFound } from './pages/not-found/not-found';
 import { AdminLayout } from './admin/admin-layout/admin-layout';
@@ -24,6 +25,7 @@ export const routes: Routes = [
   // Rutas protegidas (usuario logueado)
   { path: 'publicar', component: PublicarAnuncio, canActivate: [authGuard] },
   { path: 'favoritos', component: MisFavoritos, canActivate: [authGuard] },
+  { path: 'mis-anuncios', component: MisAnuncios, canActivate: [authGuard] },
   { path: 'perfil', component: Perfil, canActivate: [authGuard] },
   
   // Rutas de administración

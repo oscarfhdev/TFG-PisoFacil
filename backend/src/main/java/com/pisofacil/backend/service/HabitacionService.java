@@ -6,9 +6,11 @@ import com.pisofacil.backend.mapper.HabitacionMapper;
 import com.pisofacil.backend.model.Habitacion;
 import com.pisofacil.backend.model.Piso;
 import com.pisofacil.backend.repository.HabitacionRepository;
+import com.pisofacil.backend.repository.HabitacionSpecification;
 import com.pisofacil.backend.repository.PisoRepository;
 import com.pisofacil.backend.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,11 @@ public class HabitacionService {
     private final HabitacionRepository habitacionRepository;
     private final PisoRepository pisoRepository;
     private final HabitacionMapper habitacionMapper;
+
+    @Transactional(readOnly = true)
+    public List<HabitacionResponseDTO> findDestacadas() {
+        return habitacionMapper.toResponseDTOList(habitacionRepository.findDestacadasRandom());
+    }
 
     @Transactional(readOnly = true)
     public List<HabitacionResponseDTO> findAll() {
@@ -41,16 +48,17 @@ public class HabitacionService {
     }
 
     @Transactional(readOnly = true)
-    public List<HabitacionResponseDTO> findByCiudadAndPrecio(String ciudad, BigDecimal precioMax) {
-        if (precioMax != null) {
-            return habitacionMapper.toResponseDTOList(
-                    habitacionRepository.findByEstaDisponibleTrueAndPisoCiudadIgnoreCaseAndPrecioMensualLessThanEqual(ciudad, precioMax)
-            );
-        } else {
-            return habitacionMapper.toResponseDTOList(
-                    habitacionRepository.findByEstaDisponibleTrueAndPisoCiudadIgnoreCase(ciudad)
-            );
-        }
+    public List<HabitacionResponseDTO> buscarAvanzado(
+            String ciudad, BigDecimal precioMin, BigDecimal precioMax,
+            Boolean tieneBanoPrivado, Boolean exterior,
+            Boolean tieneAireAcondicionado, Boolean admiteMascotas,
+            Boolean admiteFumadores, Boolean lgtbiFriendly) {
+
+        Specification<Habitacion> spec = HabitacionSpecification.buildFiltro(
+            ciudad, precioMin, precioMax, tieneBanoPrivado, exterior,
+            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly);
+
+        return habitacionMapper.toResponseDTOList(habitacionRepository.findAll(spec));
     }
 
     @Transactional

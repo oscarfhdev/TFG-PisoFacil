@@ -9,7 +9,7 @@
 
     <!-- Stepper Visual -->
     <div class="flex items-center justify-between mb-8 relative z-10">
-      <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-700 -z-10">
+      <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 dark:bg-slate-700 -z-10">
         <div class="h-full bg-accent transition-all duration-500" [style.width.%]="(currentStep() / 3) * 100"></div>
       </div>
       
@@ -18,7 +18,9 @@
         <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
              [class.bg-green-500]="currentStep() > 0" [class.border-green-500]="currentStep() > 0" [class.text-white]="currentStep() >= 0"
              [class.bg-accent]="currentStep() === 0" [class.border-accent]="currentStep() === 0"
-             [class.bg-slate-800]="currentStep() < 0" [class.border-slate-700]="currentStep() < 0" [class.text-slate-500]="currentStep() < 0">
+             [class.bg-gray-100]="currentStep() < 0" [class.dark:bg-slate-800]="currentStep() < 0" 
+             [class.border-gray-200]="currentStep() < 0" [class.dark:border-slate-700]="currentStep() < 0" 
+             [class.text-gray-400]="currentStep() < 0" [class.dark:text-slate-500]="currentStep() < 0">
           @if (currentStep() > 0) { ✓ } @else { 1 }
         </div>
         <span class="text-xs mt-2 text-slate-400 hidden sm:block">Cuenta</span>
@@ -29,7 +31,9 @@
         <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
              [class.bg-green-500]="currentStep() > 1" [class.border-green-500]="currentStep() > 1" [class.text-white]="currentStep() >= 1"
              [class.bg-accent]="currentStep() === 1" [class.border-accent]="currentStep() === 1"
-             [class.bg-slate-800]="currentStep() < 1" [class.border-slate-700]="currentStep() < 1" [class.text-slate-500]="currentStep() < 1">
+             [class.bg-gray-100]="currentStep() < 1" [class.dark:bg-slate-800]="currentStep() < 1" 
+             [class.border-gray-200]="currentStep() < 1" [class.dark:border-slate-700]="currentStep() < 1" 
+             [class.text-gray-400]="currentStep() < 1" [class.dark:text-slate-500]="currentStep() < 1">
           @if (currentStep() > 1) { ✓ } @else { 2 }
         </div>
         <span class="text-xs mt-2 text-slate-400 hidden sm:block">Personal</span>
@@ -40,7 +44,9 @@
         <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
              [class.bg-green-500]="currentStep() > 2" [class.border-green-500]="currentStep() > 2" [class.text-white]="currentStep() >= 2"
              [class.bg-accent]="currentStep() === 2" [class.border-accent]="currentStep() === 2"
-             [class.bg-slate-800]="currentStep() < 2" [class.border-slate-700]="currentStep() < 2" [class.text-slate-500]="currentStep() < 2">
+             [class.bg-gray-100]="currentStep() < 2" [class.dark:bg-slate-800]="currentStep() < 2" 
+             [class.border-gray-200]="currentStep() < 2" [class.dark:border-slate-700]="currentStep() < 2" 
+             [class.text-gray-400]="currentStep() < 2" [class.dark:text-slate-500]="currentStep() < 2">
           @if (currentStep() > 2) { ✓ } @else { 3 }
         </div>
         <span class="text-xs mt-2 text-slate-400 hidden sm:block">Afinidad</span>
@@ -51,7 +57,9 @@
         <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors duration-300"
              [class.bg-green-500]="currentStep() > 3" [class.border-green-500]="currentStep() > 3" [class.text-white]="currentStep() >= 3"
              [class.bg-accent]="currentStep() === 3" [class.border-accent]="currentStep() === 3"
-             [class.bg-slate-800]="currentStep() < 3" [class.border-slate-700]="currentStep() < 3" [class.text-slate-500]="currentStep() < 3">
+             [class.bg-gray-100]="currentStep() < 3" [class.dark:bg-slate-800]="currentStep() < 3" 
+             [class.border-gray-200]="currentStep() < 3" [class.dark:border-slate-700]="currentStep() < 3" 
+             [class.text-gray-400]="currentStep() < 3" [class.dark:text-slate-500]="currentStep() < 3">
           @if (currentStep() > 3) { ✓ } @else { 4 }
         </div>
         <span class="text-xs mt-2 text-slate-400 hidden sm:block">Foto</span>
@@ -106,29 +114,29 @@
         <form [formGroup]="step1Form" (ngSubmit)="nextStep()" class="space-y-4 animate-fade-in">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-slate-300 mb-1 text-sm">Nombre *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Nombre *</label>
               <input type="text" formControlName="nombre" 
-                     class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
             </div>
             <div>
-              <label class="block text-slate-300 mb-1 text-sm">Apellidos</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Apellidos</label>
               <input type="text" formControlName="apellidos" 
-                     class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
             </div>
           </div>
           <div>
-            <label class="block text-slate-300 mb-1 text-sm">Fecha de Nacimiento</label>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Fecha de Nacimiento</label>
             <input type="date" formControlName="fechaNacimiento" 
-                   class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors [color-scheme:dark]">
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors [color-scheme:dark]">
           </div>
           <div>
-            <label class="block text-slate-300 mb-1 text-sm">Estudios/Profesión</label>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Estudios/Profesión</label>
             <input type="text" formControlName="estudios" 
-                   class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
                    placeholder="Ej. Ingeniería Informática">
           </div>
           <div class="pt-4 flex justify-between">
-            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-texto dark:hover:text-white px-4 py-2 transition-colors">Atrás</button>
             <button type="submit" [disabled]="step1Form.invalid" 
                     class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Siguiente
@@ -172,7 +180,7 @@
           </div>
 
           <div class="pt-4 flex justify-between">
-            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-texto dark:hover:text-white px-4 py-2 transition-colors">Atrás</button>
             <button type="submit" [disabled]="step2Form.invalid" 
                     class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Siguiente
@@ -202,7 +210,7 @@
           </div>
 
           <div class="pt-8 flex justify-between mt-auto">
-            <button type="button" (click)="prevStep()" [disabled]="loading()" class="text-slate-400 hover:text-white px-4 py-2 transition-colors">Atrás</button>
+            <button type="button" (click)="prevStep()" [disabled]="loading()" class="text-slate-400 hover:text-texto dark:hover:text-white px-4 py-2 transition-colors">Atrás</button>
             <button type="button" (click)="onSubmit()" [disabled]="loading()" 
                     class="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 flex items-center gap-2">
               @if (loading()) {

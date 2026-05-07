@@ -34,11 +34,26 @@ public class HabitacionController {
         return ResponseEntity.ok(habitacionService.findDisponibles());
     }
 
+    @GetMapping("/destacadas")
+    public ResponseEntity<List<HabitacionResponseDTO>> findDestacadas() {
+        return ResponseEntity.ok(habitacionService.findDestacadas());
+    }
+
     @GetMapping("/buscar")
-    public ResponseEntity<List<HabitacionResponseDTO>> buscar(
-            @RequestParam String ciudad,
-            @RequestParam(required = false) BigDecimal precioMax) {
-        return ResponseEntity.ok(habitacionService.findByCiudadAndPrecio(ciudad, precioMax));
+    public ResponseEntity<List<HabitacionResponseDTO>> buscarAvanzado(
+            @RequestParam(required = false) String ciudad,
+            @RequestParam(required = false) BigDecimal precioMin,
+            @RequestParam(required = false) BigDecimal precioMax,
+            @RequestParam(required = false) Boolean tieneBanoPrivado,
+            @RequestParam(required = false) Boolean exterior,
+            @RequestParam(required = false) Boolean tieneAireAcondicionado,
+            @RequestParam(required = false) Boolean admiteMascotas,
+            @RequestParam(required = false) Boolean admiteFumadores,
+            @RequestParam(required = false) Boolean lgtbiFriendly) {
+
+        return ResponseEntity.ok(habitacionService.buscarAvanzado(
+            ciudad, precioMin, precioMax, tieneBanoPrivado, exterior,
+            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly));
     }
 
     @PostMapping

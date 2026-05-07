@@ -21,27 +21,55 @@
 
       <!-- Lógica de Usuario -->
       @if (authService.isLoggedIn()) {
-        <span class="text-sm font-medium text-texto dark:text-texto-dark hidden sm:inline">
-          Hola, {{ authService.currentUser()?.nombre }}
-        </span>
         
-        <a routerLink="/favoritos" class="text-texto dark:text-texto-dark font-medium hover:underline">
-          Favoritos
+        <a routerLink="/publicar" class="bg-accent text-white px-4 py-2 rounded-full hover:opacity-90 transition font-medium hidden sm:inline-block">
+          Publicar Anuncio
         </a>
         
-        <a routerLink="/publicar" class="bg-accent text-white px-4 py-2 rounded-full hover:opacity-90 transition font-medium">
-          Publicar
-        </a>
-        
-        @if (authService.isAdmin()) {
-          <a routerLink="/admin" class="text-red-500 font-bold hover:underline">
-            Panel Admin
-          </a>
-        }
-        
-        <button (click)="logout()" class="text-gray-500 dark:text-gray-400 font-medium hover:underline">
-          Salir
+        <button [matMenuTriggerFor]="userMenu" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:ring-2 hover:ring-primary transition cursor-pointer overflow-hidden focus:outline-none">
+          @if (authService.currentUser()?.fotoPerfilUrl) {
+            <img [src]="authService.currentUser()!.fotoPerfilUrl" class="w-full h-full object-cover" alt="Avatar">
+          } @else {
+            <mat-icon class="text-gray-500 dark:text-gray-400">person</mat-icon>
+          }
         </button>
+
+        <mat-menu #userMenu="matMenu" class="dark:bg-gray-800">
+          <div class="px-4 py-3 border-b dark:border-gray-700 outline-none">
+            <p class="font-semibold text-gray-800 dark:text-gray-200">{{ authService.currentUser()?.nombre }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ authService.currentUser()?.email }}</p>
+          </div>
+          
+          <button mat-menu-item routerLink="/perfil" class="dark:text-gray-300 dark:hover:bg-gray-700">
+            <mat-icon class="dark:text-gray-300">account_circle</mat-icon> 
+            <span>Mi Perfil</span>
+          </button>
+          
+          <button mat-menu-item routerLink="/mis-anuncios" class="dark:text-gray-300 dark:hover:bg-gray-700">
+            <mat-icon class="dark:text-gray-300">apartment</mat-icon> 
+            <span>Mis Anuncios</span>
+          </button>
+          
+          <button mat-menu-item routerLink="/favoritos" class="dark:text-gray-300 dark:hover:bg-gray-700">
+            <mat-icon class="dark:text-gray-300">favorite</mat-icon> 
+            <span>Favoritos</span>
+          </button>
+          
+          @if (authService.isAdmin()) {
+            <button mat-menu-item routerLink="/admin" class="dark:text-gray-300 dark:hover:bg-gray-700">
+              <mat-icon class="text-red-500">admin_panel_settings</mat-icon> 
+              <span class="text-red-500 font-medium">Panel Admin</span>
+            </button>
+          }
+          
+          <mat-divider class="dark:border-gray-700"></mat-divider>
+          
+          <button mat-menu-item (click)="logout()" class="dark:text-gray-300 dark:hover:bg-gray-700">
+            <mat-icon class="text-gray-500">logout</mat-icon> 
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+        
       } @else {
         <a routerLink="/login" class="text-texto dark:text-texto-dark font-medium hover:underline">
           Entrar

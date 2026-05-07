@@ -1,53 +1,53 @@
 <div class="space-y-6 font-lato animate-fade-in">
   
   <div class="flex items-center justify-between">
-    <h2 class="text-2xl font-bold text-white font-poppins">Vista General</h2>
+    <h2 class="text-2xl font-bold text-texto dark:text-white font-poppins transition-colors">Vista General</h2>
   </div>
 
   <!-- KPIs Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     
     <!-- KPI Usuarios -->
-    <div class="bg-card-dark rounded-xl p-6 border border-slate-800 shadow-lg flex items-center gap-4 hover:border-slate-700 transition-colors">
-      <div class="w-14 h-14 rounded-full bg-blue-500/15 text-blue-400 flex items-center justify-center text-3xl shrink-0">
+    <div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-gray-200 dark:border-slate-800 shadow-lg flex items-center gap-4 hover:border-gray-300 dark:hover:border-slate-700 transition-colors">
+      <div class="w-14 h-14 rounded-full bg-blue-500/15 text-blue-500 dark:text-blue-400 flex items-center justify-center text-3xl shrink-0">
         👥
       </div>
       <div>
-        <p class="text-sm text-slate-400 font-medium">Total Usuarios</p>
-        <p class="text-3xl font-bold text-white font-poppins">{{ usuarios().length }}</p>
+        <p class="text-sm text-gray-500 dark:text-slate-400 font-medium transition-colors">Total Usuarios</p>
+        <p class="text-3xl font-bold text-texto dark:text-white font-poppins transition-colors">{{ usuarios().length }}</p>
       </div>
     </div>
 
     <!-- KPI Pisos -->
-    <div class="bg-card-dark rounded-xl p-6 border border-slate-800 shadow-lg flex items-center gap-4 hover:border-slate-700 transition-colors">
-      <div class="w-14 h-14 rounded-full bg-green-500/15 text-green-400 flex items-center justify-center text-3xl shrink-0">
+    <div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-gray-200 dark:border-slate-800 shadow-lg flex items-center gap-4 hover:border-gray-300 dark:hover:border-slate-700 transition-colors">
+      <div class="w-14 h-14 rounded-full bg-green-500/15 text-green-500 dark:text-green-400 flex items-center justify-center text-3xl shrink-0">
         🏠
       </div>
       <div>
-        <p class="text-sm text-slate-400 font-medium">Pisos Activos</p>
-        <p class="text-3xl font-bold text-white font-poppins">{{ pisos().length }}</p>
+        <p class="text-sm text-gray-500 dark:text-slate-400 font-medium transition-colors">Pisos Activos</p>
+        <p class="text-3xl font-bold text-texto dark:text-white font-poppins transition-colors">{{ pisos().length }}</p>
       </div>
     </div>
 
     <!-- KPI Habitaciones -->
-    <div class="bg-card-dark rounded-xl p-6 border border-slate-800 shadow-lg flex items-center gap-4 hover:border-slate-700 transition-colors">
-      <div class="w-14 h-14 rounded-full bg-purple-500/15 text-purple-400 flex items-center justify-center text-3xl shrink-0">
+    <div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-gray-200 dark:border-slate-800 shadow-lg flex items-center gap-4 hover:border-gray-300 dark:hover:border-slate-700 transition-colors">
+      <div class="w-14 h-14 rounded-full bg-purple-500/15 text-purple-500 dark:text-purple-400 flex items-center justify-center text-3xl shrink-0">
         🛏️
       </div>
       <div>
-        <p class="text-sm text-slate-400 font-medium">Habitaciones Libres</p>
-        <p class="text-3xl font-bold text-white font-poppins">{{ habitaciones().length }}</p>
+        <p class="text-sm text-gray-500 dark:text-slate-400 font-medium transition-colors">Habitaciones Libres</p>
+        <p class="text-3xl font-bold text-texto dark:text-white font-poppins transition-colors">{{ habitaciones().length }}</p>
       </div>
     </div>
 
     <!-- KPI Reportes -->
-    <div class="bg-card-dark rounded-xl p-6 border border-slate-800 shadow-lg flex items-center gap-4 hover:border-slate-700 transition-colors">
-      <div class="w-14 h-14 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center text-3xl shrink-0">
+    <div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-gray-200 dark:border-slate-800 shadow-lg flex items-center gap-4 hover:border-gray-300 dark:hover:border-slate-700 transition-colors">
+      <div class="w-14 h-14 rounded-full bg-amber-500/15 text-amber-500 dark:text-amber-400 flex items-center justify-center text-3xl shrink-0">
         📋
       </div>
       <div>
-        <p class="text-sm text-slate-400 font-medium">Reportes Totales</p>
-        <p class="text-3xl font-bold text-white font-poppins">{{ reportes().length }}</p>
+        <p class="text-sm text-gray-500 dark:text-slate-400 font-medium transition-colors">Reportes Totales</p>
+        <p class="text-3xl font-bold text-texto dark:text-white font-poppins transition-colors">{{ reportes().length }}</p>
       </div>
     </div>
 
@@ -57,27 +57,31 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
     
     <!-- Últimos Usuarios -->
-    <div class="bg-card-dark rounded-xl border border-slate-800 shadow-lg overflow-hidden flex flex-col">
-      <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-[#0B1117]/30">
-        <h3 class="text-lg font-bold text-white font-poppins">Nuevos Usuarios</h3>
+    <div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-slate-800 shadow-lg overflow-hidden flex flex-col transition-colors">
+      <div class="p-5 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/40 transition-colors">
+        <h3 class="text-lg font-bold text-texto dark:text-white font-poppins transition-colors">Nuevos Usuarios</h3>
       </div>
       
-      <div class="divide-y divide-slate-800/50 flex-1">
+      <div class="divide-y divide-gray-100 dark:divide-slate-800/50 flex-1 transition-colors">
         @for (user of usuarios().slice(0, 5); track user.idUsuario) {
-          <div class="p-4 flex items-center justify-between hover:bg-slate-800/20 transition-colors">
+          <div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800/20 transition-colors">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold border border-slate-700 shrink-0">
-                {{ user.nombre.charAt(0) | uppercase }}
-              </div>
+              @if (user.fotoPerfilUrl) {
+                <img [src]="user.fotoPerfilUrl" alt="Avatar de {{ user.nombre }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-slate-700 shrink-0 transition-colors">
+              } @else {
+                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-slate-400 font-bold border border-gray-200 dark:border-slate-700 shrink-0 transition-colors">
+                  {{ user.nombre.charAt(0) | uppercase }}
+                </div>
+              }
               <div>
-                <p class="text-sm font-bold text-white">{{ user.nombre }} {{ user.apellidos || '' }}</p>
-                <p class="text-xs text-slate-400">{{ user.email }}</p>
+                <p class="text-sm font-bold text-texto dark:text-white transition-colors">{{ user.nombre }} {{ user.apellidos || '' }}</p>
+                <p class="text-xs text-gray-500 dark:text-slate-400 transition-colors">{{ user.email }}</p>
               </div>
             </div>
-            <span class="text-xs text-slate-500">{{ user.fechaRegistro | date:'dd/MM/yyyy' }}</span>
+            <span class="text-xs text-gray-400 dark:text-slate-500 transition-colors">{{ user.fechaRegistro | date:'dd/MM/yyyy' }}</span>
           </div>
         } @empty {
-          <div class="p-8 text-center text-slate-500">
+          <div class="p-8 text-center text-gray-400 dark:text-slate-500 transition-colors">
             No hay usuarios recientes.
           </div>
         }
@@ -85,33 +89,33 @@
     </div>
 
     <!-- Últimos Reportes -->
-    <div class="bg-card-dark rounded-xl border border-slate-800 shadow-lg overflow-hidden flex flex-col">
-      <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-[#0B1117]/30">
-        <h3 class="text-lg font-bold text-white font-poppins">Reportes Recientes</h3>
+    <div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-slate-800 shadow-lg overflow-hidden flex flex-col transition-colors">
+      <div class="p-5 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/40 transition-colors">
+        <h3 class="text-lg font-bold text-texto dark:text-white font-poppins transition-colors">Reportes Recientes</h3>
       </div>
       
-      <div class="divide-y divide-slate-800/50 flex-1">
+      <div class="divide-y divide-gray-100 dark:divide-slate-800/50 flex-1 transition-colors">
         @for (report of reportes().slice(0, 5); track report.idReporte) {
-          <div class="p-4 hover:bg-slate-800/20 transition-colors">
+          <div class="p-4 hover:bg-gray-50 dark:hover:bg-slate-800/20 transition-colors">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm font-bold text-white line-clamp-1">{{ report.titulo }}</p>
+              <p class="text-sm font-bold text-texto dark:text-white line-clamp-1 transition-colors">{{ report.titulo }}</p>
               
               @if (report.estado === 'PENDIENTE') {
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/20">PENDIENTE</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 transition-colors">PENDIENTE</span>
               } @else if (report.estado === 'RESUELTO') {
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/20">RESUELTO</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 transition-colors">RESUELTO</span>
               } @else {
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/20">RECHAZADO</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 transition-colors">RECHAZADO</span>
               }
             </div>
-            <p class="text-xs text-slate-400 line-clamp-1 mb-2">{{ report.mensaje }}</p>
-            <div class="flex items-center justify-between text-xs text-slate-500">
+            <p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-1 mb-2 transition-colors">{{ report.mensaje }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-400 dark:text-slate-500 transition-colors">
               <span>Por: {{ report.nombreEmisor }}</span>
               <span>{{ report.fechaCreacion | date:'shortDate' }}</span>
             </div>
           </div>
         } @empty {
-          <div class="p-8 text-center text-slate-500">
+          <div class="p-8 text-center text-gray-400 dark:text-slate-500 transition-colors">
             No hay reportes recientes.
           </div>
         }
