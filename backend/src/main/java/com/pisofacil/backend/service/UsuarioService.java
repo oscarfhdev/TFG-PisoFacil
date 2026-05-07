@@ -118,6 +118,15 @@ public class UsuarioService {
     }
 
     @Transactional
+    public void adminResetPassword(Long id, com.pisofacil.backend.dto.AdminPasswordResetRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
+
+        usuario.setPassword(passwordEncoder.encode(dto.getPasswordNueva()));
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
     public void delete(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException("Usuario no encontrado con ID: " + id);

@@ -60,7 +60,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://192.168.1.130:4200", "http://127.0.0.1:4200"));
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:4200",
+                "http://192.168.1.130:4200",
+                "http://127.0.0.1:4200",
+                "https://*.trycloudflare.com"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization")); // Para que Angular lea el token

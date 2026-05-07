@@ -13,9 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class PublicarAnuncioRequestDTO {
 
-    @NotNull(message = "El ID del usuario es obligatorio")
-    private Long idUsuario;
-
     // Campos de Piso
     @NotBlank(message = "La dirección es obligatoria")
     private String direccion;

@@ -1,5 +1,9 @@
 package com.pisofacil.backend.controller;
 
+import com.pisofacil.backend.model.Usuario;
+import com.pisofacil.backend.repository.UsuarioRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.pisofacil.backend.dto.PublicarAnuncioRequestDTO;
 import com.pisofacil.backend.dto.PublicarAnuncioResponseDTO;
 import com.pisofacil.backend.service.AnuncioService;
@@ -18,9 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnuncioController {
 
     private final AnuncioService anuncioService;
+    private final UsuarioRepository usuarioRepository;
+
+    private Usuario getUsuarioAutenticado() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String email = ((UserDetails) principal).getUsername();
+            return usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        }
+        throw new RuntimeException("Usuario no autenticado");
+    }
 
     @PostMapping("/publicar")
     public ResponseEntity<PublicarAnuncioResponseDTO> publicar(@Valid @RequestBody PublicarAnuncioRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(anuncioService.publicar(dto));
+        Usuario usuario = getUsuarioAutenticado();
+        return ResponseEntity.status(HttpStatus.CREATED).body(anuncioService.publicar(dto, usuario));
     }
 }

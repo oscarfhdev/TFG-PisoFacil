@@ -49,6 +49,19 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.toggleEstadoCuenta(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/admin-update")
+    public ResponseEntity<UsuarioResponseDTO> adminUpdateUser(@PathVariable Long id, @Valid @RequestBody PerfilUpdateRequestDTO dto) {
+        return ResponseEntity.ok(usuarioService.updatePerfil(id, dto));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<?> adminResetPassword(@PathVariable Long id, @Valid @RequestBody com.pisofacil.backend.dto.AdminPasswordResetRequestDTO dto) {
+        usuarioService.adminResetPassword(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         usuarioService.delete(id);
