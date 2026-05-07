@@ -6,6 +6,10 @@ import com.pisofacil.backend.model.Habitacion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import org.mapstruct.MappingTarget;
+import com.pisofacil.backend.model.Foto;
+import org.mapstruct.AfterMapping;
+import java.util.stream.Collectors;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -21,7 +25,36 @@ public interface HabitacionMapper {
     @Mapping(source = "piso.idPiso", target = "idPiso")
     @Mapping(source = "piso.ciudad", target = "ciudad")
     @Mapping(source = "piso.direccion", target = "direccion")
+    
+    // Mapeos extraídos del Piso
+    @Mapping(source = "piso.descripcionGlobal", target = "descripcionGlobal")
+    @Mapping(source = "piso.numHabitacionesTotal", target = "numHabitacionesTotal")
+    @Mapping(source = "piso.tieneWifi", target = "tieneWifi")
+    @Mapping(source = "piso.tieneAscensor", target = "tieneAscensor")
+    @Mapping(source = "piso.admiteMascotas", target = "admiteMascotas")
+    @Mapping(source = "piso.admiteFumadores", target = "admiteFumadores")
+    @Mapping(source = "piso.lgtbiFriendly", target = "lgtbiFriendly")
+    
+    // Mapeos extraídos del Propietario (Piso -> Usuario)
+    @Mapping(source = "piso.usuario.idUsuario", target = "idUsuarioPropietario")
+    @Mapping(source = "piso.usuario.nombre", target = "nombrePropietario")
+    @Mapping(source = "piso.usuario.fotoPerfilUrl", target = "fotoPerfilUrlPropietario")
+    @Mapping(source = "piso.usuario.instagramUrl", target = "instagramUrlPropietario")
     HabitacionResponseDTO toResponseDTO(Habitacion entity);
+
+    @AfterMapping
+    default void mapFotos(Habitacion entity, @MappingTarget HabitacionResponseDTO dto) {
+        if (entity.getFotos() != null) {
+            dto.setFotosHabitacion(entity.getFotos().stream()
+                    .map(Foto::getUrlAlmacenamiento)
+                    .collect(Collectors.toList()));
+        }
+        if (entity.getPiso() != null && entity.getPiso().getFotos() != null) {
+            dto.setFotosPiso(entity.getPiso().getFotos().stream()
+                    .map(Foto::getUrlAlmacenamiento)
+                    .collect(Collectors.toList()));
+        }
+    }
 
     List<HabitacionResponseDTO> toResponseDTOList(List<Habitacion> entities);
 }

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PisoRequest, PisoResponse } from '../models/piso.model';
+import { MisPisosResponse } from '../models/mis-pisos.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,6 +13,10 @@ export class PisoService {
 
   findAll(): Observable<PisoResponse[]> {
     return this.http.get<PisoResponse[]>(this.apiUrl);
+  }
+
+  getMyPisos(): Observable<MisPisosResponse[]> {
+    return this.http.get<MisPisosResponse[]>(`${this.apiUrl}/me`);
   }
 
   findById(id: number): Observable<PisoResponse> {

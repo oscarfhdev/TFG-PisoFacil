@@ -8,7 +8,9 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+import com.pisofacil.backend.dto.MisPisosResponseDTO;
+
+@Mapper(componentModel = "spring", uses = {HabitacionMapper.class})
 public interface PisoMapper {
 
     @Mapping(target = "usuario", ignore = true)
@@ -23,4 +25,10 @@ public interface PisoMapper {
     PisoResponseDTO toResponseDTO(Piso entity);
 
     List<PisoResponseDTO> toResponseDTOList(List<Piso> entities);
+
+    @Mapping(source = "usuario.idUsuario", target = "idUsuario")
+    @Mapping(source = "usuario.nombre", target = "nombreUsuario")
+    MisPisosResponseDTO toMisPisosResponseDTO(Piso entity);
+
+    List<MisPisosResponseDTO> toMisPisosResponseDTOList(List<Piso> entities);
 }

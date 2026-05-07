@@ -26,4 +26,25 @@ public class HabitacionResponseDTO {
     private Boolean exterior;
     private Boolean tieneCalefaccion;
     private Boolean tieneAireAcondicionado;
+
+    // --- CAMPOS ENRIQUECIDOS AÑADIDOS ---
+    
+    // Características adicionales del Piso padre
+    private String descripcionGlobal;
+    private Integer numHabitacionesTotal;
+    private Boolean tieneWifi;
+    private Boolean tieneAscensor;
+    private Boolean admiteMascotas;
+    private Boolean admiteFumadores;
+    private Boolean lgtbiFriendly;
+    
+    // Datos del Usuario Propietario
+    private Long idUsuarioPropietario;
+    private String nombrePropietario;
+    private String fotoPerfilUrlPropietario;
+    private String instagramUrlPropietario;
+    
+    // Listas de URLs de fotos separadas
+    private java.util.List<String> fotosHabitacion;
+    private java.util.List<String> fotosPiso;
 }

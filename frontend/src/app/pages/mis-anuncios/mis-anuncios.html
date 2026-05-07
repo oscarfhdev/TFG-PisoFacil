@@ -1,0 +1,137 @@
+<div class="container mx-auto px-4 py-8 max-w-5xl">
+  
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-texto dark:text-texto-dark">Mis Anuncios</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">Gestiona tus propiedades y habitaciones publicadas</p>
+    </div>
+    <a routerLink="/publicar" class="bg-primary text-white px-6 py-2.5 rounded-full hover:opacity-90 transition font-medium flex items-center gap-2 shadow-sm">
+      <mat-icon>add</mat-icon>
+      Nuevo Piso
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+  } @else if (pisos().length === 0) {
+    <!-- Empty state -->
+    <div class="bg-card dark:bg-card-dark rounded-3xl p-12 text-center shadow-sm border border-border dark:border-border-dark flex flex-col items-center">
+      <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
+        <mat-icon class="text-5xl text-gray-400">home_work</mat-icon>
+      </div>
+      <h2 class="text-2xl font-bold text-texto dark:text-texto-dark mb-2">Aún no tienes anuncios</h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-md mb-8">Publica tu primer piso para empezar a encontrar los compañeros ideales.</p>
+      <a routerLink="/publicar" class="bg-primary text-white px-8 py-3 rounded-full hover:opacity-90 transition font-semibold text-lg inline-flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+        <mat-icon>add_home</mat-icon>
+        Publicar mi primer piso
+      </a>
+    </div>
+  } @else {
+    <!-- Lista de Pisos -->
+    <div class="space-y-8">
+      @for (piso of pisos(); track piso.idPiso) {
+        <div class="bg-card dark:bg-card-dark rounded-2xl shadow-sm border border-border dark:border-border-dark overflow-hidden">
+          
+          <!-- Header del Piso -->
+          <div class="p-6 border-b border-border dark:border-border-dark flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-50 dark:bg-gray-800/50">
+            <div>
+              <div class="flex items-center gap-3 mb-1">
+                <h2 class="text-xl font-bold text-texto dark:text-texto-dark">{{ piso.direccion }}</h2>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                  ID: {{ piso.idPiso }}
+                </span>
+              </div>
+              <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                <mat-icon class="text-sm">location_on</mat-icon> {{ piso.ciudad }}
+              </p>
+              
+              <!-- Features del piso (chips) -->
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300">
+                  <mat-icon class="text-[14px] w-[14px] h-[14px]">bed</mat-icon> {{ piso.numHabitacionesTotal }} habs
+                </span>
+                <span class="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300">
+                  <mat-icon class="text-[14px] w-[14px] h-[14px]">shower</mat-icon> {{ piso.numBanos }} baños
+                </span>
+                @if (piso.tieneWifi) {
+                  <span class="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300">
+                    <mat-icon class="text-[14px] w-[14px] h-[14px]">wifi</mat-icon> WiFi
+                  </span>
+                }
+              </div>
+            </div>
+            
+            <div class="flex gap-2">
+              <button class="p-2 text-gray-500 hover:text-primary transition hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full" title="Editar Piso">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="p-2 text-gray-500 hover:text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full" title="Eliminar Piso">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Habitaciones -->
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-texto dark:text-texto-dark mb-4 flex items-center gap-2">
+              <mat-icon class="text-primary">meeting_room</mat-icon>
+              Habitaciones ({{ piso.habitaciones?.length || 0 }})
+            </h3>
+            
+            @if (!piso.habitaciones || piso.habitaciones.length === 0) {
+              <div class="text-center py-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+                <p class="text-gray-500 dark:text-gray-400 mb-3">No hay habitaciones publicadas en este piso.</p>
+                <a routerLink="/publicar" [queryParams]="{pisoId: piso.idPiso}" class="text-primary font-medium hover:underline inline-flex items-center gap-1">
+                  <mat-icon class="text-sm">add_circle</mat-icon> Añadir primera habitación
+                </a>
+              </div>
+            } @else {
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @for (hab of piso.habitaciones; track hab.idHabitacion) {
+                  <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col hover:border-primary dark:hover:border-primary transition group relative overflow-hidden">
+                    <!-- Status indicator -->
+                    <div class="absolute top-0 right-0 w-16 h-16 overflow-hidden">
+                      <div class="absolute transform rotate-45 text-center text-white text-[10px] font-bold py-1 right-[-20px] top-[10px] w-[80px]"
+                           [class]="hab.estaDisponible ? 'bg-green-500' : 'bg-red-500'">
+                        {{ hab.estaDisponible ? 'DISPONIBLE' : 'OCUPADA' }}
+                      </div>
+                    </div>
+                    
+                    <h4 class="font-bold text-texto dark:text-texto-dark truncate pr-8">{{ hab.tituloAnuncio }}</h4>
+                    <p class="text-2xl font-bold text-primary mt-2">{{ hab.precioMensual }}€<span class="text-sm text-gray-500 font-normal">/mes</span></p>
+                    
+                    <div class="mt-4 flex gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      @if (hab.superficieM2) {
+                        <span class="flex items-center gap-1"><mat-icon class="text-[16px] w-[16px] h-[16px]">square_foot</mat-icon> {{ hab.superficieM2 }}m²</span>
+                      }
+                      @if (hab.tieneBanoPrivado) {
+                        <span class="flex items-center gap-1"><mat-icon class="text-[16px] w-[16px] h-[16px]">bathroom</mat-icon> Baño priv.</span>
+                      }
+                    </div>
+                    
+                    <div class="mt-auto pt-4 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                      <a [routerLink]="['/habitacion', hab.idHabitacion]" class="p-1.5 text-gray-500 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition" title="Ver anuncio">
+                        <mat-icon class="text-[20px] w-[20px] h-[20px]">visibility</mat-icon>
+                      </a>
+                      <button class="p-1.5 text-gray-500 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition" title="Editar">
+                        <mat-icon class="text-[20px] w-[20px] h-[20px]">edit</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                }
+                
+                <!-- Card for adding new room -->
+                <a routerLink="/publicar" [queryParams]="{pisoId: piso.idPiso}" class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 transition min-h-[140px] cursor-pointer">
+                  <mat-icon class="text-3xl mb-2">add_circle</mat-icon>
+                  <span class="font-medium">Añadir Habitación</span>
+                </a>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

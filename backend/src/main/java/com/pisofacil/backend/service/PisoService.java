@@ -2,6 +2,7 @@ package com.pisofacil.backend.service;
 
 import com.pisofacil.backend.dto.PisoRequestDTO;
 import com.pisofacil.backend.dto.PisoResponseDTO;
+import com.pisofacil.backend.dto.MisPisosResponseDTO;
 import com.pisofacil.backend.mapper.PisoMapper;
 import com.pisofacil.backend.model.Piso;
 import com.pisofacil.backend.model.Usuario;
@@ -32,6 +33,20 @@ public class PisoService {
         Piso piso = pisoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Piso no encontrado con ID: " + id));
         return pisoMapper.toResponseDTO(piso);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MisPisosResponseDTO> findByUsuario(Long idUsuario) {
+        List<Piso> pisos = pisoRepository.findByUsuarioIdUsuario(idUsuario);
+        return pisoMapper.toMisPisosResponseDTOList(pisos);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MisPisosResponseDTO> findByUsuarioEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + email));
+        List<Piso> pisos = pisoRepository.findByUsuarioIdUsuario(usuario.getIdUsuario());
+        return pisoMapper.toMisPisosResponseDTOList(pisos);
     }
 
     @Transactional

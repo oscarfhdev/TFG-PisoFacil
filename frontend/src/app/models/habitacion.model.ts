@@ -28,4 +28,23 @@ export interface HabitacionResponse {
   exterior?: boolean;
   tieneCalefaccion?: boolean;
   tieneAireAcondicionado?: boolean;
+  
+  // Mapeos de Piso
+  descripcionGlobal?: string;
+  numHabitacionesTotal?: number;
+  tieneWifi?: boolean;
+  tieneAscensor?: boolean;
+  admiteMascotas?: boolean;
+  admiteFumadores?: boolean;
+  lgtbiFriendly?: boolean;
+
+  // Mapeos de Propietario
+  idUsuarioPropietario?: number;
+  nombrePropietario?: string;
+  fotoPerfilUrlPropietario?: string;
+  instagramUrlPropietario?: string;
+
+  // Fotos
+  fotosHabitacion?: string[];
+  fotosPiso?: string[];
 }

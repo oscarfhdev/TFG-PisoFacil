@@ -2,6 +2,7 @@ package com.pisofacil.backend.controller;
 
 import com.pisofacil.backend.dto.PisoRequestDTO;
 import com.pisofacil.backend.dto.PisoResponseDTO;
+import com.pisofacil.backend.dto.MisPisosResponseDTO;
 import com.pisofacil.backend.service.PisoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,11 @@ public class PisoController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         pisoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<MisPisosResponseDTO>> getMyPisos() {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(pisoService.findByUsuarioEmail(email));
     }
 }
