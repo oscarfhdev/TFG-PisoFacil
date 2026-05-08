@@ -62,6 +62,9 @@ public class Piso {
     @Column(name = "lgtbi_friendly")
     private Boolean lgtbiFriendly;
 
+    @Column(name = "centro_interes")
+    private String centroInteres;
+
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 

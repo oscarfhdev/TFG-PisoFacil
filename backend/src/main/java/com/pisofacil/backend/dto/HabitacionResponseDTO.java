@@ -37,6 +37,7 @@ public class HabitacionResponseDTO {
     private Boolean admiteMascotas;
     private Boolean admiteFumadores;
     private Boolean lgtbiFriendly;
+    private Boolean admiteParejas;
     
     // Datos del Usuario Propietario
     private Long idUsuarioPropietario;

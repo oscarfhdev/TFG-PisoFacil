@@ -31,4 +31,5 @@ public class PisoRequestDTO {
     private Boolean admiteMascotas;
     private Boolean admiteParejas;
     private Boolean lgtbiFriendly;
+    private String centroInteres;
 }

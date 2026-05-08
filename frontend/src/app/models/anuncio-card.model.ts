@@ -2,6 +2,7 @@ export interface AnuncioCardAfinidad {
   aceptaMascotas: boolean;
   permiteFumar: boolean;
   lgtbi: boolean;
+  admiteParejas: boolean;
 }
 
 export interface AnuncioCardData {
@@ -21,4 +22,13 @@ export interface AnuncioCardData {
   avatarPropietario: string;
   afinidad: AnuncioCardAfinidad;
   esFavorito?: boolean;
+  
+  // Nuevos campos para iconos extra
+  amueblada?: boolean;
+  exterior?: boolean;
+  tieneCalefaccion?: boolean;
+  tieneAireAcondicionado?: boolean;
+  tieneWifi?: boolean;
+  tieneAscensor?: boolean;
+  tieneBanoPrivado?: boolean;
 }

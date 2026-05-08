@@ -8,6 +8,7 @@ import { MisFavoritos } from './pages/mis-favoritos/mis-favoritos';
 import { MisAnuncios } from './pages/mis-anuncios/mis-anuncios';
 import { Perfil } from './pages/perfil/perfil';
 import { Buscar } from './pages/buscar/buscar';
+import { Legal } from './pages/legal/legal';
 import { NotFound } from './pages/not-found/not-found';
 import { AdminLayout } from './admin/admin-layout/admin-layout';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'buscar', component: Buscar },
+  { path: 'legal', component: Legal },
   { path: 'habitacion/:id', component: HabitacionDetail },
   
   // Rutas protegidas (usuario logueado)

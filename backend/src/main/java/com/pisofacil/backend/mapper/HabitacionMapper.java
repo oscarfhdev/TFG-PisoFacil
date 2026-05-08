@@ -36,6 +36,7 @@ public interface HabitacionMapper {
     @Mapping(source = "piso.admiteMascotas", target = "admiteMascotas")
     @Mapping(source = "piso.admiteFumadores", target = "admiteFumadores")
     @Mapping(source = "piso.lgtbiFriendly", target = "lgtbiFriendly")
+    @Mapping(source = "piso.admiteParejas", target = "admiteParejas")
     
     // Mapeos extraídos del Propietario (Piso -> Usuario)
     @Mapping(source = "piso.usuario.idUsuario", target = "idUsuarioPropietario")

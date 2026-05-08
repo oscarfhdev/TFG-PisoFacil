@@ -52,11 +52,11 @@ public class HabitacionService {
             String ciudad, BigDecimal precioMin, BigDecimal precioMax,
             Boolean tieneBanoPrivado, Boolean exterior,
             Boolean tieneAireAcondicionado, Boolean admiteMascotas,
-            Boolean admiteFumadores, Boolean lgtbiFriendly) {
+            Boolean admiteFumadores, Boolean lgtbiFriendly, String centroInteres) {
 
         Specification<Habitacion> spec = HabitacionSpecification.buildFiltro(
             ciudad, precioMin, precioMax, tieneBanoPrivado, exterior,
-            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly);
+            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly, centroInteres);
 
         return habitacionMapper.toResponseDTOList(habitacionRepository.findAll(spec));
     }

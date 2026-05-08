@@ -32,6 +32,7 @@ public class PublicarAnuncioRequestDTO {
     private Boolean admiteMascotas;
     private Boolean admiteParejas;
     private Boolean lgtbiFriendly;
+    private String centroInteres;
 
     // Campos de Habitación (La primera habitación)
     @NotBlank(message = "El título del anuncio de la habitación es obligatorio")

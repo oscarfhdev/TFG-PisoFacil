@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -104,8 +103,6 @@ public class DatabaseSeeder implements CommandLineRunner {
                 "Ciencias Ambientales", "Relaciones Laborales"
         };
 
-        String[] generos = {"Masculino", "Femenino", "No binario"};
-
         String[] biografias = {
                 "Soy una persona tranquila y ordenada. Me gusta estudiar con música de fondo.",
                 "Busco compañeros de piso respetuosos. Me encanta cocinar para todos.",
@@ -179,11 +176,10 @@ public class DatabaseSeeder implements CommandLineRunner {
         System.out.println("✅ DataLoader: " + (usuarios.size() + 2) + " usuarios creados.");
 
         // ═══════════════════════════════════════════════════════════════
-        // 2. PISOS (30) — Varias ciudades de España (Madrid, Barcelona, Granada, Salamanca, etc.)
+        // 2. PISOS Y HABITACIONES
         // ═══════════════════════════════════════════════════════════════
 
         String[][] pisoData = {
-                // {direccion, ciudad, codigoPostal}
                 {"Calle de la Princesa, 25", "Madrid", "28008"},
                 {"Carrer d'Aragó, 150", "Barcelona", "08011"},
                 {"Calle Pedro Antonio de Alarcón, 12", "Granada", "18002"},
@@ -217,36 +213,49 @@ public class DatabaseSeeder implements CommandLineRunner {
         };
 
         String[] descripcionesPiso = {
-                "Piso compartido en el barrio de Argüelles, Madrid. Muy cerca de la Complutense.",
-                "Habitaciones en el Eixample de Barcelona. Piso amplio con mucha luz y techos altos.",
-                "Ideal para estudiantes en Granada. Zona Pedro Antonio, ambiente universitario garantizado.",
-                "Piso histórico frente a la Universidad de Salamanca. Ubicación inmejorable.",
-                "Avenida Blasco Ibáñez en Valencia. A un paso de todas las facultades y de la playa.",
-                "Vivir en el centro de Sevilla. Cerca de la Universidad de Sevilla (Antigua Fábrica de Tabacos).",
-                "Piso en el centro de Bilbao. Cerca de la Universidad de Deusto y bien comunicado.",
-                "Santiago de Compostela. Zona nueva, ideal para estudiantes de la USC.",
-                "Zona Norte de Madrid. Piso moderno cerca de las torres y bien comunicado por metro.",
-                "Barcelona centro. Conexión directa con todas las líneas de metro y tren.",
-                "Piso luminoso en el centro de Córdoba. Ideal para estudiantes de Filosofía o Derecho.",
-                "Burgos centro. Piso acogedor con calefacción central, imprescindible aquí.",
-                "En el corazón de Madrid. Cerca de Sol y de todas las zonas de ocio.",
-                "Cerca de la Sagrada Familia. Piso con terraza y vistas increíbles.",
-                "Granada centro. Piso reformado con aire acondicionado y calefacción.",
-                "Sevilla histórica. Cerca de la Catedral y de las zonas de estudio.",
-                "Centro de Vigo. Piso amplio con vistas a la ría y muy soleado.",
-                "Logroño centro. Muy cerca de la zona universitaria y de la calle Laurel.",
-                "Zaragoza centro. Calle peatonal muy tranquila, ideal para el estudio.",
-                "Málaga centro. A 10 minutos de la playa y cerca del campus de El Ejido.",
-                "Vegueta en Las Palmas. Piso con encanto canario cerca de la universidad.",
-                "A Coruña centro. Cerca del Orzán y de las facultades de Riazor.",
-                "Valencia comercial. Piso de lujo reformado para compartir entre estudiantes.",
-                "Donostia centro. Cerca de la playa de la Concha y del campus universitario.",
-                "Zona comercial de Salamanca. Edificio rehabilitado con todas las comodidades.",
-                "Valladolid centro. Muy cerca de la Plaza Mayor y de las facultades.",
-                "Oviedo antiguo. Piso con historia pero totalmente reformado por dentro.",
-                "Zamora centro. Piso económico y funcional para estudiantes.",
-                "Ambiente riojano en el centro de Logroño. Piso recién pintado.",
-                "Santa Cruz de Tenerife. Piso luminoso con balcones y vistas al mar."
+                "Espectacular piso compartido situado en el emblemático barrio de Argüelles, a escasos minutos a pie de la Universidad Complutense. La vivienda cuenta con un salón señorial de techos altos, cocina totalmente equipada con electrodomésticos de alta gama y un ambiente de estudio inmejorable. Ideal para estudiantes de máster que busquen tranquilidad y cercanía al centro.",
+                "Amplio y luminoso piso en pleno Eixample barcelonés. Conserva los suelos hidráulicos originales y techos con molduras. Las zonas comunes incluyen una galería acristalada perfecta para relajarse. Excelente conexión con líneas de metro L1 y L2. Buscamos compañeros respetuosos que valoren la arquitectura clásica y el orden.",
+                "Vivienda pensada por y para estudiantes en el corazón de Granada. Situado en la calle Pedro Antonio de Alarcón, el piso es el epicentro de la vida universitaria. Reformado recientemente con mobiliario moderno, Smart TV en el salón y conexión WiFi 6 de alta velocidad. ¡El mejor ambiente joven de la ciudad!",
+                "Vive la historia de Salamanca desde este piso situado justo frente a la fachada de la Universidad. Edificio histórico rehabilitado con todas las comodidades modernas. Cuenta con calefacción central (fundamental para el invierno salmantino) y una cocina de concepto abierto donde compartir cenas con el resto de compañeros.",
+                "Increíble ubicación en la Avenida Blasco Ibáñez. Este piso destaca por su luminosidad y su proximidad tanto a las facultades del Campus de Tarongers como a la zona de ocio nocturno y la playa. Gran terraza común con vistas a la avenida y cocina con dos frigoríficos para mayor comodidad de los inquilinos.",
+                "Piso señorial en el centro de Sevilla, a un paso de la Puerta Jerez y la Universidad de Sevilla. Habitaciones amplias, suelos de mármol y aire acondicionado centralizado. El ambiente en la casa es tranquilo, enfocado a estudiantes de último curso o opositores que necesiten un entorno de silencio y respeto.",
+                "Moderno apartamento en el ensanche bilbaíno. A 5 minutos de la parada de metro de Moyua y rodeado de servicios. El piso ha sido reformado íntegramente este año, contando con mobiliario de diseño nórdico, lavavajillas y zona de lavandería independiente. Perfecto para jóvenes profesionales o estudiantes de Deusto.",
+                "Típico piso compostelano en la zona nueva, con amplias estancias y mucha luz natural. Muy bien comunicado con el Campus Sur de la USC. La cocina es el corazón de la casa, espaciosa y con una gran mesa de madera donde los compañeros suelen compartir el desayuno. Gastos de comunidad y agua incluidos en el precio.",
+                "Vivienda exclusiva en pleno Paseo de la Castellana. Urbanización con seguridad 24h y excelentes calidades. El piso cuenta con un salón de 40m2 con ventanales de suelo a techo, cocina de diseño y climatización por suelo radiante. Una opción premium para quienes buscan confort y prestigio en la capital.",
+                "Piso totalmente reformado en la calle Balmes, una de las arterias principales de Barcelona. El inmueble dispone de una distribución inteligente que garantiza la privacidad de cada habitación. Zonas comunes minimalistas y funcionales con limpieza semanal incluida en las zonas comunes.",
+                "Encantador piso en la calle Cruz Conde, la zona más comercial y vibrante de Córdoba. A un paseo de la Facultad de Filosofía y Letras. Destaca por su patio cordobés privado de uso exclusivo para los inquilinos, ideal para las noches de primavera. Mobiliario rústico renovado y aire acondicionado en todas las estancias.",
+                "Piso acogedor y muy cálido en el centro de Burgos. Cuenta con un sistema de calefacción central excepcional y ventanas de climalit de triple vidrio para asegurar el máximo confort térmico. Ambiente familiar y tranquilo, perfecto para estudiantes de la UBU que busquen sentirse como en casa.",
+                "Vivir en la calle Mayor es vivir la esencia de Madrid. Este piso ofrece una experiencia urbana total, a un paso de la Puerta del Sol. A pesar de su ubicación céntrica, es sorprendentemente silencioso gracias a su orientación. Cocina equipada con horno, microondas y cafetera de cápsulas.",
+                "Magnífico ático cerca de la Sagrada Familia. La joya de la vivienda es su terraza privada de 20m2 con vistas directas al templo. El piso tiene una decoración bohemia y artística, ideal para perfiles creativos que busquen inspiración. Muy bien conectado con las líneas azul y morada de metro.",
+                "Piso de lujo en la calle Recogidas, Granada. Reformado con materiales de primera calidad, suelos de tarima y paredes lisas. Todas las estancias son exteriores y cuentan con mucha luz. Cocina con isla central de mármol y todos los pequeños electrodomésticos necesarios (tostadora, batidora, hervidor).",
+                "Vivienda reformada en la Avenida de la Constitución, Sevilla. Vistas inmejorables a la Catedral desde el salón. El piso combina elementos clásicos con una decoración contemporánea. Se busca un perfil de inquilino ordenado y responsable. Ambiente internacional y multicultural.",
+                "Piso con vistas panorámicas a la Ría de Vigo en la calle Urzaiz. Muy espacioso, con un gran salón-comedor donde se organizan noches de cine entre compañeros. Edificio con conserje y recogida de basuras. Situado en la zona comercial con todos los servicios a la mano.",
+                "Ubicación inmejorable en la calle Portales, Logroño. El piso es muy luminoso y cuenta con una reforma de estilo industrial con paredes de ladrillo visto. A poca distancia de la zona de tapeo y de las facultades de la Universidad de La Rioja. Ambiente dinámico y joven.",
+                "Elegante piso en la calle Alfonso I, el corazón de Zaragoza. Edificio histórico rehabilitado con un portal impresionante. El piso cuenta con techos decorados con molduras, calefacción individual y una cocina muy moderna que contrasta con el estilo clásico de la vivienda.",
+                "Piso moderno y funcional en la calle Marqués de Larios, Málaga. Disfruta de vivir en la calle más famosa de la ciudad, a un paso del puerto y de la playa de la Malagueta. Aire acondicionado en todas las habitaciones, fundamental para el verano malagueño. Mobiliario nuevo a estrenar.",
+                "Vivienda con sabor canario en el barrio de Vegueta, Las Palmas. Techos altísimos de madera y grandes ventanales. El piso tiene una atmósfera zen y tranquila, ideal para estudiantes que teletrabajen o necesiten concentración. Muy cerca de la catedral y de las zonas de museos.",
+                "Piso espacioso y señorial en la calle Real de A Coruña. Vistas laterales al mar y mucha luz de tarde. La cocina es enorme y está totalmente equipada para los amantes de la gastronomía. Edificio con ascensor y portal reformado sin barreras arquitectónicas.",
+                "Exclusivo piso en la calle Colón de Valencia. Una de las zonas más seguras y prestigiosas. El piso ha sido diseñado por un decorador de interiores, buscando el equilibrio entre elegancia y funcionalidad. Servicio de portería y recogida de paquetes incluido.",
+                "Vivir en la Avenida de la Libertad de San Sebastián es un privilegio. A escasos metros de la Playa de la Concha. El piso es sobrio, elegante y muy silencioso. Cuenta con una gran librería en el salón compartida para todos los inquilinos. Ambiente de estudio serio.",
+                "Piso recién reformado en la calle Toro, Salamanca. Todo el mobiliario, camas y electrodomésticos han sido comprados este año. Diseño funcional pensado para el aprovechamiento máximo del espacio. Muy cerca de la Plaza Mayor y de las facultades del campus centro.",
+                "Apartamento moderno en la calle Santiago de Valladolid. Muy luminoso gracias a su altura. Cuenta con un salón amplio con sofá chaiselongue y televisión 4K para uso común. Cocina con placa de inducción y horno pirolítico. Se busca compañero para larga estancia.",
+                "Piso con carácter en el casco antiguo de Oviedo. Muros de piedra vista que mantienen la temperatura ideal durante todo el año. El interior ha sido reformado con un estilo contemporáneo y minimalista. Ambiente muy acogedor y tranquilo para el descanso.",
+                "Vivienda práctica y funcional en el centro de Zamora. Ideal para estudiantes que busquen una opción económica sin renunciar a la calidad. Habitaciones bien equipadas y cocina con mesa de comedor. Muy cerca de la estación de autobuses y tren.",
+                "Piso con mucho encanto en el centro de Logroño. Destaca por su galería acristalada llena de plantas que aporta una luz especial a toda la casa. El ambiente entre los compañeros es muy familiar, suelen compartir gastos de limpieza y compra común.",
+                "Ático luminoso en Santa Cruz de Tenerife con balcones que ofrecen vistas despejadas al mar. El piso es muy fresco gracias a la ventilación cruzada y cuenta con toldos eléctricos. Decoración fresca y veraniega, con plantas naturales y mucha luz natural durante todo el día."
+        };
+
+        String[] centrosInteresSeed = {
+                "Universidad Complutense de Madrid", "Universidad de Barcelona", "Universidad de Granada (Fuentenueva)",
+                "Universidad de Salamanca", "Universidad Politécnica de Valencia", "Universidad de Sevilla",
+                "Universidad de Deusto", "Universidad de Santiago de Compostela", "IE University",
+                "ESADE Business School", "Universidad de Córdoba", "Universidad de Burgos",
+                "Universidad Autónoma de Madrid", "Universidad Pompeu Fabra", "Universidad de Granada (Cartuja)",
+                "Universidad de Sevilla (Campus Viapol)", "Universidad de Vigo", "Universidad de La Rioja",
+                "Universidad de Zaragoza", "Universidad de Málaga", "Universidad de Las Palmas",
+                "Universidad de A Coruña", "Universidad de Valencia (Tarongers)", "Universidad del País Vasco",
+                "Universidad de Salamanca (Campus Canalejas)", "Universidad de Valladolid", "Universidad de Oviedo",
+                "Universidad de Salamanca (Campus Zamora)", "Universidad de La Rioja", "Universidad de La Laguna"
         };
 
         String[] titulosHabitacion = {
@@ -283,43 +292,43 @@ public class DatabaseSeeder implements CommandLineRunner {
         };
 
         String[] descripcionesHabitacion = {
-                "Habitación perfecta para concentrarse. Escritorio grande junto a la ventana con mucha luz natural.",
-                "Armario empotrado de doble puerta. Orientación exterior que garantiza ventilación y luminosidad.",
-                "Balcón privado ideal para desayunar por las mañanas. Ambiente muy agradable.",
-                "Habitación tranquila en la parte interior del piso. Ideal para quienes necesitan silencio.",
-                "Amplio vestidor con organización completa. No necesitarás más espacio para tu ropa.",
-                "Lujo de tener baño privado. Ducha, lavabo y espejo grande. No compartirás con nadie.",
-                "Orientación norte que mantiene la habitación fresca en verano. Muy importante en el sur.",
-                "Suelo de parquet auténtico recién pulido. Elegancia y calidez bajo tus pies.",
-                "Dos ventanas que proporcionan ventilación cruzada. Muy agradable en primavera.",
-                "Split de aire acondicionado propio. Tú controlas tu temperatura en todo momento.",
-                "Rincón de estudio perfecto. Silencio garantizado y buena iluminación para largas sesiones.",
-                "Todo incluido: cama, escritorio, silla ergonómica, lámpara y cortinas. Solo trae tu ropa.",
-                "Zona de estudio separada del área de descanso. Productividad y relax en un solo espacio.",
-                "Cama doble de 150cm con colchón viscoelástico. Dormirás como nunca.",
-                "Calefacción individual y alfombra mullida. Los inviernos aquí son súper cómodos.",
-                "Vistas al patio interior con plantas. Despertarse aquí es un placer.",
-                "Diseño minimalista con muebles de líneas puras. Para quienes aprecian la sencillez.",
-                "Muebles de madera maciza de roble. Estilo nórdico que invita a quedarse.",
-                "Ventana grande orientación sur. Luz natural desde primera hora hasta el atardecer.",
-                "Espacio suficiente para incluir un pequeño sofá o sillón de lectura junto a la cama.",
-                "Cama con canapé para almacenar maletas y ropa de cama sin ocupar espacio en la habitación.",
-                "Da a un patio interior sin ruidos de la calle. Perfecta si tienes sueño ligero.",
-                "Ambiente de estudio y tranquilidad. Se busca compañero/a responsable y enfocado/a.",
-                "Incluye Smart TV en la habitación para que disfrutes de tus series con privacidad.",
-                "Pequeña nevera en la habitación para tus snacks y bebidas frías. Máxima comodidad.",
-                "Espacio muy amplio que incluye una pequeña zona de estar con butaca y mesita.",
-                "Paredes de ladrillo visto y muebles de metal/madera. Un estilo moderno y urbano.",
-                "Espejo grande y buena iluminación. Ideal para arreglarse cómodamente.",
-                "La habitación tiene acceso directo a una terraza compartida con el resto de compañeros.",
-                "Puerta con cerradura propia para garantizar tu privacidad y seguridad en todo momento."
+                "Habitación diseñada para el máximo rendimiento académico. Cuenta con un escritorio de 160cm de largo, silla ergonómica de oficina y una estantería de gran capacidad para libros. La ventana es amplia y recibe luz solar directa desde media mañana, ideal para no encender la luz hasta el atardecer.",
+                "Dormitorio exterior muy espacioso con un armario empotrado de tres cuerpos totalmente vestido por dentro. La cama cuenta con un canapé para almacenamiento extra. Orientación este, por lo que disfrutarás de unos amaneceres espectaculares. Suelo de madera natural que aporta calidez a la estancia.",
+                "Habitación con encanto que dispone de balcón privado hacia la calle peatonal. Incluye mesa y silla de exterior para poder desayunar o estudiar al aire libre. La estancia es muy luminosa y cuenta con cortinas opacas para garantizar el descanso. Techos altos con vigas decorativas.",
+                "Dormitorio muy tranquilo situado en la zona interior del piso, lejos del ruido de la calle. Es ideal para personas con sueño ligero o que necesiten silencio absoluto para concentrarse. Equipada con cama individual de alta gama, cómoda de cuatro cajones y perchero auxiliar para abrigos.",
+                "Habitación tipo suite de grandes dimensiones que incluye un vestidor independiente con espejo de cuerpo entero. La iluminación LED es regulable en intensidad para crear diferentes ambientes. Incluye alfombra de pelo corto y una butaca de lectura junto a la lámpara de pie. Un lujo en el centro.",
+                "Máxima privacidad con tu propio baño integrado en la habitación. El baño ha sido reformado recientemente con plato de ducha de resina y grifería termostática. La habitación cuenta además con un armario de puertas correderas de espejo y cama doble de 135cm con almohada viscoelástica.",
+                "Dormitorio orientado al norte, manteniendo una temperatura fresca y agradable incluso en los meses más calurosos. Cuenta con una decoración en tonos blancos y madera clara que potencia la sensación de amplitud. Escritorio junto al radiador para las sesiones de estudio invernales.",
+                "Estancia recién pintada con suelo de parquet de roble recién pulido. Dispone de un gran espejo de pared y estanterías flotantes para organización. La cama tiene un colchón de muelles ensacados que garantiza un soporte firme y cómodo. Ventana de doble acristalamiento para aislamiento total.",
+                "Dormitorio principal de la vivienda que destaca por tener dos grandes ventanales que inundan la estancia de luz. Cuenta con un rincón de estar con un pequeño sofá y mesa auxiliar. El armario es de estilo vintage restaurado, aportando mucha personalidad a la habitación.",
+                "Habitación equipada con split de aire acondicionado de bajo consumo y mando a distancia. Incluye una Smart TV de 32 pulgadas anclada a la pared para disfrutar de tus series con total comodidad desde la cama. Mobiliario moderno en blanco brillante y escritorio con organizador de cables.",
+                "El rincón perfecto para un opositor o estudiante de máster. La habitación está insonorizada acústicamente y cuenta con iluminación técnica para el estudio. Dispone de una pizarra blanca de cristal y una cajonera con llave para documentos importantes. Ambiente de paz asegurado.",
+                "Habitación totalmente amueblada y equipada con ropa de cama, edredón nórdico y juego de toallas de algodón. El escritorio incluye lámpara flexo y conexión por cable Ethernet además de WiFi. Armario con perchas incluidas y zapatero auxiliar tras la puerta.",
+                "Estancia singular con la zona de estudio claramente diferenciada de la zona de descanso mediante una estantería divisoria. Esto ayuda a desconectar después de las horas de trabajo o estudio. Cama de 105cm con cabecero tapizado en gris y mesita de noche con cargador USB.",
+                "Habitación espaciosa con cama doble de 150cm y mesitas de noche a ambos lados con lámparas de lectura individuales. Ideal para quienes valoran el espacio al dormir. Incluye una cómoda amplia para ropa doblada y un perchero estilo burro para la ropa de diario.",
+                "Dormitorio muy acogedor gracias a su orientación sur y el sistema de calefacción individual. Cuenta con una decoración en tonos cálidos, alfombra de lana y plantas naturales que purifican el aire. Escritorio de madera maciza y silla tapizada muy cómoda.",
+                "Habitación luminosa con vistas al patio interior ajardinado del edificio, lo que garantiza ausencia total de ruidos de tráfico. Despertarás con el sonido de los pájaros en pleno centro. Armario de dos puertas y escritorio de cristal templado muy moderno.",
+                "Estancia de diseño minimalista con muebles de líneas nórdicas y funcionales. Dispone de una gran pizarra de corcho para notas y fotos. La cama cuenta con un protector de colchón de alta calidad y edredón de temporada. Lámpara de techo regulable en temperatura de color.",
+                "Habitación con mobiliario de madera natural que incluye una estantería de pared a pared, ideal para amantes de la lectura o coleccionistas. El escritorio es muy robusto y cuenta con mucha profundidad. Incluye puf de relax en una esquina de la habitación.",
+                "Dormitorio con luz natural radiante durante todo el día gracias a su gran ventanal sin obstáculos enfrente. Cuenta con persianas eléctricas para un control total de la luz. Mesa de estudio amplia con silla de ruedas profesional y cajonera metálica.",
+                "Estancia muy amplia que permite tener una pequeña zona de salón propia con una butaca y mesita de centro. Es casi como un pequeño estudio dentro del piso compartido. Armario empotrado de gran altura que aprovecha hasta el último centímetro de almacenaje.",
+                "Habitación práctica con cama tipo canapé de gran capacidad, ideal para guardar maletas o ropa de otra temporada. El colchón es nuevo y de firmeza media-alta. Escritorio plegable que permite ganar espacio cuando no se está estudiando. Armario de puertas blancas.",
+                "Dormitorio interior muy silencioso y recogido, perfecto para personas que buscan un ambiente de recogimiento. La iluminación artificial ha sido cuidada para que sea cálida y acogedora. Cuenta con un gran espejo vestidor y un armario modular muy bien organizado.",
+                "Estancia pensada para perfiles senior o de postgrado que busquen un entorno serio y profesional. Mobiliario de alta calidad, colores neutros y conexión a internet por cable de alta velocidad. Se requiere un perfil responsable para esta habitación.",
+                "Habitación tecnológica que incluye televisión inteligente con aplicaciones de streaming instaladas, altavoz inteligente y regleta con protección de picos para el ordenador. Escritorio con iluminación LED ambiental personalizable en colores.",
+                "Dormitorio con el lujo de tener una pequeña nevera ejecutiva propia para guardar bebidas y snacks. Ideal para mayor comodidad y privacidad. Incluye también un pequeño microondas personal. Cama individual con canapé y escritorio de esquina.",
+                "Habitación tipo suite con una zona de estar integrada que incluye un sillón orejero y una mesita para el café. Es la habitación más grande del piso y ofrece una independencia total. Armario de cuatro puertas y grandes ventanales con visillos.",
+                "Estancia con una decoración de estilo industrial muy marcada: paredes de ladrillo visto, lámparas de filamento y muebles de hierro y madera. Muy moderna y con mucha personalidad. Escritorio amplio y cama con base tapizada negra.",
+                "Dormitorio que destaca por su gran espejo de cuerpo entero y una zona de tocador o escritorio auxiliar. Muy buena iluminación cenital y lámpara de mesa para ambiente. Armario con puertas correderas de cristal opaco muy elegante.",
+                "Habitación con acceso directo y exclusivo a una parte de la terraza compartida, permitiendo tener tu propio rincón exterior. Cama doble, armario de gran capacidad y mesa de estudio orientada hacia la terraza para disfrutar de las vistas mientras trabajas.",
+                "Máxima seguridad y privacidad para tu tranquilidad: la habitación dispone de puerta con cerradura independiente y llave propia. Estancia totalmente reformada con acabados de primera, mobiliario nuevo y una distribución muy aprovechada."
         };
 
+        int totalHabitacionesCreadas = 0;
         for (int i = 0; i < 20; i++) {
             // Asignar un usuario dueño aleatorio de los 30 creados
             Usuario dueno = usuarios.get(random.nextInt(usuarios.size()));
 
-            int numHabs = 2 + random.nextInt(3); // entre 2 y 4
             int numBanos = 1 + random.nextInt(2); // 1 o 2
             int planta = random.nextInt(6);       // 0 a 5
             double superficie = 55 + random.nextInt(71); // 55-125 m²
@@ -329,7 +338,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .direccion(pisoData[i][0])
                     .ciudad(pisoData[i][1])
                     .codigoPostal(pisoData[i][2])
-                    .numHabitacionesTotal(numHabs)
+                    .numHabitacionesTotal((i < 10) ? 2 : 1) // Sincronizado con las habitaciones reales
                     .numBanos(numBanos)
                     .planta(planta)
                     .superficieTotalM2(superficie)
@@ -340,6 +349,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .admiteMascotas(random.nextInt(3) == 0)     // ~33%
                     .admiteParejas(random.nextBoolean())
                     .lgtbiFriendly(random.nextInt(3) != 0)      // ~66%
+                    .centroInteres(centrosInteresSeed[i % centrosInteresSeed.length])
                     .build();
 
             Piso pisoGuardado = pisoRepository.save(piso);
@@ -359,9 +369,13 @@ public class DatabaseSeeder implements CommandLineRunner {
             }
 
             // ───────────────────────────────────────────────────
-            // 2.2 HABITACIONES (2-4 por piso)
+            // 2.2 HABITACIONES (Total 30 entre los 20 pisos)
             // ───────────────────────────────────────────────────
+            int numHabs = (i < 10) ? 2 : 1; // 10 pisos con 2 habs y 10 con 1 hab = 30 total
+            
             for (int h = 0; h < numHabs; h++) {
+                totalHabitacionesCreadas++; // Contador global para las carpetas 1-30
+                
                 int tituloIdx = random.nextInt(titulosHabitacion.length);
                 int descIdx = random.nextInt(descripcionesHabitacion.length);
                 BigDecimal precio = BigDecimal.valueOf(180 + random.nextInt(221)); // 180-400 €
@@ -383,9 +397,9 @@ public class DatabaseSeeder implements CommandLineRunner {
                 Habitacion habGuardada = habitacionRepository.save(hab);
 
                 // ─────────────────────────────────────────────
-                // 2.3 FOTOS DE HABITACIÓN (2 fotos, carpeta aleatoria 1-30)
+                // 2.3 FOTOS DE HABITACIÓN (Secuencial 1-30)
                 // ─────────────────────────────────────────────
-                int carpetaHab = 1 + random.nextInt(30); // K entre 1 y 30
+                int carpetaHab = totalHabitacionesCreadas; 
                 for (int fh = 1; fh <= 2; fh++) {
                     Foto fotoHab = Foto.builder()
                             .piso(pisoGuardado)

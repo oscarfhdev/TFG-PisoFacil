@@ -49,11 +49,12 @@ public class HabitacionController {
             @RequestParam(required = false) Boolean tieneAireAcondicionado,
             @RequestParam(required = false) Boolean admiteMascotas,
             @RequestParam(required = false) Boolean admiteFumadores,
-            @RequestParam(required = false) Boolean lgtbiFriendly) {
+            @RequestParam(required = false) Boolean lgtbiFriendly,
+            @RequestParam(required = false) String centroInteres) {
 
         return ResponseEntity.ok(habitacionService.buscarAvanzado(
             ciudad, precioMin, precioMax, tieneBanoPrivado, exterior,
-            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly));
+            tieneAireAcondicionado, admiteMascotas, admiteFumadores, lgtbiFriendly, centroInteres));
     }
 
     @PostMapping

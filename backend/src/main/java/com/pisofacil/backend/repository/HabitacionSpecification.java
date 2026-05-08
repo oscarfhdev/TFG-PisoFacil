@@ -13,7 +13,7 @@ public class HabitacionSpecification {
             String ciudad, BigDecimal precioMin, BigDecimal precioMax,
             Boolean tieneBanoPrivado, Boolean exterior,
             Boolean tieneAireAcondicionado, Boolean admiteMascotas,
-            Boolean admiteFumadores, Boolean lgtbiFriendly) {
+            Boolean admiteFumadores, Boolean lgtbiFriendly, String centroInteres) {
 
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction(); // WHERE true
@@ -55,6 +55,11 @@ public class HabitacionSpecification {
             }
             if (lgtbiFriendly != null && lgtbiFriendly) {
                 predicate = cb.and(predicate, cb.isTrue(piso.get("lgtbiFriendly")));
+            }
+            if (centroInteres != null && !centroInteres.isBlank()) {
+                predicate = cb.and(predicate,
+                    cb.like(cb.lower(piso.get("centroInteres")),
+                            "%" + centroInteres.toLowerCase() + "%"));
             }
 
             return predicate;

@@ -27,5 +27,6 @@ public class PisoResponseDTO {
     private Boolean admiteMascotas;
     private Boolean admiteParejas;
     private Boolean lgtbiFriendly;
+    private String centroInteres;
     private LocalDateTime fechaCreacion;
 }
