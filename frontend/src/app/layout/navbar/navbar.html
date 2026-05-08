@@ -3,8 +3,8 @@
     
     <!-- Izquierda (Logo) -->
     <a routerLink="/" class="flex items-center">
-      <img src="/logo-pisofacil-light.png" alt="PisoFácil" class="h-8 dark:hidden" />
-      <img src="/logo-pisofacil-dark.png" alt="PisoFácil" class="h-8 hidden dark:block" />
+      <img src="/logo-pisofacil-light.png" (error)="$any($event.target).src='/placeholder.png'" alt="PisoFácil" class="h-8 dark:hidden" />
+      <img src="/logo-pisofacil-dark.png" (error)="$any($event.target).src='/placeholder.png'" alt="PisoFácil" class="h-8 hidden dark:block" />
     </a>
 
     <!-- Derecha (Acciones) -->
@@ -22,52 +22,67 @@
       <!-- Lógica de Usuario -->
       @if (authService.isLoggedIn()) {
         
+        <span class="hidden lg:inline-block text-sm font-lato text-gray-600 dark:text-gray-400 mr-2">
+          ¡Bienvenido, <span class="font-bold text-secondary dark:text-primary">{{ authService.currentUser()?.nombre }}</span>!
+        </span>
+        
         <a routerLink="/publicar" class="bg-accent text-white px-4 py-2 rounded-full hover:opacity-90 transition font-medium hidden sm:inline-block">
           Publicar Anuncio
         </a>
         
         <button [matMenuTriggerFor]="userMenu" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:ring-2 hover:ring-primary transition cursor-pointer overflow-hidden focus:outline-none">
           @if (authService.currentUser()?.fotoPerfilUrl) {
-            <img [src]="authService.currentUser()!.fotoPerfilUrl" class="w-full h-full object-cover" alt="Avatar">
+            <img [src]="authService.currentUser()!.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" class="w-full h-full object-cover" alt="Avatar">
           } @else {
             <mat-icon class="text-gray-500 dark:text-gray-400">person</mat-icon>
           }
         </button>
 
-        <mat-menu #userMenu="matMenu" class="dark:bg-gray-800">
-          <div class="px-4 py-3 border-b dark:border-gray-700 outline-none">
-            <p class="font-semibold text-gray-800 dark:text-gray-200">{{ authService.currentUser()?.nombre }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ authService.currentUser()?.email }}</p>
+        <mat-menu #userMenu="matMenu" xPosition="before" class="premium-user-menu">
+          <!-- Header del Usuario -->
+          <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-md">
+            <p class="font-poppins font-bold text-secondary dark:text-white leading-tight">
+              {{ authService.currentUser()?.nombre || 'Usuario' }}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate font-lato">
+              {{ authService.currentUser()?.email }}
+            </p>
           </div>
           
-          <button mat-menu-item routerLink="/perfil" class="dark:text-gray-300 dark:hover:bg-gray-700">
-            <mat-icon class="dark:text-gray-300">account_circle</mat-icon> 
-            <span>Mi Perfil</span>
-          </button>
-          
-          <button mat-menu-item routerLink="/mis-anuncios" class="dark:text-gray-300 dark:hover:bg-gray-700">
-            <mat-icon class="dark:text-gray-300">apartment</mat-icon> 
-            <span>Mis Anuncios</span>
-          </button>
-          
-          <button mat-menu-item routerLink="/favoritos" class="dark:text-gray-300 dark:hover:bg-gray-700">
-            <mat-icon class="dark:text-gray-300">favorite</mat-icon> 
-            <span>Favoritos</span>
-          </button>
-          
+          <!-- Enlaces de Navegación -->
+          <div class="py-1">
+            <button mat-menu-item routerLink="/perfil" class="group">
+              <mat-icon class="text-primary group-hover:scale-110 transition-transform duration-200">account_circle</mat-icon> 
+              <span class="font-lato text-texto dark:text-texto-dark group-hover:text-primary transition-colors">Mi Perfil</span>
+            </button>
+            
+            <button mat-menu-item routerLink="/mis-anuncios" class="group">
+              <mat-icon class="text-primary group-hover:scale-110 transition-transform duration-200">apartment</mat-icon> 
+              <span class="font-lato text-texto dark:text-texto-dark group-hover:text-primary transition-colors">Mis Anuncios</span>
+            </button>
+            
+            <button mat-menu-item routerLink="/favoritos" class="group">
+              <mat-icon class="text-primary group-hover:scale-110 transition-transform duration-200">favorite</mat-icon> 
+              <span class="font-lato text-texto dark:text-texto-dark group-hover:text-primary transition-colors">Favoritos</span>
+            </button>
+          </div>
+
           @if (authService.isAdmin()) {
-            <button mat-menu-item routerLink="/admin" class="dark:text-gray-300 dark:hover:bg-gray-700">
-              <mat-icon class="text-red-500">admin_panel_settings</mat-icon> 
-              <span class="text-red-500 font-medium">Panel Admin</span>
+            <mat-divider class="opacity-50"></mat-divider>
+            <button mat-menu-item routerLink="/admin" class="group">
+              <mat-icon class="text-accent group-hover:rotate-12 transition-transform duration-200">admin_panel_settings</mat-icon> 
+              <span class="font-poppins text-accent font-semibold">Panel Admin</span>
             </button>
           }
           
-          <mat-divider class="dark:border-gray-700"></mat-divider>
+          <mat-divider class="opacity-50"></mat-divider>
           
-          <button mat-menu-item (click)="logout()" class="dark:text-gray-300 dark:hover:bg-gray-700">
-            <mat-icon class="text-gray-500">logout</mat-icon> 
-            <span>Cerrar Sesión</span>
-          </button>
+          <div class="py-1">
+            <button mat-menu-item (click)="logout()" class="group">
+              <mat-icon class="text-gray-400 group-hover:text-red-500 group-hover:translate-x-1 transition-all duration-200">logout</mat-icon> 
+              <span class="font-lato text-gray-500 group-hover:text-red-500 transition-colors">Cerrar Sesión</span>
+            </button>
+          </div>
         </mat-menu>
         
       } @else {

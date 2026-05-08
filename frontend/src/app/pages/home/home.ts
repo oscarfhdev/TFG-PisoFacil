@@ -53,8 +53,16 @@ export class Home {
         afinidad: {
           aceptaMascotas: hab.admiteMascotas || false,
           permiteFumar: hab.admiteFumadores || false,
-          lgtbi: hab.lgtbiFriendly || false
-        }
+          lgtbi: hab.lgtbiFriendly || false,
+          admiteParejas: false
+        },
+        amueblada: hab.amueblada,
+        exterior: hab.exterior,
+        tieneCalefaccion: hab.tieneCalefaccion,
+        tieneAireAcondicionado: hab.tieneAireAcondicionado,
+        tieneWifi: hab.tieneWifi,
+        tieneAscensor: hab.tieneAscensor,
+        tieneBanoPrivado: hab.tieneBanoPrivado
       };
     })
   );

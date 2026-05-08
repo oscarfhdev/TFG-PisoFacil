@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
+import { CrearReporteModal } from '../../components/crear-reporte-modal/crear-reporte-modal';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   loading = signal(false);
   error = signal<string | null>(null);
@@ -25,7 +28,7 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.invalid) {
-      this.error.set('Por favor, ingresa credenciales válidas.');
+      this.loginForm.markAllAsTouched();
       return;
     }
 
@@ -40,6 +43,15 @@ export class Login {
         this.error.set(err.error || 'Credenciales incorrectas');
         this.loading.set(false);
       }
+    });
+  }
+
+  openForgotModal(event: Event) {
+    event.preventDefault();
+    this.dialog.open(CrearReporteModal, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: { categoria: 'Recuperación de cuenta' }
     });
   }
 }

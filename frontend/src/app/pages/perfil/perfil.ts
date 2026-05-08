@@ -73,7 +73,10 @@ export class Perfil implements OnInit {
   }
 
   guardarPerfil() {
-    if (this.perfilForm.invalid) return;
+    if (this.perfilForm.invalid) {
+      this.perfilForm.markAllAsTouched();
+      return;
+    }
     
     const data: PerfilUpdateRequest = this.perfilForm.value;
     this.usuarioService.updateMyProfile(data).subscribe({
@@ -86,7 +89,10 @@ export class Perfil implements OnInit {
   }
 
   cambiarPassword() {
-    if (this.passwordForm.invalid) return;
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
 
     const data: CambiarPasswordRequest = this.passwordForm.value;
     this.usuarioService.changePassword(data).subscribe({

@@ -67,7 +67,7 @@
               <button class="p-2 text-gray-500 hover:text-primary transition hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full" title="Editar Piso">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button class="p-2 text-gray-500 hover:text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full" title="Eliminar Piso">
+              <button (click)="eliminarPiso(piso.idPiso)" class="p-2 text-gray-500 hover:text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full" title="Eliminar Piso">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

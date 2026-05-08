@@ -44,7 +44,8 @@ export class PublicarAnuncio {
     admiteFumadores: [false],
     admiteMascotas: [false],
     admiteParejas: [false],
-    lgtbiFriendly: [false]
+    lgtbiFriendly: [false],
+    centroInteres: ['']
   });
 
   habitacionForm: FormGroup = this.fb.group({
@@ -60,10 +61,18 @@ export class PublicarAnuncio {
   });
 
   nextStep() {
-    if (this.currentStep() === 0 && this.pisoForm.valid) {
-      this.currentStep.set(1);
-    } else if (this.currentStep() === 1 && this.habitacionForm.valid) {
-      this.currentStep.set(2);
+    if (this.currentStep() === 0) {
+      if (this.pisoForm.valid) {
+        this.currentStep.set(1);
+      } else {
+        this.pisoForm.markAllAsTouched();
+      }
+    } else if (this.currentStep() === 1) {
+      if (this.habitacionForm.valid) {
+        this.currentStep.set(2);
+      } else {
+        this.habitacionForm.markAllAsTouched();
+      }
     } else if (this.currentStep() === 2) {
       this.currentStep.set(3);
     }
@@ -117,6 +126,8 @@ export class PublicarAnuncio {
 
   onSubmit() {
     if (this.pisoForm.invalid || this.habitacionForm.invalid) {
+      this.pisoForm.markAllAsTouched();
+      this.habitacionForm.markAllAsTouched();
       this.error.set('Por favor, completa todos los campos requeridos correctamente.');
       return;
     }

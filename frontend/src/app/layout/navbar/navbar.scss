@@ -1,0 +1,47 @@
+::ng-deep .premium-user-menu {
+  margin-top: 8px;
+  min-width: 220px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+    background: white !important;
+    font-family: 'Lato', sans-serif !important;
+  }
+
+  .mat-mdc-menu-item {
+    min-height: 48px !important;
+    padding: 0 20px !important;
+    
+    &:hover:not([disabled]) {
+      background-color: rgba(100, 167, 197, 0.05) !important; // Light primary background
+    }
+
+    .mat-icon {
+      margin-right: 12px !important;
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+}
+
+// Soporte para modo oscuro en el menú de Material
+html.dark {
+  ::ng-deep .premium-user-menu {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    
+    .mat-mdc-menu-content {
+      background: #161B22 !important; // card-dark color
+    }
+
+    .mat-mdc-menu-item {
+      &:hover:not([disabled]) {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+      }
+    }
+  }
+}

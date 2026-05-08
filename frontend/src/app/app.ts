@@ -14,13 +14,20 @@ import { filter } from 'rxjs/operators';
 export class App {
   private router = inject(Router);
   
-  isAdminRoute = signal(false);
+  hideNavbar = signal(false);
+  hideFooter = signal(false);
 
   constructor() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.isAdminRoute.set(event.urlAfterRedirects.startsWith('/admin'));
+      const url = event.urlAfterRedirects;
+      this.hideNavbar.set(url.startsWith('/admin'));
+      this.hideFooter.set(
+        url.startsWith('/admin') || 
+        url.startsWith('/login') || 
+        url.startsWith('/register')
+      );
     });
   }
 }

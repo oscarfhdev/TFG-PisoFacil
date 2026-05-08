@@ -22,16 +22,34 @@
                 <form [formGroup]="editForm" (ngSubmit)="onSaveDetails()" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex flex-col">
-                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nombre</label>
-                            <input formControlName="nombre" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nombre <span class="text-red-500">*</span></label>
+                            <input formControlName="nombre" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white"
+                                   [class.border-red-500]="editForm.get('nombre')?.invalid && editForm.get('nombre')?.touched"
+                                   [class.border-gray-300]="!editForm.get('nombre')?.invalid || !editForm.get('nombre')?.touched"
+                                   [class.dark:border-slate-600]="!editForm.get('nombre')?.invalid || !editForm.get('nombre')?.touched" />
+                            @if (editForm.get('nombre')?.touched && editForm.get('nombre')?.hasError('required')) {
+                              <p class="text-red-500 text-xs mt-1">El nombre es obligatorio.</p>
+                            }
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Apellidos</label>
                             <input formControlName="apellidos" type="text" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
                         </div>
                         <div class="flex flex-col md:col-span-2">
-                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email</label>
-                            <input formControlName="email" type="email" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white" />
+                            <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email <span class="text-red-500">*</span></label>
+                            <input formControlName="email" type="email" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent dark:text-white"
+                                   [class.border-red-500]="editForm.get('email')?.invalid && editForm.get('email')?.touched"
+                                   [class.border-gray-300]="!editForm.get('email')?.invalid || !editForm.get('email')?.touched"
+                                   [class.dark:border-slate-600]="!editForm.get('email')?.invalid || !editForm.get('email')?.touched" />
+                            @if (editForm.get('email')?.touched && editForm.get('email')?.invalid) {
+                              <p class="text-red-500 text-xs mt-1">
+                                @if (editForm.get('email')?.hasError('required')) {
+                                  El email es obligatorio.
+                                } @else if (editForm.get('email')?.hasError('email')) {
+                                  Introduce un email válido.
+                                }
+                              </p>
+                            }
                         </div>
                         
                         <div class="flex flex-col">
@@ -110,8 +128,20 @@
                 
                 <form [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="space-y-4">
                     <div class="flex flex-col">
-                        <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nueva Contraseña</label>
-                        <input formControlName="passwordNueva" type="password" placeholder="Min. 6 caracteres" class="px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:text-white max-w-md" />
+                        <label class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Nueva Contraseña <span class="text-red-500">*</span></label>
+                        <input formControlName="passwordNueva" type="password" placeholder="Min. 6 caracteres" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:text-white max-w-md"
+                               [class.border-red-500]="resetPasswordForm.get('passwordNueva')?.invalid && resetPasswordForm.get('passwordNueva')?.touched"
+                               [class.border-gray-300]="!resetPasswordForm.get('passwordNueva')?.invalid || !resetPasswordForm.get('passwordNueva')?.touched"
+                               [class.dark:border-slate-600]="!resetPasswordForm.get('passwordNueva')?.invalid || !resetPasswordForm.get('passwordNueva')?.touched" />
+                        @if (resetPasswordForm.get('passwordNueva')?.touched && resetPasswordForm.get('passwordNueva')?.invalid) {
+                          <p class="text-red-500 text-xs mt-1">
+                            @if (resetPasswordForm.get('passwordNueva')?.hasError('required')) {
+                              La contraseña es obligatoria.
+                            } @else if (resetPasswordForm.get('passwordNueva')?.hasError('minlength')) {
+                              Debe tener al menos 6 caracteres.
+                            }
+                          </p>
+                        }
                     </div>
                     <div>
                         <button type="submit" [disabled]="resetPasswordForm.invalid || loadingReset" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">

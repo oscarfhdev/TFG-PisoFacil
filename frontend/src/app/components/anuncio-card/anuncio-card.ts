@@ -2,6 +2,7 @@ import { Component, input, computed, output, inject, effect } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import { AnuncioCardData } from '../../models/anuncio-card.model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { FavoritoService } from '../../services/favorito.service';
 import { AlertModal } from '../alert-modal/alert-modal';
@@ -9,7 +10,7 @@ import { AlertModal } from '../alert-modal/alert-modal';
 @Component({
   selector: 'app-anuncio-card',
   standalone: true,
-  imports: [RouterLink, MatDialogModule],
+  imports: [RouterLink, MatDialogModule, MatIconModule],
   templateUrl: './anuncio-card.html',
   styleUrl: './anuncio-card.scss',
 })

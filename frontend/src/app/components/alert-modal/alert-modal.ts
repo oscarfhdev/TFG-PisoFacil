@@ -16,11 +16,14 @@ export interface AlertModalData {
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, MatIconModule, NgClass],
   template: `
-    <div class="p-6 text-center dark:bg-card-dark dark:text-white">
-      <mat-icon [ngClass]="data.iconColor" class="!w-16 !h-16 text-6xl mb-4">{{ data.icon }}</mat-icon>
-      <h2 class="text-2xl font-bold mb-2">{{ data.title }}</h2>
-      <p class="text-gray-600 dark:text-slate-400 mb-6">{{ data.message }}</p>
-      <button mat-flat-button color="primary" class="w-full" (click)="dialogRef.close()">
+    <div class="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl relative overflow-visible">
+      <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 shadow-inner">
+        <mat-icon [ngClass]="data.iconColor" class="!w-12 !h-12 text-[48px] block">{{ data.icon }}</mat-icon>
+      </div>
+      <h2 class="text-2xl font-extrabold font-poppins mb-3 text-texto dark:text-white">{{ data.title }}</h2>
+      <p class="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">{{ data.message }}</p>
+      <button (click)="dialogRef.close()" 
+              class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20 focus:outline-none">
         Entendido
       </button>
     </div>

@@ -95,17 +95,29 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="col-span-1 md:col-span-2">
-              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Dirección completa *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Dirección completa <span class="text-red-500">*</span></label>
               <input type="text" formControlName="direccion" 
-                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                     [class.border-red-500]="pisoForm.get('direccion')?.invalid && pisoForm.get('direccion')?.touched"
+                     [class.border-gray-300]="!pisoForm.get('direccion')?.invalid || !pisoForm.get('direccion')?.touched"
+                     [class.dark:border-slate-700]="!pisoForm.get('direccion')?.invalid || !pisoForm.get('direccion')?.touched"
                      placeholder="Ej. Calle Mayor 12, 3º B">
+              @if (pisoForm.get('direccion')?.touched && pisoForm.get('direccion')?.hasError('required')) {
+                <p class="text-red-500 text-xs mt-1 animate-fade-in">La dirección es obligatoria.</p>
+              }
             </div>
             
             <div>
-              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Ciudad *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Ciudad <span class="text-red-500">*</span></label>
               <input type="text" formControlName="ciudad" 
-                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                     [class.border-red-500]="pisoForm.get('ciudad')?.invalid && pisoForm.get('ciudad')?.touched"
+                     [class.border-gray-300]="!pisoForm.get('ciudad')?.invalid || !pisoForm.get('ciudad')?.touched"
+                     [class.dark:border-slate-700]="!pisoForm.get('ciudad')?.invalid || !pisoForm.get('ciudad')?.touched"
                      placeholder="Ej. Madrid">
+              @if (pisoForm.get('ciudad')?.touched && pisoForm.get('ciudad')?.hasError('required')) {
+                <p class="text-red-500 text-xs mt-1 animate-fade-in">La ciudad es obligatoria.</p>
+              }
             </div>
             
             <div>
@@ -113,6 +125,13 @@
               <input type="text" formControlName="codigoPostal" 
                      class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
                      placeholder="Ej. 28001">
+            </div>
+
+            <div class="col-span-1 md:col-span-2">
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">¿Qué universidad o centro educativo está cerca?</label>
+              <input type="text" formControlName="centroInteres" 
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                     placeholder="Ej. Universidad de Granada (Campus Fuentenueva)">
             </div>
 
             <div>
@@ -192,20 +211,38 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="col-span-1 md:col-span-2">
-              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Título del Anuncio *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Título del Anuncio <span class="text-red-500">*</span></label>
               <input type="text" formControlName="tituloAnuncioHabitacion" 
-                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                     [class.border-red-500]="habitacionForm.get('tituloAnuncioHabitacion')?.invalid && habitacionForm.get('tituloAnuncioHabitacion')?.touched"
+                     [class.border-gray-300]="!habitacionForm.get('tituloAnuncioHabitacion')?.invalid || !habitacionForm.get('tituloAnuncioHabitacion')?.touched"
+                     [class.dark:border-slate-700]="!habitacionForm.get('tituloAnuncioHabitacion')?.invalid || !habitacionForm.get('tituloAnuncioHabitacion')?.touched"
                      placeholder="Ej. Habitación luminosa en el centro">
+              @if (habitacionForm.get('tituloAnuncioHabitacion')?.touched && habitacionForm.get('tituloAnuncioHabitacion')?.hasError('required')) {
+                <p class="text-red-500 text-xs mt-1 animate-fade-in">El título del anuncio es obligatorio.</p>
+              }
             </div>
             
             <div>
-              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Precio Mensual (€) *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm font-medium">Precio Mensual (€) <span class="text-red-500">*</span></label>
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">€</span>
                 <input type="number" formControlName="precioMensualHabitacion" 
-                       class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                       class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none transition-colors"
+                       [class.border-red-500]="habitacionForm.get('precioMensualHabitacion')?.invalid && habitacionForm.get('precioMensualHabitacion')?.touched"
+                       [class.border-gray-300]="!habitacionForm.get('precioMensualHabitacion')?.invalid || !habitacionForm.get('precioMensualHabitacion')?.touched"
+                       [class.dark:border-slate-700]="!habitacionForm.get('precioMensualHabitacion')?.invalid || !habitacionForm.get('precioMensualHabitacion')?.touched"
                        placeholder="350">
               </div>
+              @if (habitacionForm.get('precioMensualHabitacion')?.touched && habitacionForm.get('precioMensualHabitacion')?.invalid) {
+                <p class="text-red-500 text-xs mt-1 animate-fade-in">
+                  @if (habitacionForm.get('precioMensualHabitacion')?.hasError('required')) {
+                    El precio es obligatorio.
+                  } @else if (habitacionForm.get('precioMensualHabitacion')?.hasError('min')) {
+                    El precio debe ser mayor que 0.
+                  }
+                </p>
+              }
             </div>
             
             <div>
@@ -279,7 +316,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6 text-left">
               @for (preview of fotosPisoPreview(); track $index) {
                 <div class="relative group rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700 aspect-square">
-                  <img [src]="preview" class="w-full h-full object-cover">
+                  <img [src]="preview" (error)="$any($event.target).src='/placeholder.png'" class="w-full h-full object-cover">
                   <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <button type="button" (click)="removeFotoPiso($index)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -325,7 +362,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6 text-left">
               @for (preview of fotosHabitacionPreview(); track $index) {
                 <div class="relative group rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700 aspect-square">
-                  <img [src]="preview" class="w-full h-full object-cover">
+                  <img [src]="preview" (error)="$any($event.target).src='/placeholder.png'" class="w-full h-full object-cover">
                   <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <button type="button" (click)="removeFotoHabitacion($index)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

@@ -5,30 +5,29 @@
       <!-- Izquierda -->
       <div>
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-texto dark:text-white mb-6 leading-tight font-poppins">
-          Encuentra tu piso o compañero ideal en España
+          Encuentra tu piso <span class="text-accent">fácil</span> en toda España
         </h1>
         <p class="text-gray-500 dark:text-slate-400 mb-10 text-lg md:text-xl">
-          La plataforma más segura para encontrar habitación o compartir piso con estudiantes y jóvenes profesionales.
+          La plataforma más eficaz para encontrar habitación o compartir piso con estudiantes y jóvenes profesionales.
         </p>
 
-        <!-- Buscador -->
-        <div class="bg-fondo dark:bg-card-dark rounded-full shadow-lg p-2 md:p-3 flex flex-col md:flex-row items-center gap-2 border border-gray-100 dark:border-slate-800">
-          <input 
-            type="text" 
-            [(ngModel)]="ciudadBuscar"
-            placeholder="Ciudad o zona" 
-            class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-2 text-texto dark:text-white outline-none w-full"
-          />
-          <div class="h-8 w-px bg-gray-200 dark:bg-slate-700 hidden md:block"></div>
-          <input 
-            type="number" 
-            [(ngModel)]="precioMaxBuscar"
-            placeholder="Precio Máximo" 
-            class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-2 text-texto dark:text-white outline-none w-full"
-          />
-          <button (click)="buscar()" class="bg-primary hover:opacity-90 transition-opacity text-white font-bold py-3 px-8 rounded-full w-full md:w-auto whitespace-nowrap shadow-md font-poppins">
-            Buscar
-          </button>
+        <!-- Botones de Acción y Búsquedas Populares -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <a routerLink="/buscar" class="bg-accent hover:bg-orange-600 transition-all duration-300 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-accent/30 text-center text-lg font-poppins flex items-center justify-center gap-2 hover:-translate-y-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            Explorar Pisos
+          </a>
+          <a routerLink="/publicar" class="bg-primary hover:opacity-90 transition-all duration-300 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-primary/30 text-center text-lg font-poppins flex items-center justify-center gap-2 hover:-translate-y-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Publicar Anuncio
+          </a>
+        </div>
+        
+        <div class="mt-8 flex flex-wrap gap-3 items-center">
+          <span class="text-sm text-gray-500 dark:text-slate-400 font-medium">Búsquedas populares:</span>
+          <button (click)="ciudadBuscar='Madrid'; buscar()" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 text-sm text-texto dark:text-white hover:bg-primary hover:text-white hover:border-primary transition-colors">Madrid</button>
+          <button (click)="ciudadBuscar='Barcelona'; buscar()" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 text-sm text-texto dark:text-white hover:bg-primary hover:text-white hover:border-primary transition-colors">Barcelona</button>
+          <button (click)="precioMaxBuscar=400; buscar()" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 text-sm text-texto dark:text-white hover:bg-primary hover:text-white hover:border-primary transition-colors">< 400€</button>
         </div>
       </div>
 
@@ -36,12 +35,13 @@
       <div class="relative mt-8 lg:mt-0">
         <img 
           src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800" 
+          (error)="$any($event.target).src='/placeholder.png'"
           alt="Salón moderno" 
           class="w-full h-auto object-cover rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800"
         />
         <div class="absolute -bottom-6 -left-4 md:-bottom-8 md:-left-8 bg-fondo dark:bg-card-dark shadow-xl px-6 py-4 rounded-2xl flex items-center gap-3 border border-gray-100 dark:border-slate-800 animate-bounce-slow">
-          <span class="text-2xl">✅</span>
-          <span class="font-bold text-texto dark:text-white font-poppins">Anunciantes Verificados</span>
+          <span class="text-2xl">✨</span>
+          <span class="font-bold text-texto dark:text-white font-poppins">Recomendaciones personalizadas</span>
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@
 </section>
 
 <!-- 2. HABITACIONES DESTACADAS (Grid) -->
-<section class="bg-fondo dark:bg-fondo-dark py-20 font-lato">
+<section class="bg-white dark:bg-card-dark py-20 font-lato">
   <div class="container mx-auto px-4">
     <h2 class="text-3xl md:text-4xl font-bold text-center text-texto dark:text-white mb-12 font-poppins">Últimas habitaciones publicadas</h2>
     
@@ -63,13 +63,13 @@
         <div class="carousel-track flex gap-6 w-max animate-marquee hover:pause">
           <!-- Primera tanda de anuncios -->
           @for (anuncio of anuncios(); track 'first-' + anuncio.id) {
-            <div class="carousel-card min-w-[300px] md:min-w-[350px] lg:min-w-[400px] shrink-0">
+            <div class="carousel-card w-[280px] md:w-[300px] lg:w-[320px] max-w-[320px] shrink-0">
               <app-anuncio-card [anuncio]="anuncio" />
             </div>
           }
           <!-- Duplicado para efecto infinito -->
           @for (anuncio of anuncios(); track 'second-' + anuncio.id) {
-            <div class="carousel-card min-w-[300px] md:min-w-[350px] lg:min-w-[400px] shrink-0">
+            <div class="carousel-card w-[280px] md:w-[300px] lg:w-[320px] max-w-[320px] shrink-0">
               <app-anuncio-card [anuncio]="anuncio" />
             </div>
           }
@@ -79,78 +79,79 @@
   </div>
 </section>
 
-<!-- 3. CÓMO FUNCIONA PISOFÁCIL (Propuesta de valor) -->
-<section class="bg-gray-50 dark:bg-card-dark py-20 font-lato">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl md:text-4xl font-bold text-center text-texto dark:text-white mb-16 font-poppins">¿Por qué elegirnos?</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-      <!-- 1. Busca y Filtra -->
-      <div class="flex flex-col items-center group">
-        <div class="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform">
-          🔍
-        </div>
-        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">1. Busca y Filtra</h3>
-        <p class="text-gray-500 dark:text-slate-400 text-lg leading-relaxed">
-          Encuentra exactamente lo que necesitas. Filtra por precio, zona, comodidades y características del piso.
+<!-- 3. BENEFICIOS PISOFÁCIL -->
+<section class="bg-white dark:bg-fondo-dark py-24 font-lato relative overflow-hidden">
+  <!-- Decorative background element -->
+  <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+      
+      <!-- Item 1: Match de Estilo de Vida -->
+      <div class="flex flex-col group">
+        <span class="text-7xl font-bold text-primary/30 mb-6 font-poppins group-hover:text-primary/40 transition-colors duration-300">01</span>
+        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">Match de Estilo de Vida</h3>
+        <p class="text-gray-500 dark:text-slate-400 leading-relaxed text-lg">
+          Encuentra compañeros que compartan tus gustos, horarios y hábitos. Filtramos por afinidad para que tu convivencia sea perfecta desde el primer día.
         </p>
       </div>
 
-      <!-- 2. Smart Match -->
-      <div class="flex flex-col items-center group">
-        <div class="w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform">
-          🤝
-        </div>
-        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">2. Smart Match</h3>
-        <p class="text-gray-500 dark:text-slate-400 text-lg leading-relaxed">
-          Nuestro algoritmo de afinidad te ayuda a encontrar compañeros de piso compatibles con tu estilo de vida.
+      <!-- Item 2: Búsqueda Inteligente -->
+      <div class="flex flex-col group">
+        <span class="text-7xl font-bold text-accent/30 mb-6 font-poppins group-hover:text-accent/40 transition-colors duration-300">02</span>
+        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">Búsqueda Inteligente</h3>
+        <p class="text-gray-500 dark:text-slate-400 leading-relaxed text-lg">
+          Nuestros filtros avanzados y algoritmos de afinidad te muestran opciones que realmente encajan con tu estilo de vida y presupuesto actual.
         </p>
       </div>
 
-      <!-- 3. Conecta Seguro -->
-      <div class="flex flex-col items-center group">
-        <div class="w-20 h-20 bg-green-500/10 text-green-600 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform">
-          🛡️
-        </div>
-        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">3. Conecta Seguro</h3>
-        <p class="text-gray-500 dark:text-slate-400 text-lg leading-relaxed">
-          Chatea internamente con anunciantes verificados y reserva tu nueva habitación con total tranquilidad.
+      <!-- Item 3: Sin Comisiones Ocultas -->
+      <div class="flex flex-col group">
+        <span class="text-7xl font-bold text-green-500/30 mb-6 font-poppins group-hover:text-green-500/40 transition-colors duration-300">03</span>
+        <h3 class="text-2xl font-bold text-texto dark:text-white mb-4 font-poppins">Sin Comisiones Ocultas</h3>
+        <p class="text-gray-500 dark:text-slate-400 leading-relaxed text-lg">
+          Trato directo entre particulares. Sin honorarios de agencia ni letras pequeñas. Paga solo por lo que alquilas, sin sorpresas al final del mes.
         </p>
       </div>
+
     </div>
   </div>
 </section>
 
 <!-- 4. CALL TO ACTION (Doble) -->
-<section class="bg-secondary dark:bg-[#0B1117] py-20 border-t border-slate-800 font-lato">
+<section class="bg-gray-50 dark:bg-card-dark py-24 font-lato">
   <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto">
       
-      <!-- CTA Publicar -->
-      <div class="bg-white/5 border border-white/10 p-10 rounded-3xl text-center backdrop-blur-sm hover:bg-white/10 transition-colors">
-        <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-lg shadow-accent/30">
-          📢
+      <!-- Card Publicar -->
+      <div class="flex-1 bg-accent p-10 md:p-14 rounded-[2.5rem] flex flex-col justify-between group overflow-hidden relative shadow-xl shadow-accent/10 hover:shadow-accent/20 transition-all duration-500">
+        <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-700 pointer-events-none">
+           <svg class="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
         </div>
-        <h2 class="text-3xl font-extrabold text-white mb-4 font-poppins">¿Tienes una habitación libre?</h2>
-        <p class="text-white/70 text-lg mb-8 h-16">
-          Publica tu anuncio en menos de 2 minutos y empieza a recibir solicitudes de perfiles compatibles.
-        </p>
-        <a routerLink="/publicar" class="inline-block w-full bg-accent hover:bg-opacity-90 text-white font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-transform hover:scale-105 font-poppins">
-          Publicar Anuncio Gratis
+        <div class="relative z-10">
+          <h2 class="text-4xl font-extrabold text-white mb-6 font-poppins">¿Tienes una habitación?</h2>
+          <p class="text-white/90 text-xl mb-12 max-w-md leading-relaxed">
+            Publica gratis en minutos y conecta con perfiles que realmente encajan con tu estilo de vida.
+          </p>
+        </div>
+        <a routerLink="/publicar" class="relative z-10 inline-flex items-center justify-center bg-white text-accent font-bold py-5 px-10 rounded-2xl text-xl transition-all hover:bg-gray-100 shadow-xl shadow-black/10 w-full sm:w-max font-poppins hover:-translate-y-1">
+          Empezar a publicar
         </a>
       </div>
 
-      <!-- CTA Explorar -->
-      <div class="bg-white/5 border border-white/10 p-10 rounded-3xl text-center backdrop-blur-sm hover:bg-white/10 transition-colors">
-        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-lg shadow-primary/30">
-          🔍
+      <!-- Card Buscar -->
+      <div class="flex-1 bg-primary p-10 md:p-14 rounded-[2.5rem] flex flex-col justify-between group overflow-hidden relative shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500">
+        <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none">
+           <svg class="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
-        <h2 class="text-3xl font-extrabold text-white mb-4 font-poppins">¿Buscas tu próximo hogar?</h2>
-        <p class="text-white/70 text-lg mb-8 h-16">
-          Explora cientos de habitaciones verificadas y encuentra los compañeros perfectos.
-        </p>
-        <a routerLink="/buscar" class="inline-block w-full bg-primary hover:bg-opacity-90 text-white font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-transform hover:scale-105 font-poppins">
-          Explorar Habitaciones
+        <div class="relative z-10">
+          <h2 class="text-4xl font-extrabold text-white mb-6 font-poppins">¿Buscas tu nuevo hogar?</h2>
+          <p class="text-white/90 text-xl mb-12 max-w-md leading-relaxed">
+            Miles de habitaciones verificadas te esperan. Encuentra a tus compañeros de piso ideales ahora.
+          </p>
+        </div>
+        <a routerLink="/buscar" class="relative z-10 inline-flex items-center justify-center bg-white text-primary font-bold py-5 px-10 rounded-2xl text-xl transition-all hover:bg-gray-100 shadow-xl shadow-black/10 w-full sm:w-max font-poppins hover:-translate-y-1">
+          Explorar habitaciones
         </a>
       </div>
 

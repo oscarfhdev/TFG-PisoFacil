@@ -3,11 +3,12 @@ import { FavoritoService } from '../../services/favorito.service';
 import { AnuncioCardData } from '../../models/anuncio-card.model';
 import { AnuncioCard } from '../../components/anuncio-card/anuncio-card';
 import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-mis-favoritos',
   standalone: true,
-  imports: [AnuncioCard, RouterLink],
+  imports: [AnuncioCard, RouterLink, MatIconModule],
   templateUrl: './mis-favoritos.html',
   styleUrl: './mis-favoritos.scss',
 })
@@ -40,7 +41,8 @@ export class MisFavoritos implements OnInit {
           afinidad: {
             aceptaMascotas: f.admiteMascotas ?? false,
             permiteFumar: f.admiteFumadores ?? false,
-            lgtbi: f.lgtbiFriendly ?? false
+            lgtbi: f.lgtbiFriendly ?? false,
+            admiteParejas: false
           },
           esFavorito: true
         }));

@@ -10,6 +10,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
 import { HabitacionResponse } from '../../models/habitacion.model';
 import { UsuarioModal } from '../../components/usuario-modal/usuario-modal';
+import { ContactoModal } from '../../components/contacto-modal/contacto-modal';
 import { AlertModal } from '../../components/alert-modal/alert-modal';
 import { NgClass } from '@angular/common';
 
@@ -148,6 +149,36 @@ export class HabitacionDetail implements OnInit {
     this.usuarioService.findById(hab.idUsuarioPropietario).subscribe({
       next: (usuario) => {
         this.dialog.open(UsuarioModal, {
+          data: usuario,
+          width: '480px',
+          panelClass: 'modal-propietario'
+        });
+      },
+      error: (err) => console.error('Error cargando propietario', err)
+    });
+  }
+
+  abrirModalContacto() {
+    if (!this.authService.currentUser()) {
+      this.dialog.open(AlertModal, {
+        data: {
+          title: 'Acceso Restringido',
+          message: 'Debes iniciar sesión para ver los métodos de contacto del anunciante.',
+          icon: 'lock',
+          iconColor: 'text-amber-500'
+        },
+        width: '400px',
+        panelClass: 'modal-propietario'
+      });
+      return;
+    }
+
+    const hab = this.habitacion();
+    if (!hab || !hab.idUsuarioPropietario) return;
+
+    this.usuarioService.findById(hab.idUsuarioPropietario).subscribe({
+      next: (usuario) => {
+        this.dialog.open(ContactoModal, {
           data: usuario,
           width: '480px',
           panelClass: 'modal-propietario'

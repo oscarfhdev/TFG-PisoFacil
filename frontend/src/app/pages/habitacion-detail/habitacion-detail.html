@@ -1,200 +1,249 @@
 @if (loading()) {
-  <div class="flex justify-center items-center h-64">
+  <div class="flex justify-center items-center h-[70vh]">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
   </div>
 } @else if (habitacion()) {
-  <div class="container mx-auto px-4 py-8 max-w-6xl">
+  <div class="container mx-auto px-4 py-8 max-w-6xl font-sans">
     
-    <!-- Breadcrumb / Volver -->
+    <!-- Breadcrumb -->
     <a routerLink="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors mb-6 text-sm font-medium">
-      <mat-icon class="!w-4 !h-4 text-[16px]">arrow_back</mat-icon>
+      <mat-icon class="!w-5 !h-5 text-[20px]">arrow_back</mat-icon>
       Volver al inicio
     </a>
 
-    <!-- Header -->
-    <div class="mb-6">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
-          Habitación
-        </span>
-        @if (habitacion()?.estaDisponible) {
-          <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            Disponible Ya
+    <!-- Header Principal (Título, Ubicación y Botón Favorito arriba del todo) -->
+    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+            Habitación
           </span>
-        }
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-texto dark:text-white font-poppins mb-2 tracking-tight">
+          {{ habitacion()?.tituloAnuncio }}
+        </h1>
+        <p class="text-gray-500 dark:text-slate-400 flex items-center gap-2 text-base md:text-lg">
+          <mat-icon class="!w-5 !h-5 text-[20px] text-accent">location_on</mat-icon>
+          {{ habitacion()?.ciudad }} <span class="text-gray-300 mx-1">•</span> {{ habitacion()?.direccion }}
+        </p>
       </div>
-      <h1 class="text-3xl md:text-4xl font-bold text-texto dark:text-white font-poppins mb-2">
-        {{ habitacion()?.tituloAnuncio }}
-      </h1>
-      <p class="text-gray-500 dark:text-slate-400 flex items-center gap-2 text-sm md:text-base">
-        <mat-icon class="!w-5 !h-5 text-[20px]">location_on</mat-icon>
-        {{ habitacion()?.ciudad }} — {{ habitacion()?.direccion }}
-      </p>
+      
+      <!-- Botón Favorito (Arriba a la derecha) -->
+      <div class="shrink-0 mt-2 md:mt-0">
+        <button (click)="toggleFavorito()" class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-bold transition-all border-2 focus:outline-none" [ngClass]="esFavorito() ? 'border-red-500 text-red-500 bg-red-50 dark:bg-red-500/10' : 'border-gray-200 text-gray-500 hover:border-red-500 hover:text-red-500 hover:bg-red-50 dark:border-slate-700 dark:text-slate-400 dark:hover:border-red-500 dark:hover:text-red-500 dark:hover:bg-red-500/10'">
+          <mat-icon [class.text-red-500]="esFavorito()" class="transition-colors duration-300">{{ esFavorito() ? 'favorite' : 'favorite_border' }}</mat-icon> 
+          {{ esFavorito() ? 'Guardado' : 'Guardar' }}
+        </button>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Grid: Izquierda (Galería, Info) | Derecha (Precio, Acción) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
       
-      <!-- Columna Principal: Galería y Descripción -->
-      <div class="lg:col-span-2 space-y-8">
+      <!-- Columna Principal Izquierda -->
+      <div class="lg:col-span-2 space-y-10">
         
-        <!-- Galería de Fotos -->
+        <!-- Galería de Imágenes -->
         <div class="space-y-3">
-          <!-- Imagen Principal -->
-          <div class="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
-            <img [src]="todasLasFotos()[fotoActivaIndex()]" alt="Foto principal" class="w-full h-full object-cover" />
+          <div class="relative w-full h-[40vh] md:h-[50vh] rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-sm border border-gray-200 dark:border-slate-700">
+            <img [src]="todasLasFotos()[fotoActivaIndex()]" (error)="$any($event.target).src='/placeholder.png'" alt="Foto de la habitación" class="w-full h-full object-cover transition-opacity duration-300" />
+            @if (todasLasFotos().length > 1) {
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full text-white text-sm font-medium tracking-wide">
+                {{ fotoActivaIndex() + 1 }} / {{ todasLasFotos().length }}
+              </div>
+            }
           </div>
           
-          <!-- Thumbnails -->
           @if (todasLasFotos().length > 1) {
-            <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-slate-700">
+            <div class="flex gap-3 overflow-x-auto py-2 scrollbar-hide snap-x">
               @for (foto of todasLasFotos(); track $index) {
                 <button 
                   (click)="setFotoActiva($index)"
-                  class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200"
-                  [ngClass]="fotoActivaIndex() === $index ? 'border-primary shadow-md' : 'border-transparent hover:border-gray-300 dark:hover:border-slate-600'">
-                  <img [src]="foto" alt="Thumbnail" class="w-full h-full object-cover" />
-                  @if (fotoActivaIndex() !== $index) {
-                    <div class="absolute inset-0 bg-black/20 hover:bg-black/0 transition-colors"></div>
-                  }
+                  class="relative w-24 h-16 md:w-28 md:h-20 shrink-0 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-center focus:outline-none"
+                  [ngClass]="fotoActivaIndex() === $index ? 'border-primary shadow-sm scale-105' : 'border-transparent hover:scale-105 opacity-80 hover:opacity-100'">
+                  <img [src]="foto" (error)="$any($event.target).src='/placeholder.png'" alt="Thumbnail" class="w-full h-full object-cover" />
                 </button>
               }
             </div>
           }
         </div>
 
-        <!-- Descripción -->
-        <div class="bg-white dark:bg-card-dark rounded-2xl p-6 md:p-8 border border-gray-100 dark:border-slate-800 shadow-sm">
-          <h2 class="text-xl font-bold text-texto dark:text-white font-poppins mb-4">Sobre la habitación</h2>
-          <div class="text-gray-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed text-sm md:text-base">
-            {{ habitacion()?.descripcionEspecifica || 'Sin descripción detallada.' }}
-          </div>
-          
-          @if (habitacion()?.descripcionGlobal) {
-            <div class="mt-8 pt-6 border-t border-gray-100 dark:border-slate-800">
-              <h2 class="text-xl font-bold text-texto dark:text-white font-poppins mb-4">Sobre el piso en general</h2>
-              <div class="text-gray-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed text-sm md:text-base">
-                {{ habitacion()?.descripcionGlobal }}
-              </div>
+        <!-- Descripcion Textual -->
+        <div>
+           <h3 class="text-2xl font-bold text-texto dark:text-white font-poppins mb-4">Acerca de esta habitación</h3>
+           <div class="text-gray-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed text-lg">
+             {{ habitacion()?.descripcionEspecifica || 'No hay descripción detallada de la habitación.' }}
+           </div>
+        </div>
+
+        @if (habitacion()?.descripcionGlobal) {
+          <div class="pt-6 border-t border-gray-100 dark:border-slate-800">
+            <h3 class="text-2xl font-bold text-texto dark:text-white font-poppins mb-4">Sobre el piso en general</h3>
+            <div class="text-gray-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed text-lg">
+              {{ habitacion()?.descripcionGlobal }}
             </div>
-          }
+          </div>
+        }
+
+        <!-- Bloque 1: Características del Piso / Habitación -->
+        <div class="pt-6 border-t border-gray-100 dark:border-slate-800">
+           <h3 class="text-2xl font-bold text-texto dark:text-white font-poppins mb-6">Características del alojamiento</h3>
+           <div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+             @if (habitacion()?.superficieM2) {
+               <div class="flex items-center gap-3">
+                 <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">aspect_ratio</mat-icon>
+                 <div>
+                   <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.superficieM2 }} m²</p>
+                   <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Superficie</p>
+                 </div>
+               </div>
+             }
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">meeting_room</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.numHabitacionesTotal || 1 }} habs.</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">En el piso</p>
+               </div>
+             </div>
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">{{ habitacion()?.tieneBanoPrivado ? 'shower' : 'bathtub' }}</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.tieneBanoPrivado ? 'Privado' : 'Compartido' }}</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Baño</p>
+               </div>
+             </div>
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">chair</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.amueblada ? 'Sí' : 'No' }}</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Amueblada</p>
+               </div>
+             </div>
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">wifi</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.tieneWifi ? 'Incluido' : 'No' }}</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">WiFi</p>
+               </div>
+             </div>
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">elevator</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.tieneAscensor ? 'Sí' : 'No' }}</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Ascensor</p>
+               </div>
+             </div>
+             <div class="flex items-center gap-3">
+               <mat-icon class="text-gray-400 !w-6 !h-6 text-[24px]">thermostat</mat-icon>
+               <div>
+                 <p class="font-bold text-texto dark:text-slate-200">{{ habitacion()?.tieneCalefaccion ? 'Sí' : 'No' }}</p>
+                 <p class="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Calefacción</p>
+               </div>
+             </div>
+           </div>
+        </div>
+
+        <!-- Bloque 2: Normas de Convivencia -->
+        <div class="pt-6 border-t border-gray-100 dark:border-slate-800">
+           <h3 class="text-2xl font-bold text-texto dark:text-white font-poppins mb-6">Normas de convivencia</h3>
+           <div class="flex flex-col gap-4">
+             <div class="flex items-center gap-4">
+               <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                 <mat-icon class="text-gray-500 dark:text-gray-400">pets</mat-icon>
+               </div>
+               <div class="flex-grow">
+                 <p class="font-bold text-texto dark:text-slate-200">Mascotas</p>
+                 <p class="text-gray-500 dark:text-slate-400 text-sm">{{ habitacion()?.admiteMascotas ? 'Se admiten mascotas en la vivienda.' : 'No se admiten mascotas.' }}</p>
+               </div>
+               @if (habitacion()?.admiteMascotas) {
+                 <mat-icon class="text-green-500">check_circle</mat-icon>
+               } @else {
+                 <mat-icon class="text-red-400">cancel</mat-icon>
+               }
+             </div>
+             
+             <div class="flex items-center gap-4">
+               <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                 <mat-icon class="text-gray-500 dark:text-gray-400">smoking_rooms</mat-icon>
+               </div>
+               <div class="flex-grow">
+                 <p class="font-bold text-texto dark:text-slate-200">Fumadores</p>
+                 <p class="text-gray-500 dark:text-slate-400 text-sm">{{ habitacion()?.admiteFumadores ? 'Está permitido fumar.' : 'No se permite fumar en el interior.' }}</p>
+               </div>
+               @if (habitacion()?.admiteFumadores) {
+                 <mat-icon class="text-green-500">check_circle</mat-icon>
+               } @else {
+                 <mat-icon class="text-red-400">cancel</mat-icon>
+               }
+             </div>
+
+             <div class="flex items-center gap-4">
+               <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                 <mat-icon class="text-gray-500 dark:text-gray-400">group</mat-icon>
+               </div>
+               <div class="flex-grow">
+                 <p class="font-bold text-texto dark:text-slate-200">Parejas</p>
+                 <p class="text-gray-500 dark:text-slate-400 text-sm">A consultar con el propietario.</p>
+               </div>
+             </div>
+           </div>
         </div>
 
       </div>
 
-      <!-- Columna Lateral: Tarjeta Flotante -->
-      <div class="space-y-6">
-        
-        <!-- Tarjeta de Precio y Características -->
-        <div class="bg-white dark:bg-card-dark rounded-2xl p-6 border border-gray-100 dark:border-slate-800 shadow-xl shadow-primary/5 sticky top-6">
+      <!-- Columna Lateral Derecha: Tarjeta Flotante -->
+      <div class="relative">
+        <div class="bg-white dark:bg-card-dark rounded-3xl p-6 md:p-8 border border-gray-100 dark:border-slate-800 shadow-2xl shadow-black/5 sticky top-28">
           
           <!-- Precio -->
-          <div class="flex items-end gap-2 mb-6">
-            <span class="text-4xl font-bold text-texto dark:text-white font-poppins">{{ habitacion()?.precioMensual }}€</span>
-            <span class="text-gray-500 dark:text-slate-400 mb-1">/mes</span>
+          <div class="mb-8">
+            <span class="text-5xl font-extrabold text-primary dark:text-primary font-poppins">{{ habitacion()?.precioMensual }}€</span>
+            <span class="text-gray-500 dark:text-slate-400 text-xl font-medium mb-1"> / mes</span>
+          </div>
+
+          <!-- Perfil Propietario Simple -->
+          <div class="py-6 border-t border-gray-100 dark:border-slate-800 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400 mb-1">Publicado por</p>
+                <p class="font-bold text-texto dark:text-white text-xl font-poppins">
+                  {{ habitacion()?.nombrePropietario?.split(' ')?.[0] || 'Anunciante' }}
+                </p>
+              </div>
+              <img [src]="habitacion()?.fotoPerfilUrlPropietario || 'https://ui-avatars.com/api/?name=' + habitacion()?.nombrePropietario + '&background=random'" 
+                   (error)="$any($event.target).src='/placeholder.png'"
+                   alt="Propietario" 
+                   class="w-14 h-14 rounded-full object-cover shadow-sm border border-gray-200 dark:border-slate-700" />
+            </div>
+            
+            <button (click)="abrirModalPropietario()" class="w-full bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-texto dark:text-white font-bold py-3 rounded-xl transition-colors border border-gray-100 dark:border-slate-700 focus:outline-none">
+              Ver perfil
+            </button>
           </div>
 
           <!-- Botones Acción -->
-          <div class="flex flex-col gap-3 mb-8">
-            @if (habitacion()?.instagramUrlPropietario) {
-              <a [href]="habitacion()?.instagramUrlPropietario" target="_blank" mat-flat-button color="primary" class="!rounded-xl !py-6 w-full !text-base font-bold">
-                <mat-icon>chat</mat-icon> Contactar
-              </a>
-            } @else {
-              <button mat-flat-button color="primary" class="!rounded-xl !py-6 w-full !text-base font-bold" disabled>
-                <mat-icon>chat</mat-icon> Contactar
-              </button>
-            }
-            
-            <button mat-stroked-button (click)="toggleFavorito()" class="!rounded-xl !py-6 w-full !text-base font-medium border-2" [ngClass]="esFavorito() ? 'text-red-500 border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/10' : 'text-gray-700 dark:text-slate-300 dark:border-slate-700'">
-              <mat-icon [class.fill-red-500]="esFavorito()">favorite</mat-icon> 
-              {{ esFavorito() ? 'Guardado en Favoritos' : 'Guardar Favorito' }}
+          <div>
+            <!-- Botón Contactar: abre el modal de contacto -->
+            <button (click)="abrirModalContacto()" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-primary/30 text-lg focus:outline-none">
+              <mat-icon>chat_bubble</mat-icon> Ver métodos de contacto
             </button>
           </div>
-
-          <!-- Ficha Técnica Habitación -->
-          <div class="space-y-4 mb-6">
-            <h3 class="text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-2">Detalles Habitación</h3>
-            
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">aspect_ratio</mat-icon> Superficie</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.superficieM2 ? habitacion()?.superficieM2 + ' m²' : 'N/A' }}</span>
-            </div>
-            
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">bathtub</mat-icon> Baño</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.tieneBanoPrivado ? 'Privado' : 'Compartido' }}</span>
-            </div>
-
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">chair</mat-icon> Amueblada</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.amueblada ? 'Sí' : 'No' }}</span>
-            </div>
-
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">thermostat</mat-icon> Calefacción</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.tieneCalefaccion ? 'Sí' : 'No' }}</span>
-            </div>
-          </div>
-
-          <!-- Ficha Técnica Piso -->
-          <div class="space-y-4 mb-6 pt-6 border-t border-gray-100 dark:border-slate-800">
-            <h3 class="text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-2">Detalles del Piso</h3>
-            
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">meeting_room</mat-icon> Total Habitaciones</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.numHabitacionesTotal || 'N/A' }}</span>
-            </div>
-
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">wifi</mat-icon> WiFi</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.tieneWifi ? 'Sí' : 'No' }}</span>
-            </div>
-
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">elevator</mat-icon> Ascensor</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.tieneAscensor ? 'Sí' : 'No' }}</span>
-            </div>
-            
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">pets</mat-icon> Mascotas</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.admiteMascotas ? 'Permitidas' : 'No' }}</span>
-            </div>
-            
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-500 dark:text-slate-400 flex items-center gap-2"><mat-icon class="!w-4 !h-4 text-[16px]">smoking_rooms</mat-icon> Fumadores</span>
-              <span class="font-medium text-texto dark:text-slate-200">{{ habitacion()?.admiteFumadores ? 'Permitido' : 'No' }}</span>
-            </div>
-          </div>
-
-          <!-- Propietario -->
-          <div class="pt-6 border-t border-gray-100 dark:border-slate-800">
-            <h3 class="text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-4">Publicado por</h3>
-            
-            <button (click)="abrirModalPropietario()" class="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-left group">
-              <img [src]="habitacion()?.fotoPerfilUrlPropietario || 'https://ui-avatars.com/api/?name=' + habitacion()?.nombrePropietario + '&background=random'" 
-                   alt="Avatar" 
-                   class="w-12 h-12 rounded-full object-cover ring-2 ring-transparent group-hover:ring-primary/30 transition-all" />
-              <div class="flex-grow">
-                <p class="font-bold text-texto dark:text-white font-poppins">{{ habitacion()?.nombrePropietario }}</p>
-                <p class="text-sm text-primary dark:text-primary font-medium">Ver perfil completo</p>
-              </div>
-              <mat-icon class="text-gray-400 group-hover:text-primary transition-colors">chevron_right</mat-icon>
-            </button>
-          </div>
-
+          
         </div>
       </div>
     </div>
   </div>
 } @else {
-  <div class="flex flex-col justify-center items-center h-64 text-center">
-    <mat-icon class="!w-12 !h-12 text-[48px] text-gray-300 dark:text-slate-600 mb-4">error_outline</mat-icon>
-    <h2 class="text-xl font-bold text-texto dark:text-white mb-2">Habitación no encontrada</h2>
-    <p class="text-gray-500 dark:text-slate-400">Es posible que el anuncio haya sido eliminado.</p>
-    <a routerLink="/" mat-button color="primary" class="mt-4">Volver al inicio</a>
+  <div class="flex flex-col justify-center items-center h-[70vh] text-center px-4">
+    <div class="w-24 h-24 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
+      <mat-icon class="!w-12 !h-12 text-[48px] text-gray-400 dark:text-slate-500">search_off</mat-icon>
+    </div>
+    <h2 class="text-3xl font-bold text-texto dark:text-white font-poppins mb-3">No encontramos esta habitación</h2>
+    <p class="text-gray-500 dark:text-slate-400 max-w-md mx-auto mb-8 text-lg">
+      Es posible que el anuncio haya sido eliminado por el propietario o que el enlace sea incorrecto.
+    </p>
+    <a routerLink="/" class="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-primary/90 transition-colors shadow-lg shadow-primary/30">
+      Explorar otras habitaciones
+    </a>
   </div>
 }

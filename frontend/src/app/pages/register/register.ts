@@ -51,12 +51,24 @@ export class Register {
   }
 
   nextStep() {
-    if (this.currentStep() === 0 && this.step0Form.valid) {
-      this.currentStep.set(1);
-    } else if (this.currentStep() === 1 && this.step1Form.valid) {
-      this.currentStep.set(2);
-    } else if (this.currentStep() === 2 && this.step2Form.valid) {
-      this.currentStep.set(3);
+    if (this.currentStep() === 0) {
+      if (this.step0Form.valid) {
+        this.currentStep.set(1);
+      } else {
+        this.step0Form.markAllAsTouched();
+      }
+    } else if (this.currentStep() === 1) {
+      if (this.step1Form.valid) {
+        this.currentStep.set(2);
+      } else {
+        this.step1Form.markAllAsTouched();
+      }
+    } else if (this.currentStep() === 2) {
+      if (this.step2Form.valid) {
+        this.currentStep.set(3);
+      } else {
+        this.step2Form.markAllAsTouched();
+      }
     }
   }
 
@@ -78,6 +90,9 @@ export class Register {
 
   onSubmit() {
     if (this.step0Form.invalid || this.step1Form.invalid || this.step2Form.invalid) {
+      this.step0Form.markAllAsTouched();
+      this.step1Form.markAllAsTouched();
+      this.step2Form.markAllAsTouched();
       this.error.set('Por favor, completa todos los campos requeridos correctamente.');
       return;
     }

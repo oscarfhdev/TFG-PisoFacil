@@ -17,8 +17,8 @@
     <!-- Logo Área -->
     <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-slate-800 shrink-0 bg-gray-50/50 dark:bg-slate-800/40">
       <a routerLink="/" class="flex items-center gap-2 group">
-        <img src="/logo-pisofacil-light.png" alt="Logo" class="h-8 transition-transform group-hover:scale-105 dark:hidden" />
-        <img src="/logo-pisofacil-dark.png" alt="Logo" class="h-8 transition-transform group-hover:scale-105 hidden dark:block" />
+        <img src="/logo-pisofacil-light.png" (error)="$any($event.target).src='/placeholder.png'" alt="Logo" class="h-8 transition-transform group-hover:scale-105 dark:hidden" />
+        <img src="/logo-pisofacil-dark.png" (error)="$any($event.target).src='/placeholder.png'" alt="Logo" class="h-8 transition-transform group-hover:scale-105 hidden dark:block" />
         <span class="text-xs font-bold text-accent uppercase tracking-widest mt-1">Admin</span>
       </a>
       <!-- Botón cerrar móvil -->
@@ -56,7 +56,7 @@
     <div class="p-4 border-t border-gray-200 dark:border-slate-800 shrink-0">
       <div class="flex items-center gap-3 px-4 py-3 mb-4 rounded-lg bg-gray-50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-700/50">
         @if (authService.currentUser()?.fotoPerfilUrl) {
-          <img [src]="authService.currentUser()?.fotoPerfilUrl" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-slate-700/50 shrink-0">
+          <img [src]="authService.currentUser()?.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-slate-700/50 shrink-0">
         } @else {
           <div class="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold font-poppins shrink-0">
             {{ authService.currentUser()?.nombre?.charAt(0) | uppercase }}

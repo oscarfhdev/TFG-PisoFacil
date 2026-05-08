@@ -58,7 +58,10 @@ export class AdminUsuarioEditModal implements OnInit {
   }
 
   onSaveDetails() {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
     this.loadingEdit = true;
     const formValue = this.editForm.value;
@@ -95,7 +98,10 @@ export class AdminUsuarioEditModal implements OnInit {
   }
 
   onResetPassword() {
-    if (this.resetPasswordForm.invalid) return;
+    if (this.resetPasswordForm.invalid) {
+      this.resetPasswordForm.markAllAsTouched();
+      return;
+    }
 
     this.loadingReset = true;
     const passwordNueva = this.resetPasswordForm.get('passwordNueva')?.value;

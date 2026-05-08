@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,6 +24,7 @@ export class CrearReporteModal implements OnInit {
   private fb = inject(FormBuilder);
   private reporteService = inject(ReporteService);
   private snackBar = inject(MatSnackBar);
+  private data = inject(MAT_DIALOG_DATA, { optional: true });
 
   reporteForm!: FormGroup;
   loading = false;
@@ -32,18 +33,22 @@ export class CrearReporteModal implements OnInit {
     'Error en la web',
     'Sugerencia',
     'Problema con un usuario',
+    'Recuperación de cuenta',
     'Otro'
   ];
 
   ngOnInit(): void {
     this.reporteForm = this.fb.group({
-      categoria: ['', [Validators.required]],
+      categoria: [this.data?.categoria || '', [Validators.required]],
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
   onSubmit() {
-    if (this.reporteForm.invalid) return;
+    if (this.reporteForm.invalid) {
+      this.reporteForm.markAllAsTouched();
+      return;
+    }
 
     this.loading = true;
     const formValue = this.reporteForm.value;

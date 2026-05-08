@@ -1,5 +1,11 @@
-<div class="min-h-screen bg-fondo dark:bg-fondo-dark font-lato flex items-center justify-center p-4 transition-colors duration-300">
-  <div class="bg-white dark:bg-card-dark rounded-2xl border border-gray-100 dark:border-slate-800 shadow-2xl w-full max-w-2xl p-6 md:p-10 relative overflow-hidden transition-colors duration-300">
+<div class="h-[calc(100vh-4rem)] relative font-lato flex items-center justify-center p-4 transition-colors duration-300 overflow-hidden">
+  <!-- Background Image with Overlay -->
+  <div class="absolute inset-0 z-0 overflow-hidden">
+    <img src="/assets/images/auth-bg.png" alt="Background" class="w-full h-full object-cover blur-[3px] scale-105">
+    <div class="absolute inset-0 bg-slate-900/40"></div>
+  </div>
+
+  <div class="bg-white dark:bg-card-dark rounded-2xl border border-gray-100 dark:border-slate-800 shadow-2xl w-full max-w-2xl p-6 md:p-10 relative overflow-hidden transition-colors duration-300 z-10">
     
     <!-- Header / Logo -->
     <div class="text-center mb-8 relative z-10">
@@ -80,28 +86,60 @@
       @if (currentStep() === 0) {
         <form [formGroup]="step0Form" (ngSubmit)="nextStep()" class="space-y-4 animate-fade-in">
           <div>
-            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Email *</label>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Email <span class="text-red-500">*</span></label>
             <input type="email" formControlName="email" 
-                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                   [class.border-red-500]="step0Form.get('email')?.invalid && step0Form.get('email')?.touched"
+                   [class.border-gray-300]="!step0Form.get('email')?.invalid || !step0Form.get('email')?.touched"
+                   [class.dark:border-slate-700]="!step0Form.get('email')?.invalid || !step0Form.get('email')?.touched"
+                   [class.focus:border-accent]="!step0Form.get('email')?.invalid || !step0Form.get('email')?.touched"
                    placeholder="tu@email.com">
+            @if (step0Form.get('email')?.touched && step0Form.get('email')?.invalid) {
+              <p class="text-red-500 text-xs mt-1 animate-fade-in">
+                @if (step0Form.get('email')?.hasError('required')) {
+                  El email es obligatorio.
+                } @else if (step0Form.get('email')?.hasError('email')) {
+                  Introduce un email válido (ej. usuario&#64;email.com).
+                }
+              </p>
+            }
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Contraseña *</label>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Contraseña <span class="text-red-500">*</span></label>
             <input type="password" formControlName="password" 
-                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                   [class.border-red-500]="step0Form.get('password')?.invalid && step0Form.get('password')?.touched"
+                   [class.border-gray-300]="!step0Form.get('password')?.invalid || !step0Form.get('password')?.touched"
+                   [class.dark:border-slate-700]="!step0Form.get('password')?.invalid || !step0Form.get('password')?.touched"
+                   [class.focus:border-accent]="!step0Form.get('password')?.invalid || !step0Form.get('password')?.touched"
                    placeholder="Mínimo 6 caracteres">
+            @if (step0Form.get('password')?.touched && step0Form.get('password')?.invalid) {
+              <p class="text-red-500 text-xs mt-1 animate-fade-in">
+                @if (step0Form.get('password')?.hasError('required')) {
+                  La contraseña es obligatoria.
+                } @else if (step0Form.get('password')?.hasError('minlength')) {
+                  La contraseña debe tener al menos 6 caracteres.
+                }
+              </p>
+            }
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Confirmar Contraseña *</label>
+            <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Confirmar Contraseña <span class="text-red-500">*</span></label>
             <input type="password" formControlName="confirmPassword" 
-                   class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors"
+                   class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                   [class.border-red-500]="(step0Form.get('confirmPassword')?.invalid || step0Form.hasError('mismatch')) && step0Form.get('confirmPassword')?.touched"
+                   [class.border-gray-300]="(!step0Form.get('confirmPassword')?.invalid && !step0Form.hasError('mismatch')) || !step0Form.get('confirmPassword')?.touched"
+                   [class.dark:border-slate-700]="(!step0Form.get('confirmPassword')?.invalid && !step0Form.hasError('mismatch')) || !step0Form.get('confirmPassword')?.touched"
+                   [class.focus:border-accent]="(!step0Form.get('confirmPassword')?.invalid && !step0Form.hasError('mismatch')) || !step0Form.get('confirmPassword')?.touched"
                    placeholder="Repite la contraseña">
-            @if (step0Form.hasError('mismatch')) {
-              <p class="text-red-400 text-xs mt-1">Las contraseñas no coinciden.</p>
+            @if (step0Form.get('confirmPassword')?.touched && step0Form.get('confirmPassword')?.hasError('required')) {
+              <p class="text-red-500 text-xs mt-1 animate-fade-in">Debes confirmar la contraseña.</p>
+            } @else if (step0Form.get('confirmPassword')?.touched && step0Form.hasError('mismatch')) {
+              <p class="text-red-500 text-xs mt-1 animate-fade-in">Las contraseñas no coinciden.</p>
             }
           </div>
           <div class="pt-4 flex justify-end">
-            <button type="submit" [disabled]="step0Form.invalid" 
+            <button type="submit" 
                     class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Siguiente
             </button>
@@ -114,9 +152,16 @@
         <form [formGroup]="step1Form" (ngSubmit)="nextStep()" class="space-y-4 animate-fade-in">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Nombre *</label>
+              <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Nombre <span class="text-red-500">*</span></label>
               <input type="text" formControlName="nombre" 
-                     class="w-full bg-gray-50 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                     class="w-full bg-gray-50 dark:bg-slate-800/50 border text-texto dark:text-white rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                     [class.border-red-500]="step1Form.get('nombre')?.invalid && step1Form.get('nombre')?.touched"
+                     [class.border-gray-300]="!step1Form.get('nombre')?.invalid || !step1Form.get('nombre')?.touched"
+                     [class.dark:border-slate-700]="!step1Form.get('nombre')?.invalid || !step1Form.get('nombre')?.touched"
+                     [class.focus:border-accent]="!step1Form.get('nombre')?.invalid || !step1Form.get('nombre')?.touched">
+              @if (step1Form.get('nombre')?.touched && step1Form.get('nombre')?.hasError('required')) {
+                <p class="text-red-500 text-xs mt-1 animate-fade-in">El nombre es obligatorio.</p>
+              }
             </div>
             <div>
               <label class="block text-gray-700 dark:text-slate-300 mb-1 text-sm transition-colors">Apellidos</label>
@@ -137,7 +182,7 @@
           </div>
           <div class="pt-4 flex justify-between">
             <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-texto dark:hover:text-white px-4 py-2 transition-colors">Atrás</button>
-            <button type="submit" [disabled]="step1Form.invalid" 
+            <button type="submit" 
                     class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Siguiente
             </button>
@@ -181,7 +226,7 @@
 
           <div class="pt-4 flex justify-between">
             <button type="button" (click)="prevStep()" class="text-slate-400 hover:text-texto dark:hover:text-white px-4 py-2 transition-colors">Atrás</button>
-            <button type="submit" [disabled]="step2Form.invalid" 
+            <button type="submit" 
                     class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Siguiente
             </button>
@@ -192,11 +237,11 @@
       <!-- Paso 3: Foto y Submit -->
       @if (currentStep() === 3) {
         <div class="space-y-6 animate-fade-in text-center">
-          <p class="text-gray-600 dark:text-slate-300 mb-4 transition-colors">Sube una foto de perfil para que tus futuros compañeros te reconozcan.</p>
+          <p class="text-gray-600 dark:text-slate-300 mb-4 transition-colors">Sube una foto de perfil para que tus futuros compañeros te reconozcan. <span class="text-gray-400 text-sm">(Opcional)</span></p>
           
           <div class="flex flex-col items-center justify-center">
             @if (previewUrl()) {
-              <img [src]="previewUrl()" alt="Preview" class="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-slate-700 mb-4 shadow-lg">
+              <img [src]="previewUrl()" (error)="$any($event.target).src='/placeholder.png'" alt="Preview" class="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-slate-700 mb-4 shadow-lg">
             } @else {
               <div class="w-32 h-32 rounded-full bg-gray-100 dark:bg-slate-800 border-4 border-gray-200 dark:border-slate-700 flex items-center justify-center text-4xl mb-4 text-gray-400 dark:text-slate-500">
                 📷

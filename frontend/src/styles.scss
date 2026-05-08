@@ -45,5 +45,10 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Poppins', Roboto, sans-serif;
+}
+
+.modal-propietario .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 2rem !important;
+  overflow: visible !important;
 }
