@@ -29,6 +29,7 @@ public interface FavoritoMapper {
     @Mapping(source = "habitacion.piso.admiteMascotas", target = "admiteMascotas")
     @Mapping(source = "habitacion.piso.admiteFumadores", target = "admiteFumadores")
     @Mapping(source = "habitacion.piso.lgtbiFriendly", target = "lgtbiFriendly")
+    @Mapping(source = "habitacion.piso.admiteParejas", target = "admiteParejas")
     @Mapping(source = "habitacion.piso.usuario.fotoPerfilUrl", target = "fotoPerfilUrlPropietario")
     @Mapping(target = "fotoPrincipal", ignore = true)
     FavoritoResponseDTO toResponseDTO(Favorito entity);

@@ -343,7 +343,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .direccion(pisoData[i][0])
                     .ciudad(pisoData[i][1])
                     .codigoPostal(pisoData[i][2])
-                    .numHabitacionesTotal((i < 10) ? 2 : 1) 
+                    .numHabitacionesTotal(i < 10 ? 2 : 1) 
                     .numBanos(numBanos)
                     .planta(planta)
                     .superficieTotalM2(superficie)
@@ -370,13 +370,13 @@ public class DatabaseSeeder implements CommandLineRunner {
                 fotoRepository.save(fotoPiso);
             }
 
-            int numHabs = (i < 10) ? 2 : 1; 
+            int numHabs = i < 10 ? 2 : 1;
             
             for (int h = 0; h < numHabs; h++) {
                 totalHabitacionesCreadas++; 
                 
-                int tituloIdx = totalHabitacionesCreadas - 1; 
-                int descIdx = totalHabitacionesCreadas - 1;   
+                int tituloIdx = totalHabitacionesCreadas - 1;
+                int descIdx = totalHabitacionesCreadas - 1;
                 BigDecimal precio = BigDecimal.valueOf(250 + random.nextInt(251)); 
 
                 boolean aceptaParejas = (totalHabitacionesCreadas % 5 == 0); 
@@ -408,7 +408,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                             .piso(pisoGuardado)
                             .habitacion(habGuardada)
                             .urlAlmacenamiento("/api/uploads/fotos/hab-" + carpetaHab + "/" + fh + ".jpg")
-                            .esPrincipal(false) 
+                            .esPrincipal(fh == 1) // Primera foto es la principal
+
                             .build();
                     fotoRepository.save(fotoHab);
                 }

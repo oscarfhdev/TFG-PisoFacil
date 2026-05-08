@@ -21,6 +21,6 @@ public interface HabitacionRepository extends JpaRepository<Habitacion, Long>, J
     List<Habitacion> findByEstaDisponibleTrueAndPisoCiudadIgnoreCaseAndPrecioMensualLessThanEqual(
             String ciudad, BigDecimal precioMaximo);
 
-    @Query(value = "SELECT * FROM habitacion WHERE esta_disponible = true ORDER BY RAND() LIMIT 7", nativeQuery = true)
+    @Query(value = "SELECT * FROM habitacion ORDER BY esta_disponible DESC, RAND() LIMIT 7", nativeQuery = true)
     List<Habitacion> findDestacadasRandom();
 }

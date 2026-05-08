@@ -57,4 +57,11 @@ public class PisoController {
     public ResponseEntity<List<MisPisosResponseDTO>> getAllWithHabitaciones() {
         return ResponseEntity.ok(pisoService.findAllWithHabitaciones());
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> adminDelete(@PathVariable Long id) {
+        pisoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

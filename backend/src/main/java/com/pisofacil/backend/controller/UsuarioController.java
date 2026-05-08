@@ -69,6 +69,13 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> adminDelete(@PathVariable Long id) {
+        usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/me")
     public ResponseEntity<UsuarioResponseDTO> getMyProfile() {
         String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();

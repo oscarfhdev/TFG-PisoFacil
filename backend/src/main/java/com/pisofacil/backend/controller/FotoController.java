@@ -34,9 +34,10 @@ public class FotoController {
     public ResponseEntity<FotoResponseDTO> create(
             @RequestParam("archivo") MultipartFile archivo,
             @RequestParam("idPiso") Long idPiso,
-            @RequestParam(value = "idHabitacion", required = false) Long idHabitacion) {
+            @RequestParam(value = "idHabitacion", required = false) Long idHabitacion,
+            @RequestParam(value = "esPrincipal", required = false) Boolean esPrincipal) {
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(fotoService.create(archivo, idPiso, idHabitacion));
+        return ResponseEntity.status(HttpStatus.CREATED).body(fotoService.create(archivo, idPiso, idHabitacion, esPrincipal));
     }
 
     @DeleteMapping("/{id}")

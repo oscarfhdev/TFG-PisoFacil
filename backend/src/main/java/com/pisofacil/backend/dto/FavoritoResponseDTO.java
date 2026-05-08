@@ -24,5 +24,6 @@ public class FavoritoResponseDTO {
     private Boolean admiteMascotas;
     private Boolean admiteFumadores;
     private Boolean lgtbiFriendly;
+    private Boolean admiteParejas;
     private String fotoPerfilUrlPropietario;
 }

@@ -38,14 +38,19 @@ public class HabitacionResponseDTO {
     private Boolean admiteFumadores;
     private Boolean lgtbiFriendly;
     private Boolean admiteParejas;
+    private String centroInteres;
     
     // Datos del Usuario Propietario
     private Long idUsuarioPropietario;
     private String nombrePropietario;
+    private String apellidosPropietario;
     private String fotoPerfilUrlPropietario;
     private String instagramUrlPropietario;
     
     // Listas de URLs de fotos separadas
     private java.util.List<String> fotosHabitacion;
     private java.util.List<String> fotosPiso;
+
+    // Motor de Compatibilidad: porcentaje calculado (null si usuario anónimo)
+    private Integer porcentajeCompatibilidad;
 }

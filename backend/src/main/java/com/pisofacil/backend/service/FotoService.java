@@ -38,7 +38,7 @@ public class FotoService {
     }
 
     @Transactional
-    public FotoResponseDTO create(MultipartFile archivo, Long idPiso, Long idHabitacion) {
+    public FotoResponseDTO create(MultipartFile archivo, Long idPiso, Long idHabitacion, Boolean esPrincipalParam) {
         Piso piso = pisoRepository.findById(idPiso)
                 .orElseThrow(() -> new ResourceNotFoundException("Piso no encontrado con ID: " + idPiso));
 
@@ -50,10 +50,30 @@ public class FotoService {
 
         String urlAlmacenamiento = storageService.store(archivo);
 
+        boolean esPrincipal;
+        if (esPrincipalParam != null) {
+            // El cliente indica explícitamente si es principal.
+            // Si marca esta foto como principal, desmarcar la anterior del mismo ámbito.
+            if (Boolean.TRUE.equals(esPrincipalParam)) {
+                if (habitacion != null) {
+                    fotoRepository.clearPrincipalByHabitacion(habitacion.getIdHabitacion());
+                } else {
+                    fotoRepository.clearPrincipalByPiso(piso.getIdPiso());
+                }
+            }
+            esPrincipal = esPrincipalParam;
+        } else if (habitacion != null) {
+            // Lógica automática: primera foto del ámbito = principal
+            esPrincipal = !fotoRepository.existsByHabitacionIdHabitacionAndEsPrincipalTrue(habitacion.getIdHabitacion());
+        } else {
+            esPrincipal = !fotoRepository.existsByPisoIdPisoAndHabitacionIsNullAndEsPrincipalTrue(piso.getIdPiso());
+        }
+
         Foto foto = new Foto();
         foto.setPiso(piso);
         foto.setHabitacion(habitacion);
         foto.setUrlAlmacenamiento(urlAlmacenamiento);
+        foto.setEsPrincipal(esPrincipal);
 
         return fotoMapper.toResponseDTO(fotoRepository.save(foto));
     }

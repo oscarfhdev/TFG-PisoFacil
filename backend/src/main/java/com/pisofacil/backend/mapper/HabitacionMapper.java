@@ -37,22 +37,30 @@ public interface HabitacionMapper {
     @Mapping(source = "piso.admiteFumadores", target = "admiteFumadores")
     @Mapping(source = "piso.lgtbiFriendly", target = "lgtbiFriendly")
     @Mapping(source = "piso.admiteParejas", target = "admiteParejas")
+    @Mapping(source = "piso.centroInteres", target = "centroInteres")
     
     // Mapeos extraídos del Propietario (Piso -> Usuario)
     @Mapping(source = "piso.usuario.idUsuario", target = "idUsuarioPropietario")
     @Mapping(source = "piso.usuario.nombre", target = "nombrePropietario")
+    @Mapping(source = "piso.usuario.apellidos", target = "apellidosPropietario")
     @Mapping(source = "piso.usuario.fotoPerfilUrl", target = "fotoPerfilUrlPropietario")
     @Mapping(source = "piso.usuario.instagramUrl", target = "instagramUrlPropietario")
     
-    // Fotos se mapean en @AfterMapping
+    // Fotos y compatibilidad se mapean fuera del mapper
     @Mapping(target = "fotosHabitacion", ignore = true)
     @Mapping(target = "fotosPiso", ignore = true)
+    @Mapping(target = "porcentajeCompatibilidad", ignore = true)
     HabitacionResponseDTO toResponseDTO(Habitacion entity);
 
     @AfterMapping
     default void mapFotos(Habitacion entity, @MappingTarget HabitacionResponseDTO dto) {
         if (entity.getFotos() != null) {
             dto.setFotosHabitacion(entity.getFotos().stream()
+                    .sorted((a, b) -> {
+                        boolean aPrincipal = Boolean.TRUE.equals(a.getEsPrincipal());
+                        boolean bPrincipal = Boolean.TRUE.equals(b.getEsPrincipal());
+                        return Boolean.compare(bPrincipal, aPrincipal); // principal primero
+                    })
                     .map(Foto::getUrlAlmacenamiento)
                     .collect(Collectors.toList()));
         } else {
@@ -63,6 +71,11 @@ public interface HabitacionMapper {
             // no las fotos que pertenecen a una habitación específica
             dto.setFotosPiso(entity.getPiso().getFotos().stream()
                     .filter(f -> f.getHabitacion() == null)
+                    .sorted((a, b) -> {
+                        boolean aPrincipal = Boolean.TRUE.equals(a.getEsPrincipal());
+                        boolean bPrincipal = Boolean.TRUE.equals(b.getEsPrincipal());
+                        return Boolean.compare(bPrincipal, aPrincipal); // principal primero
+                    })
                     .map(Foto::getUrlAlmacenamiento)
                     .collect(Collectors.toList()));
         } else {
