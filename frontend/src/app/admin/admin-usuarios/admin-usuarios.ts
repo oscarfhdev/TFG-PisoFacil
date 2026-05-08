@@ -8,6 +8,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioResponse } from '../../models/usuario.model';
 import { AdminUsuarioEditModal } from '../admin-usuario-edit-modal/admin-usuario-edit-modal';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -83,6 +84,42 @@ export class AdminUsuarios implements OnInit {
         this.snackBar.open(`Cuenta de ${updated.nombre} ${estado}`, 'OK', { duration: 3000, panelClass: ['toast-success'] });
       },
       error: () => this.snackBar.open('Error al cambiar el estado', 'Cerrar', { duration: 4000, panelClass: ['toast-error'] })
+    });
+  }
+
+  confirmarEliminarUsuario(usuario: UsuarioResponse) {
+    if (usuario.esAdmin) {
+      this.snackBar.open('No se puede eliminar una cuenta de administrador', 'OK', { duration: 4000, panelClass: ['toast-error'] });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: {
+        title: `Eliminar usuario`,
+        message: `¿Estás seguro de que quieres eliminar a "${usuario.nombre} ${usuario.apellidos || ''}"?`,
+        warnings: [
+          'Todos sus pisos y habitaciones publicadas',
+          'Todos sus reportes de soporte',
+          'Su lista de favoritos y datos de perfil',
+        ],
+        confirmText: 'Sí, eliminar',
+        cancelText: 'Cancelar',
+        confirmColor: 'warn',
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) return;
+
+      this.usuarioService.adminDelete(usuario.idUsuario).subscribe({
+        next: () => {
+          this.dataSource.data = this.dataSource.data.filter(u => u.idUsuario !== usuario.idUsuario);
+          this.snackBar.open(`✓ Usuario "${usuario.nombre}" eliminado correctamente`, 'OK', { duration: 4000, panelClass: ['toast-success'] });
+        },
+        error: () => this.snackBar.open('✗ Error al eliminar el usuario. Inténtalo de nuevo.', 'Cerrar', { duration: 5000, panelClass: ['toast-error'] })
+      });
     });
   }
 }

@@ -3,7 +3,7 @@
   <div class="flex items-center gap-6 mb-8 bg-card dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-border dark:border-border-dark">
     <div class="relative group cursor-pointer" (click)="fileInput.click()">
       @if (usuario()?.fotoPerfilUrl) {
-        <img [src]="usuario()!.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" class="w-24 h-24 rounded-full object-cover shadow-md group-hover:opacity-80 transition" alt="Avatar">
+        <img [src]="usuario()!.fotoPerfilUrl" (error)="$any($event.target).src='/avatar-placeholder.png'" class="w-24 h-24 rounded-full object-cover shadow-md group-hover:opacity-80 transition" alt="Avatar">
       } @else {
         <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow-md group-hover:opacity-80 transition">
           <mat-icon class="text-4xl text-gray-500 dark:text-gray-400">person</mat-icon>
@@ -84,7 +84,7 @@
 
               <!-- Género -->
               <div>
-                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Género <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Género</label>
                 <select formControlName="genero" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
                   <option value="">Prefiero no decirlo</option>
                   <option value="Hombre">Hombre</option>
@@ -96,14 +96,8 @@
 
               <!-- Estudios -->
               <div>
-                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Estudios / Ocupación <span class="text-red-500">*</span></label>
-                <input type="text" formControlName="estudios" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                       [class.border-red-500]="perfilForm.get('estudios')?.invalid && perfilForm.get('estudios')?.touched"
-                       [class.border-gray-300]="!perfilForm.get('estudios')?.invalid || !perfilForm.get('estudios')?.touched"
-                       [class.dark:border-gray-700]="!perfilForm.get('estudios')?.invalid || !perfilForm.get('estudios')?.touched" placeholder="Ej: Estudiante Ingeniería">
-                @if (perfilForm.get('estudios')?.touched && perfilForm.get('estudios')?.hasError('required')) {
-                  <p class="text-red-500 text-xs mt-1">Tus estudios u ocupación son obligatorios.</p>
-                }
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Estudios / Ocupación</label>
+                <input type="text" formControlName="estudios" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: Estudiante Ingeniería">
               </div>
 
               <!-- Métodos adicionales -->

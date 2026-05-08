@@ -32,7 +32,7 @@ export class CrearReporteModal implements OnInit {
   categorias = [
     'Error en la web',
     'Sugerencia',
-    'Problema con un usuario',
+    'Anuncio fraudulento o inapropiado',
     'Otro'
   ];
 

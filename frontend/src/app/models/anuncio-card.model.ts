@@ -31,4 +31,8 @@ export interface AnuncioCardData {
   tieneWifi?: boolean;
   tieneAscensor?: boolean;
   tieneBanoPrivado?: boolean;
+
+  // Motor de Compatibilidad
+  porcentajeCompatibilidad?: number;
 }
+

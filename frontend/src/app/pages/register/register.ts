@@ -3,11 +3,12 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequest } from '../../models/auth.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatSnackBarModule],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -15,6 +16,7 @@ export class Register {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   currentStep = signal(0);
   loading = signal(false);
@@ -111,15 +113,30 @@ export class Register {
     this.authService.register(request).subscribe({
       next: (res) => {
         if (this.fotoFile() && res.idUsuario) {
-          this.authService.uploadProfilePhoto(res.idUsuario, this.fotoFile()!).subscribe({
-            next: () => this.router.navigate(['/login']),
+          // El endpoint de subida de foto requiere autenticación JWT.
+          // Hacemos un auto-login silencioso para obtener el token antes de subir la foto.
+          const email = this.step0Form.value.email;
+          const password = this.step0Form.value.password;
+          this.authService.login({ email, password }).subscribe({
+            next: () => {
+              this.authService.uploadProfilePhoto(res.idUsuario, this.fotoFile()!).subscribe({
+                next: () => {
+                  this.authService.logout();
+                  this.mostrarExito('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
+                },
+                error: () => {
+                  // La foto falló pero el registro fue correcto
+                  this.authService.logout();
+                  this.mostrarExito('¡Cuenta creada! No se pudo subir la foto de perfil.');
+                }
+              });
+            },
             error: () => {
-              // Si falla la foto, de todas formas vamos al login (o podemos manejarlo diferente)
-              this.router.navigate(['/login']);
+              this.mostrarExito('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
             }
           });
         } else {
-          this.router.navigate(['/login']);
+          this.mostrarExito('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
         }
       },
       error: (err) => {
@@ -127,5 +144,14 @@ export class Register {
         this.loading.set(false);
       }
     });
+  }
+
+  private mostrarExito(msg: string) {
+    this.loading.set(false);
+    this.snackBar.open(msg, 'Cerrar', {
+      duration: 3500,
+      panelClass: ['toast-success']
+    });
+    setTimeout(() => this.router.navigate(['/login']), 3500);
   }
 }

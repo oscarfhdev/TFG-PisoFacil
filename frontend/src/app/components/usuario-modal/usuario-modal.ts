@@ -24,7 +24,7 @@ import { DatePipe, NgClass } from '@angular/common';
       <div class="px-6 pb-8 -mt-14">
         <div class="flex flex-col items-center">
           <img [src]="usuario.fotoPerfilUrl || 'https://ui-avatars.com/api/?name=' + usuario.nombre + '&background=random'" 
-               (error)="$any($event.target).src='/placeholder.png'"
+               (error)="$any($event.target).src='/avatar-placeholder.png'"
                alt="Avatar" 
                class="w-28 h-28 rounded-full border-4 border-white dark:border-slate-900 object-cover bg-white shadow-md z-10">
           

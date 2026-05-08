@@ -21,6 +21,17 @@
   border-color: #64A7C5;
 }
 
+/* Dark mode del input de búsqueda */
+:host-context(.dark) .admin-input {
+  background-color: #1e2636;
+  border-color: rgba(255,255,255,0.1);
+  color: #e2e8f0;
+}
+:host-context(.dark) .admin-input:focus {
+  border-color: #64A7C5;
+  background-color: #1e2636;
+}
+
 /* ── Tabla Material override ── */
 .material-dark-table {
   ::ng-deep {
@@ -72,6 +83,15 @@
   font-family: 'Lato', sans-serif !important;
   border-bottom: 1px solid rgba(243, 244, 246, 0.8) !important;
   padding: 0.75rem 1rem !important;
+}
+
+/* Dark mode: bordes más suaves en la tabla */
+:host-context(.dark) .admin-td {
+  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+}
+:host-context(.dark) .admin-th {
+  background-color: rgba(243, 156, 18, 0.06) !important;
+  border-bottom-color: rgba(243, 156, 18, 0.2) !important;
 }
 
 /* ── Sub-tabla de habitaciones ── */

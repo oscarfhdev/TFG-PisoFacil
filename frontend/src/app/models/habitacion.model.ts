@@ -19,9 +19,12 @@ export interface BusquedaFiltros {
   tieneBanoPrivado?: boolean;
   exterior?: boolean;
   tieneAireAcondicionado?: boolean;
-  admiteMascotas?: boolean;
-  admiteFumadores?: boolean;
-  lgtbiFriendly?: boolean;
+  tieneCalefaccion?: boolean;
+  amueblada?: boolean;
+  tieneWifi?: boolean;
+  tieneAscensor?: boolean;
+  numHabitacionesMax?: number;
+  centroInteres?: string;
 }
 
 export interface HabitacionResponse {
@@ -49,14 +52,20 @@ export interface HabitacionResponse {
   admiteMascotas?: boolean;
   admiteFumadores?: boolean;
   lgtbiFriendly?: boolean;
+  admiteParejas?: boolean;
+  centroInteres?: string;
 
   // Mapeos de Propietario
   idUsuarioPropietario?: number;
   nombrePropietario?: string;
+  apellidosPropietario?: string;
   fotoPerfilUrlPropietario?: string;
   instagramUrlPropietario?: string;
 
   // Fotos
   fotosHabitacion?: string[];
   fotosPiso?: string[];
+
+  // Motor de Compatibilidad
+  porcentajeCompatibilidad?: number;
 }

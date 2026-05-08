@@ -6,6 +6,9 @@ import { HabitacionDetail } from './pages/habitacion-detail/habitacion-detail';
 import { PublicarAnuncio } from './pages/publicar-anuncio/publicar-anuncio';
 import { MisFavoritos } from './pages/mis-favoritos/mis-favoritos';
 import { MisAnuncios } from './pages/mis-anuncios/mis-anuncios';
+import { EditarPiso } from './pages/editar-piso/editar-piso';
+import { EditarHabitacion } from './pages/editar-habitacion/editar-habitacion';
+import { NuevaHabitacion } from './pages/nueva-habitacion/nueva-habitacion';
 import { Perfil } from './pages/perfil/perfil';
 import { Buscar } from './pages/buscar/buscar';
 import { Legal } from './pages/legal/legal';
@@ -33,6 +36,9 @@ export const routes: Routes = [
   { path: 'favoritos', component: MisFavoritos, canActivate: [authGuard] },
   { path: 'mis-anuncios', component: MisAnuncios, canActivate: [authGuard] },
   { path: 'perfil', component: Perfil, canActivate: [authGuard] },
+  { path: 'editar-piso/:id', component: EditarPiso, canActivate: [authGuard] },
+  { path: 'editar-habitacion/:id', component: EditarHabitacion, canActivate: [authGuard] },
+  { path: 'nueva-habitacion/:pisoId', component: NuevaHabitacion, canActivate: [authGuard] },
   
   // Rutas de administración
   { 

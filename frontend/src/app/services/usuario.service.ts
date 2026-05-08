@@ -60,4 +60,8 @@ export class UsuarioService {
   adminResetPassword(id: number, passwordNueva: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}/reset-password`, { passwordNueva });
   }
+
+  adminDelete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${id}`);
+  }
 }

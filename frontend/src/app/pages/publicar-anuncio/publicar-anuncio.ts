@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AnuncioService } from '../../services/anuncio.service';
 import { FotoService } from '../../services/foto.service';
 import { PublicarAnuncioRequest } from '../../models/anuncio.model';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
+import { catchError, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-publicar-anuncio',
@@ -29,6 +29,10 @@ export class PublicarAnuncio {
   fotosHabitacionFiles = signal<File[]>([]);
   fotosPisoPreview = signal<string[]>([]);
   fotosHabitacionPreview = signal<string[]>([]);
+
+  // Índice de la foto marcada como principal (0 por defecto = la primera)
+  fotoPrincipalPisoIndex = signal<number>(0);
+  fotoPrincipalHabIndex = signal<number>(0);
 
   pisoForm: FormGroup = this.fb.group({
     direccion: ['', Validators.required],
@@ -102,6 +106,17 @@ export class PublicarAnuncio {
   removeFotoPiso(index: number) {
     this.fotosPisoFiles.update(files => files.filter((_, i) => i !== index));
     this.fotosPisoPreview.update(previews => previews.filter((_, i) => i !== index));
+    // Recalcular índice principal
+    const currentPrincipal = this.fotoPrincipalPisoIndex();
+    if (index === currentPrincipal) {
+      this.fotoPrincipalPisoIndex.set(0); // La nueva primera foto pasa a ser la principal
+    } else if (index < currentPrincipal) {
+      this.fotoPrincipalPisoIndex.update(v => v - 1);
+    }
+  }
+
+  setPrincipalPiso(index: number) {
+    this.fotoPrincipalPisoIndex.set(index);
   }
 
   onFilesSelectedHabitacion(event: Event) {
@@ -122,6 +137,17 @@ export class PublicarAnuncio {
   removeFotoHabitacion(index: number) {
     this.fotosHabitacionFiles.update(files => files.filter((_, i) => i !== index));
     this.fotosHabitacionPreview.update(previews => previews.filter((_, i) => i !== index));
+    // Recalcular índice principal
+    const currentPrincipal = this.fotoPrincipalHabIndex();
+    if (index === currentPrincipal) {
+      this.fotoPrincipalHabIndex.set(0);
+    } else if (index < currentPrincipal) {
+      this.fotoPrincipalHabIndex.update(v => v - 1);
+    }
+  }
+
+  setPrincipalHabitacion(index: number) {
+    this.fotoPrincipalHabIndex.set(index);
   }
 
   onSubmit() {
@@ -150,10 +176,27 @@ export class PublicarAnuncio {
         // Preparar observables de subida de fotos
         const uploadTasks: any[] = [];
 
-        // Fotos del piso (sin idHabitacion)
-        this.fotosPisoFiles().forEach(file => {
+        // Reordenar fotos piso: la foto principal va primero
+        const pisoFiles = [...this.fotosPisoFiles()];
+        const pisoIdx = this.fotoPrincipalPisoIndex();
+        if (pisoIdx > 0 && pisoIdx < pisoFiles.length) {
+          const [principal] = pisoFiles.splice(pisoIdx, 1);
+          pisoFiles.unshift(principal);
+        }
+
+        // Reordenar fotos habitación: la foto principal va primero
+        const habFiles = [...this.fotosHabitacionFiles()];
+        const habIdx = this.fotoPrincipalHabIndex();
+        if (habIdx > 0 && habIdx < habFiles.length) {
+          const [principal] = habFiles.splice(habIdx, 1);
+          habFiles.unshift(principal);
+        }
+
+        // Fotos del piso: enviar esPrincipal=true solo para la foto con estrella
+        this.fotosPisoFiles().forEach((file, index) => {
+          const esPrincipal = index === this.fotoPrincipalPisoIndex();
           uploadTasks.push(
-            this.fotoService.upload(file, idPiso).pipe(
+            this.fotoService.upload(file, idPiso, undefined, esPrincipal).pipe(
               catchError(err => {
                 console.error('Error subiendo foto de piso', err);
                 return of(null);
@@ -162,10 +205,11 @@ export class PublicarAnuncio {
           );
         });
 
-        // Fotos de la habitación (con idHabitacion)
-        this.fotosHabitacionFiles().forEach(file => {
+        // Fotos de la habitación: enviar esPrincipal=true solo para la foto con estrella
+        this.fotosHabitacionFiles().forEach((file, index) => {
+          const esPrincipal = index === this.fotoPrincipalHabIndex();
           uploadTasks.push(
-            this.fotoService.upload(file, idPiso, idHabitacion).pipe(
+            this.fotoService.upload(file, idPiso, idHabitacion, esPrincipal).pipe(
               catchError(err => {
                 console.error('Error subiendo foto de habitación', err);
                 return of(null);
@@ -175,7 +219,10 @@ export class PublicarAnuncio {
         });
 
         if (uploadTasks.length > 0) {
-          forkJoin(uploadTasks).subscribe({
+          // IMPORTANTE: concat en vez de forkJoin para subir en secuencia.
+          // La primera foto del array es la principal — debe llegar PRIMERO al backend.
+          // forkJoin es paralelo (race condition), concat es secuencial (garantizado).
+          concat(...uploadTasks).pipe(toArray()).subscribe({
             next: () => {
               this.successMessage.set(res.mensaje || '¡Anuncio publicado con éxito!');
               setTimeout(() => this.router.navigate(['/mis-anuncios']), 1500);

@@ -83,7 +83,7 @@
       <!-- Info del Admin -->
       <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/40 border border-gray-100 dark:border-slate-700/50">
         @if (authService.currentUser()?.fotoPerfilUrl) {
-          <img [src]="authService.currentUser()?.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" alt="Avatar" class="w-8 h-8 rounded-full object-cover border-2 border-primary/30 shrink-0">
+          <img [src]="authService.currentUser()?.fotoPerfilUrl" (error)="$any($event.target).src='/avatar-placeholder.png'" alt="Avatar" class="w-8 h-8 rounded-full object-cover border-2 border-primary/30 shrink-0">
         } @else {
           <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold font-poppins text-sm shrink-0">
             {{ authService.currentUser()?.nombre?.charAt(0) | uppercase }}

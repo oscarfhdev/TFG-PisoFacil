@@ -26,6 +26,10 @@ export class HabitacionService {
     return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/destacadas`);
   }
 
+  findRecomendadas(): Observable<HabitacionResponse[]> {
+    return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/recomendadas`);
+  }
+
   buscarAvanzado(filtros: BusquedaFiltros): Observable<HabitacionResponse[]> {
     let params = new HttpParams();
     Object.entries(filtros).forEach(([key, value]) => {
@@ -46,5 +50,13 @@ export class HabitacionService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  toggleDisponibilidad(id: number): Observable<HabitacionResponse> {
+    return this.http.put<HabitacionResponse>(`${this.apiUrl}/${id}/toggle-disponibilidad`, {});
+  }
+
+  adminDelete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${id}`);
   }
 }

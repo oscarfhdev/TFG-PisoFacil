@@ -30,18 +30,16 @@
 }
 
 // Soporte para modo oscuro en el menú de Material
-html.dark {
-  ::ng-deep .premium-user-menu {
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    
-    .mat-mdc-menu-content {
-      background: #161B22 !important; // card-dark color
-    }
+::ng-deep html.dark .premium-user-menu {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  
+  .mat-mdc-menu-content {
+    background: #161B22 !important; // card-dark color
+  }
 
-    .mat-mdc-menu-item {
-      &:hover:not([disabled]) {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-      }
+  .mat-mdc-menu-item {
+    &:hover:not([disabled]) {
+      background-color: rgba(255, 255, 255, 0.05) !important;
     }
   }
 }

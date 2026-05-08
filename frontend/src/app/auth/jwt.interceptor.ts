@@ -23,7 +23,8 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 || error.status === 403) {
+      const isAuthEndpoint = req.url.includes('/auth/login') || req.url.includes('/auth/register');
+      if ((error.status === 401 || error.status === 403) && !isAuthEndpoint) {
         authService.logout();
         snackBar.open('Tu sesión ha caducado. Vuelve a iniciar sesión', 'Cerrar', {
           duration: 5000,

@@ -6,7 +6,16 @@
   transition-all duration-300 
   group cursor-pointer
   flex flex-col h-full
+  relative
 ">
+  <!-- Badge de Compatibilidad (solo si está logueado y tiene porcentaje) -->
+  @if (isLoggedIn() && anuncio().porcentajeCompatibilidad != null) {
+    <div class="compatibility-badge" [class]="getBadgeClass()">
+      <span class="compatibility-icon">{{ getBadgeIcon() }}</span>
+      <span class="compatibility-text">{{ anuncio().porcentajeCompatibilidad }}% Match</span>
+    </div>
+  }
+
   <!-- Zona de la Imagen (Arriba) -->
   <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
     <img [src]="anuncio().imagenUrl" [alt]="anuncio().titulo" (error)="$any($event.target).src='assets/placeholder.png'"
@@ -83,7 +92,7 @@
       </div>
     </div>
     
-    <!-- Afinidad/Compatibilidad -->
+    <!-- Afinidad/Compatibilidad (etiquetas siempre visibles) -->
     <div class="flex flex-wrap items-center gap-2 mt-3">
       @if (anuncio().afinidad?.admiteParejas) {
         <span class="bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 rounded-md px-1.5 py-0.5 text-[10px] uppercase font-bold flex items-center gap-1" title="Admite parejas">
@@ -93,11 +102,6 @@
       @if (anuncio().afinidad?.aceptaMascotas) {
         <span class="bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 rounded-md px-1.5 py-0.5 text-[10px] uppercase font-bold flex items-center gap-1" title="Acepta mascotas">
           <mat-icon class="!w-3 !h-3 text-[12px]">pets</mat-icon> Mascotas
-        </span>
-      }
-      @if (anuncio().afinidad?.permiteFumar === false) {
-        <span class="bg-red-50 text-red-500 dark:bg-red-900/20 dark:text-red-400 rounded-md px-1.5 py-0.5 text-[10px] uppercase font-bold flex items-center gap-1" title="No se permite fumar">
-          <mat-icon class="!w-3 !h-3 text-[12px]">smoke_free</mat-icon> No fumar
         </span>
       }
       @if (anuncio().afinidad?.permiteFumar === true) {

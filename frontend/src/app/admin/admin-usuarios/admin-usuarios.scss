@@ -59,3 +59,12 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in { animation: fadeIn 0.4s ease-out both; }
+
+/* Dark mode: bordes más suaves */
+:host-context(.dark) .admin-td {
+  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+}
+:host-context(.dark) .admin-th {
+  background-color: rgba(243, 156, 18, 0.06) !important;
+  border-bottom-color: rgba(243, 156, 18, 0.2) !important;
+}

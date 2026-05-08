@@ -1,112 +1,230 @@
-<div class="min-h-screen bg-gray-50 dark:bg-fondo-dark font-lato pt-8 pb-16">
+<div class="buscar-page bg-gray-50 dark:bg-[#0D1117]">
   <div class="container mx-auto px-4">
-    
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-extrabold text-texto dark:text-white font-poppins flex items-center gap-3">
-        Buscar Habitaciones
-        @if (loading()) {
-          <mat-spinner diameter="24" color="accent"></mat-spinner>
-        }
-      </h1>
-      <p class="text-gray-500 dark:text-slate-400 mt-2">
-        Mostrando {{ anuncios().length }} resultados disponibles
-      </p>
+
+    <!-- ══ Header ══ -->
+    <div class="buscar-header">
+      <div>
+        <!-- Breadcrumb -->
+        <a routerLink="/" class="buscar-back-link">
+          <mat-icon>arrow_back</mat-icon>
+          Inicio
+        </a>
+        <h1 class="buscar-title">
+          <span class="buscar-title-icon">
+            <mat-icon>search</mat-icon>
+          </span>
+          Buscar Habitaciones
+          @if (loading()) {
+            <mat-spinner diameter="22" color="accent" class="ml-2"></mat-spinner>
+          }
+        </h1>
+        <p class="buscar-subtitle">
+          @if (!loading()) {
+            <span>{{ anuncios().length }} habitaciones disponibles</span>
+          }
+          @if (activeFiltersCount() > 0) {
+            <span class="buscar-badge-filtros">
+              {{ activeFiltersCount() }} filtro{{ activeFiltersCount() > 1 ? 's' : '' }} activo{{ activeFiltersCount() > 1 ? 's' : '' }}
+            </span>
+          }
+        </p>
+      </div>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-8">
-      
-      <!-- Sidebar de Filtros -->
-      <aside class="w-full lg:w-80 shrink-0 bg-white dark:bg-card-dark rounded-2xl p-6 border border-gray-100 dark:border-slate-800 h-fit sticky top-6 shadow-sm">
-        <h2 class="text-xl font-bold text-texto dark:text-white mb-6 font-poppins flex items-center gap-2">
-          <mat-icon>tune</mat-icon> Filtros
-        </h2>
+    <div class="buscar-layout">
 
-        <!-- Filtro: Ciudad -->
-        <div class="mb-6">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Ciudad</mat-label>
-            <input matInput [ngModel]="ciudad()" (ngModelChange)="ciudad.set($event); onFilterChange()" placeholder="Ej. Madrid">
-            <mat-icon matSuffix>location_on</mat-icon>
-          </mat-form-field>
-        </div>
+      <!-- ══ Sidebar ══ -->
+      <aside class="buscar-sidebar">
+        <div class="filter-card bg-white dark:bg-[#161B22] dark:ring-1 dark:ring-slate-700/50">
 
-        <mat-divider class="my-6"></mat-divider>
-
-        <!-- Filtro: Precio -->
-        <div class="mb-6">
-          <h3 class="text-sm font-bold text-gray-700 dark:text-slate-300 mb-4 font-poppins">Precio Mensual</h3>
-          <mat-slider class="w-full" min="100" max="1000" step="50" discrete>
-            <input value="100" matSliderStartThumb [ngModel]="precioMin()" (ngModelChange)="precioMin.set($event); onFilterChange()">
-            <input value="1000" matSliderEndThumb [ngModel]="precioMax()" (ngModelChange)="precioMax.set($event); onFilterChange()">
-          </mat-slider>
-          <div class="flex justify-between text-xs text-gray-500 dark:text-slate-400">
-            <span>{{ precioMin() || 100 }}€</span>
-            <span>{{ precioMax() || 1000 }}€+</span>
+          <!-- Cabecera -->
+          <div class="filter-card-header">
+            <h2 class="filter-card-title">
+              <mat-icon class="filter-icon">tune</mat-icon>
+              Filtros
+            </h2>
+            @if (activeFiltersCount() > 0) {
+              <button (click)="clearFilters()" class="filter-clear-btn">
+                <mat-icon>restart_alt</mat-icon>
+                Limpiar
+              </button>
+            }
           </div>
-        </div>
 
-        <mat-divider class="my-6"></mat-divider>
-
-        <!-- Filtro: Características Habitación -->
-        <div class="mb-6">
-          <h3 class="text-sm font-bold text-gray-700 dark:text-slate-300 mb-3 font-poppins">Características</h3>
-          <div class="flex flex-col gap-2">
-            <mat-checkbox color="primary" [ngModel]="tieneBanoPrivado()" (ngModelChange)="tieneBanoPrivado.set($event); onFilterChange()">
-              Baño privado
-            </mat-checkbox>
-            <mat-checkbox color="primary" [ngModel]="exterior()" (ngModelChange)="exterior.set($event); onFilterChange()">
-              Exterior
-            </mat-checkbox>
-            <mat-checkbox color="primary" [ngModel]="tieneAireAcondicionado()" (ngModelChange)="tieneAireAcondicionado.set($event); onFilterChange()">
-              Aire Acondicionado
-            </mat-checkbox>
+          <!-- ── Ciudad ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">location_on</mat-icon>
+              Ciudad
+            </label>
+            <div class="filter-input-wrap">
+              <input
+                type="text"
+                class="filter-input"
+                placeholder="Madrid, Barcelona…"
+                [ngModel]="ciudad()"
+                (ngModelChange)="ciudad.set($event); onFilterChange()"
+              />
+            </div>
           </div>
-        </div>
 
-        <mat-divider class="my-6"></mat-divider>
+          <div class="filter-divider"></div>
 
-        <!-- Filtro: Preferencias Convivencia -->
-        <div>
-          <h3 class="text-sm font-bold text-gray-700 dark:text-slate-300 mb-3 font-poppins">Convivencia</h3>
-          <div class="flex flex-col gap-2">
-            <mat-checkbox color="primary" [ngModel]="admiteMascotas()" (ngModelChange)="admiteMascotas.set($event); onFilterChange()">
-              Admite mascotas 🐾
-            </mat-checkbox>
-            <mat-checkbox color="primary" [ngModel]="admiteFumadores()" (ngModelChange)="admiteFumadores.set($event); onFilterChange()">
-              Admite fumadores 🚬
-            </mat-checkbox>
-            <mat-checkbox color="primary" [ngModel]="lgtbiFriendly()" (ngModelChange)="lgtbiFriendly.set($event); onFilterChange()">
-              LGTBI+ Friendly 🏳️‍🌈
-            </mat-checkbox>
+          <!-- ── Centro de interés ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">school</mat-icon>
+              Centro de interés
+            </label>
+            <div class="filter-input-wrap">
+              <input
+                type="text"
+                class="filter-input"
+                placeholder="Ej. Universidad de Sevilla…"
+                [ngModel]="centroInteres()"
+                (ngModelChange)="centroInteres.set($event); onFilterChange()"
+              />
+            </div>
           </div>
-        </div>
 
+          <div class="filter-divider"></div>
+
+          <!-- ── Precio ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">euro</mat-icon>
+              Precio mensual
+            </label>
+            <mat-slider class="filter-slider" min="100" max="1500" step="25" discrete>
+              <input matSliderStartThumb [ngModel]="precioMin()" (ngModelChange)="precioMin.set($event); onFilterChange()">
+              <input matSliderEndThumb  [ngModel]="precioMax()" (ngModelChange)="precioMax.set($event); onFilterChange()">
+            </mat-slider>
+            <div class="filter-price-row">
+              <span class="filter-price-badge">{{ precioMin() }}€</span>
+              <span class="filter-price-sep">—</span>
+              <span class="filter-price-badge">{{ precioMax() >= 1500 ? '1500€+' : precioMax() + '€' }}</span>
+            </div>
+          </div>
+
+          <div class="filter-divider"></div>
+
+          <!-- ── Habitaciones del piso ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">meeting_room</mat-icon>
+              Habitaciones del piso
+            </label>
+            <div class="filter-companions-row">
+              @for (n of [1, 2, 3, 4]; track n) {
+                <button
+                  class="filter-companion-btn"
+                  [class.active]="numHabitacionesMax() === n"
+                  (click)="numHabitacionesMax.set(numHabitacionesMax() === n ? null : n); onFilterChange()">
+                  {{ n }}
+                </button>
+              }
+
+            </div>
+          </div>
+
+          <div class="filter-divider"></div>
+
+          <!-- ── Habitación ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">bed</mat-icon>
+              Habitación
+            </label>
+            <div class="filter-toggles">
+              <button class="filter-toggle" [class.active]="tieneBanoPrivado()" (click)="toggle(tieneBanoPrivado)">
+                <mat-icon>shower</mat-icon>
+                <span>Baño privado</span>
+              </button>
+              <button class="filter-toggle" [class.active]="exterior()" (click)="toggle(exterior)">
+                <mat-icon>wb_sunny</mat-icon>
+                <span>Exterior</span>
+              </button>
+              <button class="filter-toggle" [class.active]="amueblada()" (click)="toggle(amueblada)">
+                <mat-icon>chair</mat-icon>
+                <span>Amueblada</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="filter-divider"></div>
+
+          <!-- ── Servicios del piso ── -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="filter-label-icon">apartment</mat-icon>
+              Servicios del piso
+            </label>
+            <div class="filter-toggles">
+              <button class="filter-toggle" [class.active]="tieneWifi()" (click)="toggle(tieneWifi)">
+                <mat-icon>wifi</mat-icon>
+                <span>WiFi</span>
+              </button>
+              <button class="filter-toggle" [class.active]="tieneAscensor()" (click)="toggle(tieneAscensor)">
+                <mat-icon>elevator</mat-icon>
+                <span>Ascensor</span>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- ── Motor de Compatibilidad info ── -->
+          @if (authService.isLoggedIn()) {
+            <div class="filter-divider"></div>
+            <div class="filter-compat-info">
+              <span class="filter-compat-emoji">🧠</span>
+              <div>
+                <p class="filter-compat-title">Motor de Compatibilidad activo</p>
+                <p class="filter-compat-desc">Resultados ordenados según tu perfil de convivencia.</p>
+              </div>
+            </div>
+          }
+
+        </div>
       </aside>
 
-      <!-- Grid de Resultados -->
-      <main class="flex-1">
-        @if (!loading() && anuncios().length === 0) {
-          <!-- Empty State -->
-          <div class="bg-white dark:bg-card-dark rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
-            <div class="w-24 h-24 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-4xl mb-6">
-              🕵️
-            </div>
-            <h3 class="text-2xl font-bold text-texto dark:text-white mb-2 font-poppins">No encontramos coincidencias</h3>
-            <p class="text-gray-500 dark:text-slate-400 max-w-md">
-              Prueba a eliminar o modificar algunos filtros para ver más habitaciones disponibles.
+      <!-- ══ Grid de resultados ══ -->
+      <main class="buscar-main">
+
+        <!-- Banner Upselling -->
+        @if (!authService.isLoggedIn()) {
+          <div class="upselling-banner">
+            <span class="upselling-icon-wrap">🧠</span>
+            <p class="upselling-text">
+              <strong>Motor de Compatibilidad:</strong>
+              inicia sesión para ver tu % de compatibilidad con cada piso.
             </p>
           </div>
-        } @else {
-          <!-- Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" [class.opacity-50]="loading()" style="transition: opacity 0.3s ease;">
+        }
+
+        <!-- Empty state -->
+        @if (!loading() && anuncios().length === 0) {
+          <div class="buscar-empty">
+            <div class="buscar-empty-icon">🕵️</div>
+            <h3 class="buscar-empty-title">Sin resultados</h3>
+            <p class="buscar-empty-desc">Prueba a relajar los filtros para ver más habitaciones.</p>
+            @if (activeFiltersCount() > 0) {
+              <button (click)="clearFilters()" class="buscar-empty-btn">
+                <mat-icon>restart_alt</mat-icon> Limpiar filtros
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Grid -->
+        @if (anuncios().length > 0 || loading()) {
+          <div class="buscar-grid" [class.loading]="loading()">
             @for (anuncio of anuncios(); track anuncio.id) {
               <app-anuncio-card [anuncio]="anuncio" />
             }
           </div>
         }
-      </main>
 
+      </main>
     </div>
   </div>
 </div>

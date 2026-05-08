@@ -18,12 +18,15 @@ export class FotoService {
     return this.http.get<FotoResponse[]>(`${this.apiUrl}/habitacion/${idHabitacion}`);
   }
 
-  upload(archivo: File, idPiso: number, idHabitacion?: number): Observable<FotoResponse> {
+  upload(archivo: File, idPiso: number, idHabitacion?: number, esPrincipal?: boolean): Observable<FotoResponse> {
     const formData = new FormData();
     formData.append('archivo', archivo);
     formData.append('idPiso', idPiso.toString());
     if (idHabitacion) {
       formData.append('idHabitacion', idHabitacion.toString());
+    }
+    if (esPrincipal !== undefined) {
+      formData.append('esPrincipal', esPrincipal.toString());
     }
     return this.http.post<FotoResponse>(this.apiUrl, formData);
   }

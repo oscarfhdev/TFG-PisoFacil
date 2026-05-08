@@ -17,5 +17,6 @@ export interface FavoritoResponse {
   admiteMascotas?: boolean;
   admiteFumadores?: boolean;
   lgtbiFriendly?: boolean;
+  admiteParejas?: boolean;
   fotoPerfilUrlPropietario?: string;
 }

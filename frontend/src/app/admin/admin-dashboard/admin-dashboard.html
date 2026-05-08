@@ -84,10 +84,13 @@
           <p class="kpi-sub">
             @if (stats()!.reportesPendientes > 0) {
               <span class="text-amber-500 font-bold">{{ stats()!.reportesPendientes }} pendientes</span>
+            } @else if (stats()!.totalReportes > 0) {
+              <span class="text-emerald-500">{{ stats()!.reportesResueltos }} resueltos · {{ stats()!.reportesRechazados }} rechazados</span>
             } @else {
-              <span class="text-emerald-500">Todo resuelto ✓</span>
+              <span class="text-gray-400 dark:text-slate-500">Sin reportes aún</span>
             }
           </p>
+
         </div>
       </div>
 

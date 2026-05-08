@@ -42,7 +42,7 @@ export class MisFavoritos implements OnInit {
             aceptaMascotas: f.admiteMascotas ?? false,
             permiteFumar: f.admiteFumadores ?? false,
             lgtbi: f.lgtbiFriendly ?? false,
-            admiteParejas: false
+            admiteParejas: f.admiteParejas ?? false
           },
           esFavorito: true
         }));

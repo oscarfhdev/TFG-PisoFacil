@@ -22,6 +22,9 @@ export class AnuncioCard {
   private authService = inject(AuthService);
   private favoritoService = inject(FavoritoService);
 
+  // Acceso al estado de autenticación para uso en template
+  isLoggedIn = this.authService.isLoggedIn;
+
   detailLink = computed(() => {
     const a = this.anuncio();
     return a.tipo === 'habitacion'
@@ -46,6 +49,24 @@ export class AnuncioCard {
       // Actually, since it's an input, we shouldn't mutate it directly.
       // But we can just use the global signal in the template if we wanted.
     });
+  }
+
+  /** Devuelve la clase CSS del badge según el porcentaje de compatibilidad */
+  getBadgeClass(): string {
+    const pct = this.anuncio().porcentajeCompatibilidad;
+    if (pct == null) return '';
+    if (pct >= 80) return 'badge-high';
+    if (pct >= 50) return 'badge-medium';
+    return 'badge-low';
+  }
+
+  /** Devuelve el icono/emoji del badge según el porcentaje */
+  getBadgeIcon(): string {
+    const pct = this.anuncio().porcentajeCompatibilidad;
+    if (pct == null) return '';
+    if (pct >= 80) return '🔥';
+    if (pct >= 50) return '✨';
+    return '⚡';
   }
 
   onFavoritoClick(event: Event): void {

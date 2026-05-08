@@ -32,7 +32,7 @@
         
         <button [matMenuTriggerFor]="userMenu" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:ring-2 hover:ring-primary transition cursor-pointer overflow-hidden focus:outline-none">
           @if (authService.currentUser()?.fotoPerfilUrl) {
-            <img [src]="authService.currentUser()!.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" class="w-full h-full object-cover" alt="Avatar">
+            <img [src]="authService.currentUser()!.fotoPerfilUrl" (error)="$any($event.target).src='/avatar-placeholder.png'" class="w-full h-full object-cover" alt="Avatar">
           } @else {
             <mat-icon class="text-gray-500 dark:text-gray-400">person</mat-icon>
           }
