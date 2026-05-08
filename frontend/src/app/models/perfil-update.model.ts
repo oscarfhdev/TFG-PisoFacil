@@ -11,6 +11,8 @@ export interface PerfilUpdateRequest {
   tieneMascota?: boolean;
   tienePareja?: boolean;
   perfilLgtbi?: boolean;
+  telefono?: string;
+  fotoPerfilUrl?: string;
 }
 
 export interface CambiarPasswordRequest {

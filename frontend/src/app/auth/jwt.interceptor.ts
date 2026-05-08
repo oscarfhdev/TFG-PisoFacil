@@ -27,7 +27,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         authService.logout();
         snackBar.open('Tu sesión ha caducado. Vuelve a iniciar sesión', 'Cerrar', {
           duration: 5000,
-          panelClass: ['bg-red-600', 'text-white'],
+          panelClass: ['toast-error'],
           horizontalPosition: 'center',
           verticalPosition: 'bottom'
         });

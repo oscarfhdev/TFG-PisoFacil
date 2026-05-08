@@ -1,18 +1,19 @@
 <div class="container mx-auto px-4 py-8 max-w-4xl">
   <!-- Header Perfil -->
   <div class="flex items-center gap-6 mb-8 bg-card dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-border dark:border-border-dark">
-    <div class="relative">
+    <div class="relative group cursor-pointer" (click)="fileInput.click()">
       @if (usuario()?.fotoPerfilUrl) {
-        <img [src]="usuario()!.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" class="w-24 h-24 rounded-full object-cover shadow-md" alt="Avatar">
+        <img [src]="usuario()!.fotoPerfilUrl" (error)="$any($event.target).src='/placeholder.png'" class="w-24 h-24 rounded-full object-cover shadow-md group-hover:opacity-80 transition" alt="Avatar">
       } @else {
-        <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow-md">
+        <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow-md group-hover:opacity-80 transition">
           <mat-icon class="text-4xl text-gray-500 dark:text-gray-400">person</mat-icon>
         </div>
       }
       <!-- Botón para cambiar foto (futuro) -->
-      <button class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-lg hover:opacity-90 transition">
+      <button class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-lg hover:opacity-90 transition pointer-events-none">
         <mat-icon class="text-sm w-4 h-4 text-center leading-none">edit</mat-icon>
       </button>
+      <input type="file" #fileInput hidden accept="image/*" (change)="onFileSelected($event)">
     </div>
     <div>
       <h1 class="text-3xl font-bold text-texto dark:text-texto-dark">{{ usuario()?.nombre }} {{ usuario()?.apellidos }}</h1>
@@ -27,7 +28,7 @@
   </div>
 
   <!-- Tabs -->
-  <div class="bg-card dark:bg-card-dark rounded-2xl shadow-sm border border-border dark:border-border-dark overflow-hidden">
+  <div class="bg-card dark:bg-card-dark rounded-2xl shadow-sm border border-border dark:border-border-dark overflow-hidden font-sans">
     <mat-tab-group animationDuration="0ms" class="dark-theme-tabs">
       
       <!-- Tab 1: Datos Personales -->
@@ -72,6 +73,7 @@
                     }
                   </p>
                 }
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Este es el método de contacto predeterminado y obligatorio si publicas un piso.</p>
               </div>
 
               <!-- Fecha Nacimiento -->
@@ -82,7 +84,7 @@
 
               <!-- Género -->
               <div>
-                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Género</label>
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Género <span class="text-red-500">*</span></label>
                 <select formControlName="genero" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
                   <option value="">Prefiero no decirlo</option>
                   <option value="Hombre">Hombre</option>
@@ -94,18 +96,43 @@
 
               <!-- Estudios -->
               <div>
-                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Estudios / Ocupación</label>
-                <input type="text" formControlName="estudios" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: Estudiante Ingeniería">
+                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Estudios / Ocupación <span class="text-red-500">*</span></label>
+                <input type="text" formControlName="estudios" class="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+                       [class.border-red-500]="perfilForm.get('estudios')?.invalid && perfilForm.get('estudios')?.touched"
+                       [class.border-gray-300]="!perfilForm.get('estudios')?.invalid || !perfilForm.get('estudios')?.touched"
+                       [class.dark:border-gray-700]="!perfilForm.get('estudios')?.invalid || !perfilForm.get('estudios')?.touched" placeholder="Ej: Estudiante Ingeniería">
+                @if (perfilForm.get('estudios')?.touched && perfilForm.get('estudios')?.hasError('required')) {
+                  <p class="text-red-500 text-xs mt-1">Tus estudios u ocupación son obligatorios.</p>
+                }
               </div>
 
-              <!-- Instagram -->
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Enlace de Instagram</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span class="text-gray-500">@</span>
+              <!-- Métodos adicionales -->
+              <div class="md:col-span-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 class="text-md font-semibold text-texto dark:text-texto-dark mb-1">Métodos de Contacto Adicionales</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Déjalos en blanco si prefieres no compartirlos o no mostrarlos.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Teléfono -->
+                  <div>
+                    <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Teléfono</label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <mat-icon class="text-gray-500 text-sm w-5 h-5 leading-none">phone</mat-icon>
+                      </div>
+                      <input type="tel" formControlName="telefono" class="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: +34 600 000 000">
+                    </div>
                   </div>
-                  <input type="text" formControlName="instagramUrl" class="w-full pl-8 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Ej: https://instagram.com/usuario">
+
+                  <!-- Instagram -->
+                  <div>
+                    <label class="block text-sm font-medium text-texto dark:text-texto-dark mb-2">Instagram</label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500 font-bold">@</span>
+                      </div>
+                      <input type="text" formControlName="instagramUrl" class="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-texto dark:text-texto-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="usuario">
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -121,24 +148,32 @@
             <h3 class="text-lg font-semibold text-texto dark:text-texto-dark mb-4">Preferencias de Convivencia</h3>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                <input type="checkbox" formControlName="esFumador" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
-                <span class="text-texto dark:text-texto-dark">Soy fumador/a</span>
+              <label class="flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                     [class.border-accent]="perfilForm.get('esFumador')?.value" [class.border-gray-200]="!perfilForm.get('esFumador')?.value" [class.dark:border-gray-700]="!perfilForm.get('esFumador')?.value">
+                <input type="checkbox" formControlName="esFumador" class="w-5 h-5 text-accent rounded focus:ring-accent accent-accent">
+                <mat-icon [class.text-accent]="perfilForm.get('esFumador')?.value" class="text-gray-400">smoking_rooms</mat-icon>
+                <span class="text-texto dark:text-texto-dark font-medium">Soy fumador/a</span>
               </label>
 
-              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                <input type="checkbox" formControlName="tieneMascota" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
-                <span class="text-texto dark:text-texto-dark">Tengo mascota</span>
+              <label class="flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                     [class.border-accent]="perfilForm.get('tieneMascota')?.value" [class.border-gray-200]="!perfilForm.get('tieneMascota')?.value" [class.dark:border-gray-700]="!perfilForm.get('tieneMascota')?.value">
+                <input type="checkbox" formControlName="tieneMascota" class="w-5 h-5 text-accent rounded focus:ring-accent accent-accent">
+                <mat-icon [class.text-accent]="perfilForm.get('tieneMascota')?.value" class="text-gray-400">pets</mat-icon>
+                <span class="text-texto dark:text-texto-dark font-medium">Tengo mascota</span>
               </label>
 
-              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                <input type="checkbox" formControlName="tienePareja" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
-                <span class="text-texto dark:text-texto-dark">Tengo pareja</span>
+              <label class="flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                     [class.border-accent]="perfilForm.get('tienePareja')?.value" [class.border-gray-200]="!perfilForm.get('tienePareja')?.value" [class.dark:border-gray-700]="!perfilForm.get('tienePareja')?.value">
+                <input type="checkbox" formControlName="tienePareja" class="w-5 h-5 text-accent rounded focus:ring-accent accent-accent">
+                <mat-icon [class.text-accent]="perfilForm.get('tienePareja')?.value" class="text-gray-400">group</mat-icon>
+                <span class="text-texto dark:text-texto-dark font-medium">Tengo pareja</span>
               </label>
 
-              <label class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                <input type="checkbox" formControlName="perfilLgtbi" class="w-5 h-5 text-primary rounded focus:ring-primary accent-primary">
-                <span class="text-texto dark:text-texto-dark">LGTBI+ Friendly</span>
+              <label class="flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                     [class.border-accent]="perfilForm.get('perfilLgtbi')?.value" [class.border-gray-200]="!perfilForm.get('perfilLgtbi')?.value" [class.dark:border-gray-700]="!perfilForm.get('perfilLgtbi')?.value">
+                <input type="checkbox" formControlName="perfilLgtbi" class="w-5 h-5 text-accent rounded focus:ring-accent accent-accent">
+                <mat-icon [class.text-accent]="perfilForm.get('perfilLgtbi')?.value" class="text-gray-400">favorite</mat-icon>
+                <span class="text-texto dark:text-texto-dark font-medium">LGTBI+ Friendly</span>
               </label>
             </div>
 

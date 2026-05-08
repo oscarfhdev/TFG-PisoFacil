@@ -1,4 +1,44 @@
-/* Aquí se pueden poner overrides globales de Material si es necesario */
 :host {
   display: block;
+}
+
+/* ── Nav links ── */
+.nav-link {
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-slate-300;
+  @apply border border-transparent;
+  @apply hover:bg-primary/5 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-white;
+  @apply transition-all duration-150;
+  font-family: 'Lato', sans-serif;
+}
+
+.nav-link-active {
+  @apply bg-primary/10 dark:bg-primary/20 text-primary dark:text-white border-primary/20 !important;
+}
+
+.nav-icon {
+  @apply w-5 h-5 flex items-center justify-center shrink-0 opacity-70;
+  transition: opacity 0.15s;
+}
+
+.nav-link:hover .nav-icon,
+.nav-link-active .nav-icon {
+  @apply opacity-100;
+}
+
+/* ── Password form ── */
+.password-form-container {
+  @apply p-3 rounded-xl bg-gray-50 dark:bg-slate-800/40 border border-gray-100 dark:border-slate-700/50;
+  @apply space-y-2;
+}
+
+.password-input {
+  @apply w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700;
+  @apply text-texto dark:text-white rounded-lg;
+  @apply focus:outline-none focus:border-primary dark:focus:border-primary;
+  @apply transition-colors;
+  font-family: 'Lato', sans-serif;
+}
+
+.password-input::placeholder {
+  @apply text-gray-400 dark:text-slate-500;
 }

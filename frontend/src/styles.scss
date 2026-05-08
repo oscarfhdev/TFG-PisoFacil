@@ -52,3 +52,61 @@ body {
   border-radius: 2rem !important;
   overflow: visible !important;
 }
+
+/* ══════════════════════════════════════
+   PisoFácil — Toasts / Snackbars
+   ══════════════════════════════════════ */
+
+/* Base compartida */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-supporting-text-font: 'Poppins', sans-serif !important;
+  --mdc-snackbar-supporting-text-size: 0.875rem !important;
+  --mdc-snackbar-supporting-text-weight: 400 !important;
+
+  .mdc-snackbar__surface {
+    font-family: 'Poppins', sans-serif !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  .mat-mdc-snack-bar-label {
+    font-family: 'Poppins', sans-serif !important;
+  }
+
+  .mat-mdc-button {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+  }
+}
+
+/* Éxito — verde apagado */
+.toast-success .mdc-snackbar__surface {
+  background-color: #2e7d5e !important;
+  color: #ffffff !important;
+}
+.toast-success .mat-mdc-snack-bar-label { color: #ffffff !important; }
+.toast-success .mat-mdc-button { color: #a8e6cf !important; }
+
+/* Error — rojo apagado */
+.toast-error .mdc-snackbar__surface {
+  background-color: #b94040 !important;
+  color: #ffffff !important;
+}
+.toast-error .mat-mdc-snack-bar-label { color: #ffffff !important; }
+.toast-error .mat-mdc-button { color: #fdd !important; }
+
+/* Info — azul PisoFácil apagado */
+.toast-info .mdc-snackbar__surface {
+  background-color: #1C4B68 !important;
+  color: #ffffff !important;
+}
+.toast-info .mat-mdc-snack-bar-label { color: #ffffff !important; }
+.toast-info .mat-mdc-button { color: #9ecfe0 !important; }
+
+/* Advertencia — ocre discreto */
+.toast-warn .mdc-snackbar__surface {
+  background-color: #8a6a1e !important;
+  color: #ffffff !important;
+}
+.toast-warn .mat-mdc-snack-bar-label { color: #ffffff !important; }
+.toast-warn .mat-mdc-button { color: #fce8a8 !important; }

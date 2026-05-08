@@ -1,0 +1,73 @@
+:host {
+  display: block;
+}
+
+/* ── KPI Cards ── */
+.kpi-card {
+  @apply bg-white dark:bg-card-dark rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm;
+  @apply flex items-center gap-4;
+  @apply hover:shadow-md hover:border-gray-200 dark:hover:border-slate-700;
+  @apply transition-all duration-200;
+}
+
+.kpi-icon {
+  @apply w-12 h-12 rounded-xl flex items-center justify-center shrink-0;
+  @apply transition-transform duration-200;
+}
+
+.kpi-card:hover .kpi-icon {
+  @apply scale-105;
+}
+
+.kpi-label {
+  @apply text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-0.5;
+  font-family: 'Lato', sans-serif;
+}
+
+.kpi-value {
+  @apply text-2xl font-bold text-texto dark:text-white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.kpi-sub {
+  @apply text-xs text-gray-400 dark:text-slate-500 mt-0.5;
+}
+
+/* ── Chart Cards ── */
+.chart-card {
+  @apply bg-white dark:bg-card-dark rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm;
+  @apply hover:shadow-md transition-shadow duration-200;
+}
+
+.chart-header {
+  @apply flex items-start justify-between mb-4;
+}
+
+.chart-title {
+  @apply text-base font-bold text-texto dark:text-white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.chart-subtitle {
+  @apply text-xs text-gray-500 dark:text-slate-400 mt-0.5;
+}
+
+.chart-body {
+  position: relative;
+}
+
+/* ── Fade-in Animation ── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}

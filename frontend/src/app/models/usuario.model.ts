@@ -27,6 +27,7 @@ export interface UsuarioResponse {
   biografia?: string;
   fotoPerfilUrl?: string;
   instagramUrl?: string;
+  telefono?: string;
   fechaRegistro: string;
   esFumador?: boolean;
   tieneMascota?: boolean;

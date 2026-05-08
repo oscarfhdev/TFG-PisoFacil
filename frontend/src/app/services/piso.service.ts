@@ -15,6 +15,10 @@ export class PisoService {
     return this.http.get<PisoResponse[]>(this.apiUrl);
   }
 
+  findAllAdmin(): Observable<MisPisosResponse[]> {
+    return this.http.get<MisPisosResponse[]>(`${this.apiUrl}/admin-all`);
+  }
+
   getMyPisos(): Observable<MisPisosResponse[]> {
     return this.http.get<MisPisosResponse[]>(`${this.apiUrl}/me`);
   }

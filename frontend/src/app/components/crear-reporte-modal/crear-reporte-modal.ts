@@ -33,7 +33,6 @@ export class CrearReporteModal implements OnInit {
     'Error en la web',
     'Sugerencia',
     'Problema con un usuario',
-    'Recuperación de cuenta',
     'Otro'
   ];
 
@@ -62,13 +61,13 @@ export class CrearReporteModal implements OnInit {
 
     this.reporteService.create(reporteData).subscribe({
       next: () => {
-        this.snackBar.open('¡Gracias por tu reporte! Lo revisaremos pronto.', 'OK', { duration: 5000 });
+        this.snackBar.open('¡Gracias por tu reporte! Lo revisaremos pronto.', 'OK', { duration: 5000, panelClass: ['toast-success'] });
         this.loading = false;
         this.dialogRef.close(true);
       },
       error: (err) => {
         console.error(err);
-        this.snackBar.open('Error al enviar el reporte. Inténtalo de nuevo.', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al enviar el reporte. Inténtalo de nuevo.', 'Cerrar', { duration: 3000, panelClass: ['toast-error'] });
         this.loading = false;
       }
     });

@@ -14,14 +14,16 @@ import { AdminLayout } from './admin/admin-layout/admin-layout';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminReportes } from './admin/admin-reportes/admin-reportes';
 import { AdminUsuarios } from './admin/admin-usuarios/admin-usuarios';
+import { AdminPisos } from './admin/admin-pisos/admin-pisos';
 import { authGuard } from './auth/auth.guard';
 import { adminGuard } from './auth/admin.guard';
+import { noAuthGuard } from './auth/no-auth.guard';
 
 export const routes: Routes = [
   // Rutas públicas
   { path: '', component: Home },
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
+  { path: 'login', component: Login, canActivate: [noAuthGuard] },
+  { path: 'register', component: Register, canActivate: [noAuthGuard] },
   { path: 'buscar', component: Buscar },
   { path: 'legal', component: Legal },
   { path: 'habitacion/:id', component: HabitacionDetail },
@@ -40,6 +42,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminDashboard },
       { path: 'usuarios', component: AdminUsuarios },
+      { path: 'pisos', component: AdminPisos },
       { path: 'reportes', component: AdminReportes },
     ]
   },

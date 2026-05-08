@@ -58,7 +58,7 @@ export class MisAnuncios implements OnInit {
           next: () => {
             this.snackBar.open('Piso eliminado correctamente', 'Cerrar', {
               duration: 3000,
-              panelClass: ['bg-green-600', 'text-white']
+              panelClass: ['toast-success']
             });
             // Filtrar el piso de la lista local en lugar de recargar todo de nuevo
             this.pisos.update(pisos => pisos.filter(p => p.idPiso !== idPiso));
@@ -67,7 +67,7 @@ export class MisAnuncios implements OnInit {
             console.error('Error al eliminar el piso', err);
             this.snackBar.open('Error al eliminar el piso. Inténtalo de nuevo.', 'Cerrar', {
               duration: 4000,
-              panelClass: ['bg-red-600', 'text-white']
+              panelClass: ['toast-error']
             });
           }
         });

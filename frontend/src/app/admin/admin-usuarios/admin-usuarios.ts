@@ -80,9 +80,9 @@ export class AdminUsuarios implements OnInit {
           this.dataSource.data = [...this.dataSource.data];
         }
         const estado = updated.cuentaActiva ? 'activada' : 'suspendida';
-        this.snackBar.open(`Cuenta de ${updated.nombre} ${estado}`, 'OK', { duration: 3000 });
+        this.snackBar.open(`Cuenta de ${updated.nombre} ${estado}`, 'OK', { duration: 3000, panelClass: ['toast-success'] });
       },
-      error: () => this.snackBar.open('Error al cambiar el estado', 'Cerrar', { duration: 4000 })
+      error: () => this.snackBar.open('Error al cambiar el estado', 'Cerrar', { duration: 4000, panelClass: ['toast-error'] })
     });
   }
 }

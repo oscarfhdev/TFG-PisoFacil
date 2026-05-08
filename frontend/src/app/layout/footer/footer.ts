@@ -22,7 +22,7 @@ export class Footer {
 
   abrirReporte() {
     if (!this.authService.isLoggedIn()) {
-      this.snackBar.open('Debes iniciar sesión para reportar un problema', 'OK', { duration: 4000 });
+      this.snackBar.open('Debes iniciar sesión para reportar un problema', 'OK', { duration: 4000, panelClass: ['toast-info'] });
       return;
     }
     this.dialog.open(CrearReporteModal, {

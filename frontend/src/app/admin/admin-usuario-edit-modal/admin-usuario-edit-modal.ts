@@ -84,14 +84,14 @@ export class AdminUsuarioEditModal implements OnInit {
 
     this.usuarioService.adminUpdateUser(this.data.usuario.idUsuario, updateData).subscribe({
       next: (res) => {
-        this.snackBar.open('Detalles del usuario actualizados', 'OK', { duration: 3000 });
+        this.snackBar.open('Detalles del usuario actualizados', 'OK', { duration: 3000, panelClass: ['toast-success'] });
         this.data.usuario = res; // Update local data
         this.loadingEdit = false;
         this.dialogRef.close({ updatedUser: res });
       },
       error: (err) => {
         console.error(err);
-        this.snackBar.open('Error al actualizar el usuario', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al actualizar el usuario', 'Cerrar', { duration: 3000, panelClass: ['toast-error'] });
         this.loadingEdit = false;
       }
     });
@@ -108,13 +108,13 @@ export class AdminUsuarioEditModal implements OnInit {
 
     this.usuarioService.adminResetPassword(this.data.usuario.idUsuario, passwordNueva).subscribe({
       next: () => {
-        this.snackBar.open('Contraseña reseteada correctamente', 'OK', { duration: 3000 });
+        this.snackBar.open('Contraseña reseteada correctamente', 'OK', { duration: 3000, panelClass: ['toast-success'] });
         this.loadingReset = false;
         this.resetPasswordForm.reset();
       },
       error: (err) => {
         console.error(err);
-        this.snackBar.open('Error al resetear la contraseña', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al resetear la contraseña', 'Cerrar', { duration: 3000, panelClass: ['toast-error'] });
         this.loadingReset = false;
       }
     });

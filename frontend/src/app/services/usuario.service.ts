@@ -27,6 +27,12 @@ export class UsuarioService {
     return this.http.put<void>(`${this.apiUrl}/me/password`, data);
   }
 
+  uploadFotoPerfil(id: number, file: File): Observable<UsuarioResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<UsuarioResponse>(`${this.apiUrl}/${id}/foto-perfil`, formData);
+  }
+
   findById(id: number): Observable<UsuarioResponse> {
     return this.http.get<UsuarioResponse>(`${this.apiUrl}/${id}`);
   }
