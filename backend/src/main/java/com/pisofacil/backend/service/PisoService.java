@@ -70,10 +70,8 @@ public class PisoService {
         Piso piso = pisoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Piso no encontrado con ID: " + id));
 
-        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + dto.getIdUsuario()));
-
-        piso.setUsuario(usuario);
+        // El propietario no cambia al editar: se mantiene el usuario ya asociado en BD.
+        // El idUsuario del body se ignora por seguridad (la autoría se valida por JWT).
         piso.setDireccion(dto.getDireccion());
         piso.setCiudad(dto.getCiudad());
         piso.setCodigoPostal(dto.getCodigoPostal());

@@ -30,9 +30,8 @@ export class PublicarAnuncio {
   fotosPisoPreview = signal<string[]>([]);
   fotosHabitacionPreview = signal<string[]>([]);
 
-  // Índice de la foto marcada como principal (0 por defecto = la primera)
+  // Índice de la foto marcada como principal del piso (0 por defecto = la primera)
   fotoPrincipalPisoIndex = signal<number>(0);
-  fotoPrincipalHabIndex = signal<number>(0);
 
   pisoForm: FormGroup = this.fb.group({
     direccion: ['', Validators.required],
@@ -137,17 +136,6 @@ export class PublicarAnuncio {
   removeFotoHabitacion(index: number) {
     this.fotosHabitacionFiles.update(files => files.filter((_, i) => i !== index));
     this.fotosHabitacionPreview.update(previews => previews.filter((_, i) => i !== index));
-    // Recalcular índice principal
-    const currentPrincipal = this.fotoPrincipalHabIndex();
-    if (index === currentPrincipal) {
-      this.fotoPrincipalHabIndex.set(0);
-    } else if (index < currentPrincipal) {
-      this.fotoPrincipalHabIndex.update(v => v - 1);
-    }
-  }
-
-  setPrincipalHabitacion(index: number) {
-    this.fotoPrincipalHabIndex.set(index);
   }
 
   onSubmit() {
@@ -176,25 +164,11 @@ export class PublicarAnuncio {
         // Preparar observables de subida de fotos
         const uploadTasks: any[] = [];
 
-        // Reordenar fotos piso: la foto principal va primero
-        const pisoFiles = [...this.fotosPisoFiles()];
+        // Fotos del piso: enviar esPrincipal=true solo para la foto marcada con estrella
+        const pisoFiles = this.fotosPisoFiles();
         const pisoIdx = this.fotoPrincipalPisoIndex();
-        if (pisoIdx > 0 && pisoIdx < pisoFiles.length) {
-          const [principal] = pisoFiles.splice(pisoIdx, 1);
-          pisoFiles.unshift(principal);
-        }
-
-        // Reordenar fotos habitación: la foto principal va primero
-        const habFiles = [...this.fotosHabitacionFiles()];
-        const habIdx = this.fotoPrincipalHabIndex();
-        if (habIdx > 0 && habIdx < habFiles.length) {
-          const [principal] = habFiles.splice(habIdx, 1);
-          habFiles.unshift(principal);
-        }
-
-        // Fotos del piso: enviar esPrincipal=true solo para la foto con estrella
-        this.fotosPisoFiles().forEach((file, index) => {
-          const esPrincipal = index === this.fotoPrincipalPisoIndex();
+        pisoFiles.forEach((file, index) => {
+          const esPrincipal = index === pisoIdx;
           uploadTasks.push(
             this.fotoService.upload(file, idPiso, undefined, esPrincipal).pipe(
               catchError(err => {
@@ -205,11 +179,11 @@ export class PublicarAnuncio {
           );
         });
 
-        // Fotos de la habitación: enviar esPrincipal=true solo para la foto con estrella
-        this.fotosHabitacionFiles().forEach((file, index) => {
-          const esPrincipal = index === this.fotoPrincipalHabIndex();
+        // Fotos de la habitación: SIEMPRE esPrincipal=false
+        // La foto principal del anuncio de habitación es siempre la del piso
+        this.fotosHabitacionFiles().forEach((file) => {
           uploadTasks.push(
-            this.fotoService.upload(file, idPiso, idHabitacion, esPrincipal).pipe(
+            this.fotoService.upload(file, idPiso, idHabitacion, false).pipe(
               catchError(err => {
                 console.error('Error subiendo foto de habitación', err);
                 return of(null);

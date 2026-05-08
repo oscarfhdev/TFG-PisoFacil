@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 import { ReporteService } from '../../services/reporte.service';
 import { ReporteResponse } from '../../models/reporte.model';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { catchError, map, of } from 'rxjs';
 
 @Component({
@@ -14,6 +16,7 @@ import { catchError, map, of } from 'rxjs';
 })
 export class AdminReportes {
   private reporteService = inject(ReporteService);
+  private dialog = inject(MatDialog);
 
   // Cargamos los reportes ordenados del más reciente al más antiguo
   reportes = toSignal(
@@ -25,16 +28,27 @@ export class AdminReportes {
   );
 
   cambiarEstado(id: number, nuevoEstado: string) {
-    if (confirm(`¿Estás seguro de marcar este reporte como ${nuevoEstado}?`)) {
+    const esResolv = nuevoEstado.toUpperCase() === 'RESUELTO';
+
+    const data: ConfirmDialogData = {
+      title: esResolv ? 'Resolver denuncia' : 'Rechazar denuncia',
+      message: esResolv
+        ? '¿Confirmas que este reporte ha sido revisado y queda marcado como resuelto?'
+        : '¿Confirmas que deseas rechazar este reporte y cerrarlo sin acción?',
+      confirmText: esResolv ? 'Sí, resolver' : 'Sí, rechazar',
+      cancelText: 'Cancelar',
+      confirmColor: esResolv ? 'primary' : 'warn',
+      confirmIcon: esResolv ? 'check_circle' : 'cancel',
+    };
+
+    const ref = this.dialog.open(ConfirmDialogComponent, { data, autoFocus: false });
+
+    ref.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
       this.reporteService.updateEstado(id, nuevoEstado).subscribe({
-        next: () => {
-          // Idealmente, se recargarían los reportes llamando de nuevo a findAll
-          // o mutando el signal si usáramos un WritableSignal.
-          // Para esta demostración, recargamos la página o dependemos de la recarga manual.
-          window.location.reload();
-        },
-        error: (err) => console.error('Error actualizando estado del reporte', err)
+        next: () => window.location.reload(),
+        error: (err) => console.error('Error actualizando estado del reporte', err),
       });
-    }
+    });
   }
 }

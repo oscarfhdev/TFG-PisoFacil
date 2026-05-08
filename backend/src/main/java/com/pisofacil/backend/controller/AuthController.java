@@ -73,6 +73,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
 
+        // Comprobar si la cuenta está suspendida/desactivada
+        if (Boolean.FALSE.equals(usuario.getCuentaActiva())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Tu cuenta ha sido suspendida. Contacta con soporte para más información.");
+        }
+
         String token = jwtUtil.generateToken(usuario);
         String role = Boolean.TRUE.equals(usuario.getEsAdmin()) ? "ADMIN" : "USER";
 

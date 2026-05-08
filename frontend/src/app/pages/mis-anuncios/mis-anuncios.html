@@ -132,11 +132,18 @@
                   </div>
                 }
                 
-                <!-- Card for adding new room -->
-                <a [routerLink]="['/nueva-habitacion', piso.idPiso]" class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 transition min-h-[140px] cursor-pointer">
-                  <mat-icon class="text-3xl mb-2">add_circle</mat-icon>
-                  <span class="font-medium">Añadir Habitación</span>
-                </a>
+                <!-- Card for adding new room: solo si aún hay hueco -->
+                @if (!piso.numHabitacionesTotal || piso.habitaciones.length < piso.numHabitacionesTotal) {
+                  <a [routerLink]="['/nueva-habitacion', piso.idPiso]" class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 transition min-h-[140px] cursor-pointer">
+                    <mat-icon class="text-3xl mb-2">add_circle</mat-icon>
+                    <span class="font-medium">Añadir Habitación</span>
+                  </a>
+                } @else {
+                  <div class="border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl p-4 flex flex-col items-center justify-center text-gray-300 dark:text-gray-600 min-h-[140px] cursor-not-allowed select-none" title="Ya has publicado todas las habitaciones de este piso">
+                    <mat-icon class="text-3xl mb-2">check_circle</mat-icon>
+                    <span class="font-medium text-xs text-center">Todas las habitaciones publicadas</span>
+                  </div>
+                }
               </div>
             }
           </div>

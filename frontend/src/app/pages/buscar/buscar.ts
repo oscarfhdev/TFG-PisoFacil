@@ -78,9 +78,10 @@ export class Buscar {
 
   anuncios = computed<AnuncioCardData[]>(() => {
     return this.resultadosRaw().map(hab => {
+      // La foto principal del anuncio siempre es la del piso (esPrincipal viene primera)
       const fotoPrincipal =
-        hab.fotosHabitacion?.length ? hab.fotosHabitacion[0]
-        : hab.fotosPiso?.length     ? hab.fotosPiso[0]
+        hab.fotosPiso?.length         ? hab.fotosPiso[0]
+        : hab.fotosHabitacion?.length  ? hab.fotosHabitacion[0]
         : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800';
 
       return {

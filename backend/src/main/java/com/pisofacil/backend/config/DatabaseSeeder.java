@@ -331,7 +331,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         };
 
         int totalHabitacionesCreadas = 0;
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 19; i++) {
             Usuario dueno = usuarios.get(random.nextInt(usuarios.size()));
 
             int numBanos = 1 + random.nextInt(2); 
@@ -416,8 +416,68 @@ public class DatabaseSeeder implements CommandLineRunner {
             }
         }
 
-        System.out.println("✅ DataLoader: 20 pisos con 30 anuncios REALISTAS y datos de contacto creados.");
-        System.out.println("🏠 DataLoader: Seed completado con teléfonos y emails en las descripciones.");
+        // ═══════════════════════════════════════════════════════════════
+        // 3. PISO PROPIO DEL USUARIO DE PRUEBA (user@pisofacil.com)
+        // ═══════════════════════════════════════════════════════════════
+        Piso pisoUserTest = Piso.builder()
+                .usuario(userTest)
+                .direccion("Calle Avenida de Ansite, 10")
+                .ciudad("Santa Cruz de Tenerife")
+                .codigoPostal("38001")
+                .numHabitacionesTotal(1)
+                .numBanos(1)
+                .planta(3)
+                .superficieTotalM2(65.0)
+                .tieneWifi(true)
+                .tieneAscensor(true)
+                .descripcionGlobal("Piso luminoso en Santa Cruz de Tenerife con balcones que ofrecen vistas despejadas al mar. El piso es muy fresco gracias a la ventilación cruzada natural y los toldos eléctricos para los días de sol intenso. La decoración es fresca y veraniega, con plantas naturales por toda la casa. El ambiente es relajado y sociable. Los gastos de agua y luz van aparte del alquiler, aunque aquí no se gasta prácticamente nada en calefacción.")
+                .admiteFumadores(false)
+                .admiteMascotas(true)
+                .admiteParejas(false)
+                .lgtbiFriendly(true)
+                .centroInteres("Universidad de La Laguna")
+                .build();
+        Piso pisoUserTestGuardado = pisoRepository.save(pisoUserTest);
+
+        // Fotos del piso (carpeta piso-20)
+        for (int f = 1; f <= 3; f++) {
+            fotoRepository.save(Foto.builder()
+                    .piso(pisoUserTestGuardado)
+                    .habitacion(null)
+                    .urlAlmacenamiento("/api/uploads/fotos/piso-20/" + f + ".jpg")
+                    .esPrincipal(f == 1)
+                    .build());
+        }
+
+        // Habitación del piso de userTest (carpeta hab-30)
+        totalHabitacionesCreadas++; // = 30
+        Habitacion habUserTest = Habitacion.builder()
+                .piso(pisoUserTestGuardado)
+                .tituloAnuncio(titulosHabitacion[29])
+                .precioMensual(BigDecimal.valueOf(380))
+                .descripcionEspecifica(descripcionesHabitacion[29])
+                .estaDisponible(true)
+                .superficieM2(16.0)
+                .tieneBanoPrivado(false)
+                .amueblada(true)
+                .exterior(true)
+                .tieneCalefaccion(false)
+                .tieneAireAcondicionado(true)
+                .build();
+        Habitacion habUserTestGuardada = habitacionRepository.save(habUserTest);
+
+        // Fotos de la habitación (carpeta hab-30)
+        for (int fh = 1; fh <= 2; fh++) {
+            fotoRepository.save(Foto.builder()
+                    .piso(pisoUserTestGuardado)
+                    .habitacion(habUserTestGuardada)
+                    .urlAlmacenamiento("/api/uploads/fotos/hab-30/" + fh + ".jpg")
+                    .esPrincipal(fh == 1)
+                    .build());
+        }
+
+        System.out.println("✅ DataLoader: 20 pisos con 30 anuncios REALISTAS creados.");
+        System.out.println("👤 DataLoader: Piso de user@pisofacil.com creado con hab-30.");
     }
 
     private String getRandomColor(Random random) {

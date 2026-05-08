@@ -50,23 +50,21 @@ public class FotoService {
 
         String urlAlmacenamiento = storageService.store(archivo);
 
-        boolean esPrincipal;
-        if (esPrincipalParam != null) {
-            // El cliente indica explícitamente si es principal.
-            // Si marca esta foto como principal, desmarcar la anterior del mismo ámbito.
+        // La foto principal SOLO aplica a fotos del piso (zonas comunes).
+        // Las fotos de habitación NUNCA son principales: la imagen destacada
+        // del anuncio siempre es la foto principal del piso.
+        boolean esPrincipal = false;
+        if (habitacion == null) {
+            // Es una foto del piso
             if (Boolean.TRUE.equals(esPrincipalParam)) {
-                if (habitacion != null) {
-                    fotoRepository.clearPrincipalByHabitacion(habitacion.getIdHabitacion());
-                } else {
-                    fotoRepository.clearPrincipalByPiso(piso.getIdPiso());
-                }
+                // El usuario marcó esta foto como principal → desmarcar la anterior
+                fotoRepository.clearPrincipalByPiso(piso.getIdPiso());
+                esPrincipal = true;
+            } else if (esPrincipalParam == null) {
+                // Auto-asignar: primera foto del piso = principal
+                esPrincipal = !fotoRepository.existsByPisoIdPisoAndHabitacionIsNullAndEsPrincipalTrue(piso.getIdPiso());
             }
-            esPrincipal = esPrincipalParam;
-        } else if (habitacion != null) {
-            // Lógica automática: primera foto del ámbito = principal
-            esPrincipal = !fotoRepository.existsByHabitacionIdHabitacionAndEsPrincipalTrue(habitacion.getIdHabitacion());
-        } else {
-            esPrincipal = !fotoRepository.existsByPisoIdPisoAndHabitacionIsNullAndEsPrincipalTrue(piso.getIdPiso());
+            // Si esPrincipalParam == false, se queda en false
         }
 
         Foto foto = new Foto();

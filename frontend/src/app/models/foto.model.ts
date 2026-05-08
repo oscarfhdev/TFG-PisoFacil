@@ -3,4 +3,5 @@ export interface FotoResponse {
   idPiso: number;
   idHabitacion?: number;
   urlAlmacenamiento: string;
+  esPrincipal?: boolean;
 }

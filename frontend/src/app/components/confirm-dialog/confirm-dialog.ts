@@ -12,6 +12,8 @@ export interface ConfirmDialogData {
   confirmText?: string;
   cancelText?: string;
   confirmColor?: 'primary' | 'accent' | 'warn';
+  /** Material icon name for the confirm button. Defaults to 'delete'. */
+  confirmIcon?: string;
 }
 
 @Component({
@@ -65,7 +67,7 @@ export interface ConfirmDialogData {
                 [color]="data.confirmColor || 'primary'"
                 (click)="dialogRef.close(true)"
                 class="confirm-confirm-btn">
-          <mat-icon>delete</mat-icon>
+          <mat-icon>{{ data.confirmIcon || 'delete' }}</mat-icon>
           {{ data.confirmText || 'Confirmar' }}
         </button>
       </div>

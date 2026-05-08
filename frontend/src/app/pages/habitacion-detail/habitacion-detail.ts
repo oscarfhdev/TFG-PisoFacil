@@ -58,15 +58,17 @@ export class HabitacionDetail implements OnInit {
       next: (data) => {
         this.habitacion.set(data);
         
-        // Combinar fotos de la habitación y del piso
-        const fotosHab = data.fotosHabitacion || [];
+        // Combinar fotos: PISO PRIMERO (la principal del anuncio siempre es la del piso),
+        // luego las de la habitación.
+        // El backend ya ordena fotosPiso con la principal primero (esPrincipal=true).
         const fotosPiso = data.fotosPiso || [];
+        const fotosHab = data.fotosHabitacion || [];
         
         // Si no hay fotos, poner un placeholder
-        if (fotosHab.length === 0 && fotosPiso.length === 0) {
+        if (fotosPiso.length === 0 && fotosHab.length === 0) {
           this.todasLasFotos.set(['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200']);
         } else {
-          this.todasLasFotos.set([...fotosHab, ...fotosPiso]);
+          this.todasLasFotos.set([...fotosPiso, ...fotosHab]);
         }
         
         this.checkFavorito();

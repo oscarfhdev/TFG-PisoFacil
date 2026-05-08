@@ -12,4 +12,5 @@ public class FotoResponseDTO {
     private Long idPiso;
     private Long idHabitacion;
     private String urlAlmacenamiento;
+    private Boolean esPrincipal;
 }

@@ -40,9 +40,10 @@ export class Home {
 
   anuncios = computed<AnuncioCardData[]>(() =>
     this.habitacionesDestacadas().map(hab => {
-      const fotoPrincipal = hab.fotosHabitacion && hab.fotosHabitacion.length > 0
-        ? hab.fotosHabitacion[0]
-        : (hab.fotosPiso && hab.fotosPiso.length > 0 ? hab.fotosPiso[0] : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800');
+      // La foto principal del anuncio siempre es la del piso (esPrincipal viene primera desde el backend)
+      const fotoPrincipal = hab.fotosPiso && hab.fotosPiso.length > 0
+        ? hab.fotosPiso[0]
+        : (hab.fotosHabitacion && hab.fotosHabitacion.length > 0 ? hab.fotosHabitacion[0] : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800');
 
       return {
         id: hab.idHabitacion,
