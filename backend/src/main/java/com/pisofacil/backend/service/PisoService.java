@@ -49,6 +49,11 @@ public class PisoService {
         return pisoMapper.toMisPisosResponseDTOList(pisos);
     }
 
+    @Transactional(readOnly = true)
+    public List<MisPisosResponseDTO> findAllWithHabitaciones() {
+        return pisoMapper.toMisPisosResponseDTOList(pisoRepository.findAll());
+    }
+
     @Transactional
     public PisoResponseDTO create(PisoRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())

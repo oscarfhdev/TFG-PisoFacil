@@ -34,13 +34,13 @@ public class ReporteController {
         throw new RuntimeException("Usuario no autenticado");
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<ReporteResponseDTO>> findAll() {
         return ResponseEntity.ok(reporteService.findAll());
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ReporteResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(reporteService.findById(id));
@@ -54,7 +54,7 @@ public class ReporteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reporteService.create(dto, usuario));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/estado")
     public ResponseEntity<ReporteResponseDTO> updateEstado(
             @PathVariable Long id,
@@ -62,7 +62,7 @@ public class ReporteController {
         return ResponseEntity.ok(reporteService.updateEstado(id, estado));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         reporteService.delete(id);

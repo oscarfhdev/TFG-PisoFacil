@@ -21,13 +21,13 @@ public interface PisoMapper {
     Piso toEntity(PisoRequestDTO dto);
 
     @Mapping(source = "usuario.idUsuario", target = "idUsuario")
-    @Mapping(source = "usuario.nombre", target = "nombreUsuario")
+    @Mapping(target = "nombreUsuario", expression = "java(entity.getUsuario().getNombre() + (entity.getUsuario().getApellidos() != null ? \" \" + entity.getUsuario().getApellidos() : \"\"))")
     PisoResponseDTO toResponseDTO(Piso entity);
 
     List<PisoResponseDTO> toResponseDTOList(List<Piso> entities);
 
     @Mapping(source = "usuario.idUsuario", target = "idUsuario")
-    @Mapping(source = "usuario.nombre", target = "nombreUsuario")
+    @Mapping(target = "nombreUsuario", expression = "java(entity.getUsuario().getNombre() + (entity.getUsuario().getApellidos() != null ? \" \" + entity.getUsuario().getApellidos() : \"\"))")
     MisPisosResponseDTO toMisPisosResponseDTO(Piso entity);
 
     List<MisPisosResponseDTO> toMisPisosResponseDTOList(List<Piso> entities);

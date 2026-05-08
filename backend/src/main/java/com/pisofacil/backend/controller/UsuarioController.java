@@ -22,6 +22,7 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final com.pisofacil.backend.service.StorageService storageService;
 
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> findAll() {
@@ -97,8 +98,31 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> uploadFotoPerfil(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-        // Implementación temporal simple: solo retornamos el usuario existente
-        // En un futuro se guardará en S3 o disco local
-        return ResponseEntity.ok(usuarioService.findById(id));
+        // Obtenemos el usuario por seguridad (o para confirmar que existe)
+        UsuarioResponseDTO user = usuarioService.findById(id);
+        
+        // Guardamos el archivo y obtenemos la URL
+        String fileUrl = storageService.store(file);
+        
+        // Actualizamos la foto de perfil en la base de datos
+        PerfilUpdateRequestDTO updateDTO = new PerfilUpdateRequestDTO();
+        updateDTO.setNombre(user.getNombre());
+        updateDTO.setApellidos(user.getApellidos());
+        updateDTO.setEmail(user.getEmail());
+        updateDTO.setFechaNacimiento(user.getFechaNacimiento());
+        updateDTO.setGenero(user.getGenero());
+        updateDTO.setEstudios(user.getEstudios());
+        updateDTO.setBiografia(user.getBiografia());
+        updateDTO.setInstagramUrl(user.getInstagramUrl());
+        updateDTO.setTelefono(user.getTelefono());
+        updateDTO.setEsFumador(user.getEsFumador());
+        updateDTO.setTieneMascota(user.getTieneMascota());
+        updateDTO.setTienePareja(user.getTienePareja());
+        updateDTO.setPerfilLgtbi(user.getPerfilLgtbi());
+        
+        // Set new photo url
+        updateDTO.setFotoPerfilUrl(fileUrl);
+        
+        return ResponseEntity.ok(usuarioService.updatePerfil(id, updateDTO));
     }
 }

@@ -22,6 +22,7 @@ public class UsuarioResponseDTO {
     private String biografia;
     private String fotoPerfilUrl;
     private String instagramUrl;
+    private String telefono;
     private LocalDateTime fechaRegistro;
     private Boolean esFumador;
     private Boolean tieneMascota;

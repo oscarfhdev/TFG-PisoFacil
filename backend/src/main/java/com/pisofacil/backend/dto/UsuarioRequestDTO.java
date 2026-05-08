@@ -30,6 +30,7 @@ public class UsuarioRequestDTO {
     private String biografia;
     private String fotoPerfilUrl;
     private String instagramUrl;
+    private String telefono;
     private Boolean esFumador;
     private Boolean tieneMascota;
     private Boolean tienePareja;

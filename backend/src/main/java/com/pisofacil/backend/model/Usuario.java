@@ -57,6 +57,9 @@ public class Usuario {
     @Column(name = "instagram_url")
     private String instagramUrl;
 
+    @Column(name = "telefono")
+    private String telefono;
+
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 

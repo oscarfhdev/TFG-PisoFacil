@@ -30,4 +30,6 @@ public class PerfilUpdateRequestDTO {
     private Boolean tieneMascota;
     private Boolean tienePareja;
     private Boolean perfilLgtbi;
+    private String telefono;
+    private String fotoPerfilUrl;
 }

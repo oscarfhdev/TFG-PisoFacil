@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class FavoritoResponseDTO {
     private Long idFavorito;
     private Long idUsuario;

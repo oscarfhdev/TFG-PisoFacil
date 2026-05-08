@@ -96,6 +96,12 @@ public class UsuarioService {
         usuario.setEstudios(dto.getEstudios());
         usuario.setBiografia(dto.getBiografia());
         usuario.setInstagramUrl(dto.getInstagramUrl());
+        usuario.setTelefono(dto.getTelefono());
+        // Solo actualizar la foto si el DTO trae un valor explícito (no null)
+        // para no sobreescribir la foto cuando el formulario de perfil no la incluye
+        if (dto.getFotoPerfilUrl() != null) {
+            usuario.setFotoPerfilUrl(dto.getFotoPerfilUrl());
+        }
         usuario.setEsFumador(dto.getEsFumador());
         usuario.setTieneMascota(dto.getTieneMascota());
         usuario.setTienePareja(dto.getTienePareja());

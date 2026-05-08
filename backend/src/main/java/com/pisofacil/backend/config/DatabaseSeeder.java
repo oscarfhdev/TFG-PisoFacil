@@ -148,12 +148,19 @@ public class DatabaseSeeder implements CommandLineRunner {
             int fotoNum = (i / 2) + 1;
             String fotoUrl = "/api/uploads/fotos/usuarios/" + carpetaGenero + "/" + fotoNum + ".jpg";
 
+            // Instagram solo para ~60% de los usuarios (diversidad)
+            String instagram = (i % 5 != 0) ? "@" + nombre.toLowerCase() + "." + apellidos.toLowerCase().split(" ")[0] : null;
+            // Teléfono para ~70% de los usuarios
+            String telefono = (i % 3 != 0) ? "6" + String.format("%08d", 10000000 + i * 3214567) : null;
+
             Usuario u = Usuario.builder()
                     .nombre(nombre)
                     .apellidos(apellidos)
                     .email(nombreCompleto.toLowerCase().replace(" ", ".").replace("á", "a")
                             .replace("é", "e").replace("í", "i").replace("ó", "o")
                             .replace("ú", "u") + i + "@correo.com")
+                    .telefono(telefono)
+                    .instagramUrl(instagram)
                     .password(passwordEncoder.encode("password123"))
                     .esAdmin(false)
                     .fechaNacimiento(LocalDate.of(
@@ -213,36 +220,36 @@ public class DatabaseSeeder implements CommandLineRunner {
         };
 
         String[] descripcionesPiso = {
-                "Espectacular piso compartido situado en el emblemático barrio de Argüelles, a escasos minutos a pie de la Universidad Complutense. La vivienda cuenta con un salón señorial de techos altos, cocina totalmente equipada con electrodomésticos de alta gama y un ambiente de estudio inmejorable. Ideal para estudiantes de máster que busquen tranquilidad y cercanía al centro.",
-                "Amplio y luminoso piso en pleno Eixample barcelonés. Conserva los suelos hidráulicos originales y techos con molduras. Las zonas comunes incluyen una galería acristalada perfecta para relajarse. Excelente conexión con líneas de metro L1 y L2. Buscamos compañeros respetuosos que valoren la arquitectura clásica y el orden.",
-                "Vivienda pensada por y para estudiantes en el corazón de Granada. Situado en la calle Pedro Antonio de Alarcón, el piso es el epicentro de la vida universitaria. Reformado recientemente con mobiliario moderno, Smart TV en el salón y conexión WiFi 6 de alta velocidad. ¡El mejor ambiente joven de la ciudad!",
-                "Vive la historia de Salamanca desde este piso situado justo frente a la fachada de la Universidad. Edificio histórico rehabilitado con todas las comodidades modernas. Cuenta con calefacción central (fundamental para el invierno salmantino) y una cocina de concepto abierto donde compartir cenas con el resto de compañeros.",
-                "Increíble ubicación en la Avenida Blasco Ibáñez. Este piso destaca por su luminosidad y su proximidad tanto a las facultades del Campus de Tarongers como a la zona de ocio nocturno y la playa. Gran terraza común con vistas a la avenida y cocina con dos frigoríficos para mayor comodidad de los inquilinos.",
-                "Piso señorial en el centro de Sevilla, a un paso de la Puerta Jerez y la Universidad de Sevilla. Habitaciones amplias, suelos de mármol y aire acondicionado centralizado. El ambiente en la casa es tranquilo, enfocado a estudiantes de último curso o opositores que necesiten un entorno de silencio y respeto.",
-                "Moderno apartamento en el ensanche bilbaíno. A 5 minutos de la parada de metro de Moyua y rodeado de servicios. El piso ha sido reformado íntegramente este año, contando con mobiliario de diseño nórdico, lavavajillas y zona de lavandería independiente. Perfecto para jóvenes profesionales o estudiantes de Deusto.",
-                "Típico piso compostelano en la zona nueva, con amplias estancias y mucha luz natural. Muy bien comunicado con el Campus Sur de la USC. La cocina es el corazón de la casa, espaciosa y con una gran mesa de madera donde los compañeros suelen compartir el desayuno. Gastos de comunidad y agua incluidos en el precio.",
-                "Vivienda exclusiva en pleno Paseo de la Castellana. Urbanización con seguridad 24h y excelentes calidades. El piso cuenta con un salón de 40m2 con ventanales de suelo a techo, cocina de diseño y climatización por suelo radiante. Una opción premium para quienes buscan confort y prestigio en la capital.",
-                "Piso totalmente reformado en la calle Balmes, una de las arterias principales de Barcelona. El inmueble dispone de una distribución inteligente que garantiza la privacidad de cada habitación. Zonas comunes minimalistas y funcionales con limpieza semanal incluida en las zonas comunes.",
-                "Encantador piso en la calle Cruz Conde, la zona más comercial y vibrante de Córdoba. A un paseo de la Facultad de Filosofía y Letras. Destaca por su patio cordobés privado de uso exclusivo para los inquilinos, ideal para las noches de primavera. Mobiliario rústico renovado y aire acondicionado en todas las estancias.",
-                "Piso acogedor y muy cálido en el centro de Burgos. Cuenta con un sistema de calefacción central excepcional y ventanas de climalit de triple vidrio para asegurar el máximo confort térmico. Ambiente familiar y tranquilo, perfecto para estudiantes de la UBU que busquen sentirse como en casa.",
-                "Vivir en la calle Mayor es vivir la esencia de Madrid. Este piso ofrece una experiencia urbana total, a un paso de la Puerta del Sol. A pesar de su ubicación céntrica, es sorprendentemente silencioso gracias a su orientación. Cocina equipada con horno, microondas y cafetera de cápsulas.",
-                "Magnífico ático cerca de la Sagrada Familia. La joya de la vivienda es su terraza privada de 20m2 con vistas directas al templo. El piso tiene una decoración bohemia y artística, ideal para perfiles creativos que busquen inspiración. Muy bien conectado con las líneas azul y morada de metro.",
-                "Piso de lujo en la calle Recogidas, Granada. Reformado con materiales de primera calidad, suelos de tarima y paredes lisas. Todas las estancias son exteriores y cuentan con mucha luz. Cocina con isla central de mármol y todos los pequeños electrodomésticos necesarios (tostadora, batidora, hervidor).",
-                "Vivienda reformada en la Avenida de la Constitución, Sevilla. Vistas inmejorables a la Catedral desde el salón. El piso combina elementos clásicos con una decoración contemporánea. Se busca un perfil de inquilino ordenado y responsable. Ambiente internacional y multicultural.",
-                "Piso con vistas panorámicas a la Ría de Vigo en la calle Urzaiz. Muy espacioso, con un gran salón-comedor donde se organizan noches de cine entre compañeros. Edificio con conserje y recogida de basuras. Situado en la zona comercial con todos los servicios a la mano.",
-                "Ubicación inmejorable en la calle Portales, Logroño. El piso es muy luminoso y cuenta con una reforma de estilo industrial con paredes de ladrillo visto. A poca distancia de la zona de tapeo y de las facultades de la Universidad de La Rioja. Ambiente dinámico y joven.",
-                "Elegante piso en la calle Alfonso I, el corazón de Zaragoza. Edificio histórico rehabilitado con un portal impresionante. El piso cuenta con techos decorados con molduras, calefacción individual y una cocina muy moderna que contrasta con el estilo clásico de la vivienda.",
-                "Piso moderno y funcional en la calle Marqués de Larios, Málaga. Disfruta de vivir en la calle más famosa de la ciudad, a un paso del puerto y de la playa de la Malagueta. Aire acondicionado en todas las habitaciones, fundamental para el verano malagueño. Mobiliario nuevo a estrenar.",
-                "Vivienda con sabor canario en el barrio de Vegueta, Las Palmas. Techos altísimos de madera y grandes ventanales. El piso tiene una atmósfera zen y tranquila, ideal para estudiantes que teletrabajen o necesiten concentración. Muy cerca de la catedral y de las zonas de museos.",
-                "Piso espacioso y señorial en la calle Real de A Coruña. Vistas laterales al mar y mucha luz de tarde. La cocina es enorme y está totalmente equipada para los amantes de la gastronomía. Edificio con ascensor y portal reformado sin barreras arquitectónicas.",
-                "Exclusivo piso en la calle Colón de Valencia. Una de las zonas más seguras y prestigiosas. El piso ha sido diseñado por un decorador de interiores, buscando el equilibrio entre elegancia y funcionalidad. Servicio de portería y recogida de paquetes incluido.",
-                "Vivir en la Avenida de la Libertad de San Sebastián es un privilegio. A escasos metros de la Playa de la Concha. El piso es sobrio, elegante y muy silencioso. Cuenta con una gran librería en el salón compartida para todos los inquilinos. Ambiente de estudio serio.",
-                "Piso recién reformado en la calle Toro, Salamanca. Todo el mobiliario, camas y electrodomésticos han sido comprados este año. Diseño funcional pensado para el aprovechamiento máximo del espacio. Muy cerca de la Plaza Mayor y de las facultades del campus centro.",
-                "Apartamento moderno en la calle Santiago de Valladolid. Muy luminoso gracias a su altura. Cuenta con un salón amplio con sofá chaiselongue y televisión 4K para uso común. Cocina con placa de inducción y horno pirolítico. Se busca compañero para larga estancia.",
-                "Piso con carácter en el casco antiguo de Oviedo. Muros de piedra vista que mantienen la temperatura ideal durante todo el año. El interior ha sido reformado con un estilo contemporáneo y minimalista. Ambiente muy acogedor y tranquilo para el descanso.",
-                "Vivienda práctica y funcional en el centro de Zamora. Ideal para estudiantes que busquen una opción económica sin renunciar a la calidad. Habitaciones bien equipadas y cocina con mesa de comedor. Muy cerca de la estación de autobuses y tren.",
-                "Piso con mucho encanto en el centro de Logroño. Destaca por su galería acristalada llena de plantas que aporta una luz especial a toda la casa. El ambiente entre los compañeros es muy familiar, suelen compartir gastos de limpieza y compra común.",
-                "Ático luminoso en Santa Cruz de Tenerife con balcones que ofrecen vistas despejadas al mar. El piso es muy fresco gracias a la ventilación cruzada y cuenta con toldos eléctricos. Decoración fresca y veraniega, con plantas naturales y mucha luz natural durante todo el día."
+                "Piso compartido muy bien ubicado en la zona de Argüelles, a menos de diez minutos andando de la Complutense. Somos tres personas jóvenes entre estudiantes y trabajadores, el ambiente es muy tranquilo y nos llevamos genial. La cocina está totalmente equipada con microondas, horno, lavavajillas y una nevera grande. Tenemos un salón bastante amplio con sofá de esquina donde solemos ver alguna peli los viernes por la noche. Los turnos de limpieza se respetan siempre y hay un cuadrante en la puerta de la cocina. Los gastos de comunidad están incluidos en el alquiler, pero la luz, el agua y el gas se pagan aparte divididos entre todos, suele salir por unos 35-40 euros al mes cada uno dependiendo de la época del año.",
+                "Buscamos compañero/a para nuestro piso en el Eixample barcelonés. Es un piso amplio de techos altos con suelos hidráulicos originales y mucha personalidad. No somos de fiestas en casa entre semana, preferimos un ambiente tranquilo para estudiar o trabajar desde casa. La cocina tiene vitrocerámica, horno y una mesa donde solemos desayunar juntos. Tenemos dos baños completos, lo cual es bastante cómodo. El WiFi de fibra óptica está incluido en el precio, pero la luz y el agua van aparte según factura real que nos llega cada dos meses. La zona está muy bien comunicada con metro y autobuses, y tenemos un Mercadona a dos calles.",
+                "Piso ideal para universitarios en pleno centro de Granada, justo al lado de la famosa calle Pedro Antonio de Alarcón donde está todo el ambiente estudiantil. El piso fue reformado hace dos años con muebles nuevos y un estilo moderno que mola bastante. Las habitaciones son todas exteriores, así que entra mucha luz natural. Tenemos WiFi de alta velocidad incluido en el precio porque sabemos que es fundamental para estudiar. La cocina es bastante amplia y tiene todo lo necesario. El salón es acogedor, con una Smart TV donde vemos partidos o series. Los gastos de luz y agua se dividen entre todos de forma justa.",
+                "¿Te apetece vivir justo enfrente de la Universidad de Salamanca? Nuestro piso está en un edificio antiguo rehabilitado que tiene un encanto especial, con su portal de piedra y todo. La vivienda está muy bien cuidada y cuenta con calefacción central, que aquí en Salamanca es fundamental porque los inviernos son bastante duros. La cocina es de concepto abierto y solemos hacer cenas de compañeros de vez en cuando. Tenemos un salón con buena luz y un sofá grande. Los gastos de calefacción están incluidos en la comunidad, pero la luz va aparte. Buscamos a alguien para todo el curso que sea responsable y buen compañero.",
+                "Vivienda en la Avenida Blasco Ibáñez, perfecta para estudiantes de la UPV o de la UV porque ambos campus quedan muy cerca. El piso es bastante grande con casi 100 metros cuadrados y tiene una terraza donde da el sol prácticamente todo el día, que es genial para tender la ropa o tomar algo por las tardes. Estamos a un paso de la zona de ocio pero el piso es tranquilo por dentro. Tenemos dos baños para compartir entre los que vivimos, así que por las mañanas no hay agobios. La cocina tiene dos frigoríficos porque somos varios y así cada uno tiene su espacio. Luz y agua aparte.",
+                "Piso señorial en pleno centro de Sevilla, a pocos minutos de la Puerta de Jerez y de las facultades del centro. Es una casa con mucho carácter, suelos de mármol y techos altos con molduras. El ambiente en casa es muy tranquilo y silencioso, perfecto si estás opositando, preparando un máster o simplemente necesitas concentrarte. Tenemos aire acondicionado centralizado que en Sevilla es absolutamente imprescindible de mayo a octubre. Los gastos de electricidad van aparte porque el aire consume bastante y cada uno gestiona su uso. Buscamos a gente responsable y madura.",
+                "Compartimos piso en el centro de Bilbao, estamos muy cerca de la parada de Moyua y del Casco Viejo. El piso es moderno porque se reformó hace poco y tiene un estilo nórdico con muebles de IKEA que queda muy bien. Tenemos zona de lavandería independiente con lavadora y tendedero interior para los días de lluvia, que aquí en Bilbao ya sabéis que son muchos. La cocina tiene lavavajillas, que es un lujo en un piso compartido. Los suministros de luz y gas se pagan aparte divididos entre todos. Buscamos a alguien joven que trabaje o estudie y que sea limpio en las zonas comunes.",
+                "Piso acogedor en la zona nueva de Santiago de Compostela, una zona con mucha vida estudiantil, supermercados cerca y buenas comunicaciones con el Campus Sur de la USC. El piso es muy cálido gracias a la calefacción de gas y las ventanas de doble cristal. La cocina es el corazón de la casa, tiene una mesa grande de madera donde solemos desayunar juntos y compartir conversaciones. Los gastos de comunidad y agua están incluidos en el precio del alquiler, la luz y el gas van aparte. Buscamos a alguien tranquilo que quiera un hogar de verdad para todo el curso.",
+                "Vivimos en la zona norte de Madrid, cerca de Paseo de la Castellana, y nos sobra una habitación que queremos llenar con alguien majo. El piso es moderno con calefacción central incluida y un salón bastante grande con ventanales de suelo a techo que dan mucha luminosidad. La cocina está bien equipada con electrodomésticos buenos. Es un barrio tranquilo con buen aparcamiento si tienes coche y hay un supermercado abajo. Los gastos de luz van aparte. Buscamos a alguien trabajador que quiera un sitio tranquilo para descansar después de la jornada laboral.",
+                "Piso reformado en la calle Balmes de Barcelona, una de las calles principales del Eixample. Somos tres compañeros de entre 22 y 26 años que nos llevamos muy bien. Buscamos a alguien de edad similar para que el ambiente sea fluido y natural. La limpieza de las zonas comunes es fundamental para nosotros, tenemos un cuadrante de turnos semanales que se respeta a rajatabla. La cocina es funcional y tiene todo lo necesario. WiFi de fibra incluido. Los gastos de luz y agua van aparte según la factura que llega cada mes.",
+                "Piso con mucho encanto en el centro de Córdoba, en la calle Cruz Conde que es la zona más comercial. Lo mejor que tiene es un patio cordobés privado donde solemos cenar en las noches de verano, es una maravilla. Estamos cerca de todas las facultades del centro y del casco histórico. Las habitaciones son amplias y exteriores. Tenemos aire acondicionado en todas las estancias, que en Córdoba es totalmente necesario. Los suministros de electricidad y agua van aparte del alquiler. Buscamos a alguien sociable y buen compañero.",
+                "Buscamos compañero/a para nuestro piso en el centro de Burgos. Es una zona residencial muy tranquila y el piso es súper calentito gracias a la calefacción individual de gas que funciona de maravilla. Tenemos ventanas de doble acristalamiento que aíslan fenomenal del frío burgalés. El salón es amplio y cómodo, perfecto para ver pelis o estudiar en el sofá. La cocina tiene horno, microondas y espacio de sobra. Los gastos de calefacción y luz van aparte y los dividimos entre todos. Buscamos a alguien para larga estancia que quiera sentirse como en casa.",
+                "¿Te imaginas vivir al lado de la Puerta del Sol en Madrid? Nuestro piso es súper céntrico pero da a un patio interior, así que no se oyen ruidos de la calle para nada. Es bastante sorprendente lo silencioso que es para estar donde está. Somos estudiantes de máster y opositores, así que el ambiente es de estudio y trabajo. La cocina está equipada con horno, microondas y cafetera de cápsulas que compartimos. Tenemos WiFi rápido incluido. Los gastos de luz van aparte y se dividen de forma justa.",
+                "Ático increíble cerca de la Sagrada Familia en Barcelona. Lo mejor de todo es la terraza privada de unos 20 metros cuadrados con vistas directas al templo, que de noche iluminado es una pasada. Solemos subir a estudiar, tomar algo o simplemente charlar al atardecer. El ambiente del piso es artístico y relajado, nos consideramos un piso LGTBI-friendly y abierto a todo tipo de perfiles. La cocina es pequeña pero funcional. Estamos bien conectados con metro. Los suministros van aparte del alquiler.",
+                "Piso de estudiantes en Granada, zona Recogidas, que es una de las calles más céntricas y bien comunicadas. El piso está muy bien, con muebles nuevos que compramos este año y mucha luz natural en todas las habitaciones. Tenemos aire acondicionado individual en cada habitación, que en Granada se agradece mucho en verano. La cocina tiene una isla central muy práctica y está completamente equipada. Los gastos de luz y agua no están incluidos en el precio y se dividen entre todos. Buscamos gente con ganas de disfrutar del ambiente granadino respetando el descanso.",
+                "Compartimos piso en la Avenida de la Constitución de Sevilla, con vistas espectaculares a la Catedral desde el salón que te dejan sin palabras. Es un piso muy grande y señorial con habitaciones amplias y bien ventiladas. El ambiente es multicultural porque hemos tenido compañeros de varios países y nos gusta esa diversidad. Buscamos un perfil de inquilino ordenado y responsable, no se permiten fiestas en casa pero sí visitas normales. Los gastos de luz y aire acondicionado van aparte del alquiler.",
+                "Piso espacioso en la calle Urzaiz de Vigo, con vistas a la Ría que son bastante bonitas especialmente al atardecer. Tenemos un salón-comedor muy bien montado con sofá grande y tele, donde organizamos noches de cine entre compañeros de vez en cuando. El edificio tiene conserje y servicio de recogida de basuras, lo cual es muy cómodo. Estamos en plena zona comercial con todos los servicios a mano. Los suministros se pagan aparte. Buscamos a alguien que trabaje o estudie por la zona.",
+                "Ubicación inmejorable en la calle Portales de Logroño, que es el centro absoluto de la ciudad. El piso es muy luminoso gracias a los grandes ventanales y cuenta con una reforma de estilo moderno con algunos toques industriales que le dan personalidad. Estamos a poca distancia de las facultades de la Universidad de La Rioja y de la famosa zona de tapeo de la calle Laurel. El ambiente del piso es dinámico y joven. Los gastos de internet están incluidos en el precio, la luz va aparte.",
+                "Piso céntrico en la calle Alfonso I de Zaragoza, que es el corazón histórico de la ciudad. Es una casa antigua que se reformó con muy buen gusto, conservando los techos con molduras y el suelo original pero con una cocina moderna que contrasta genial. El ambiente es muy tranquilo porque todos estudiamos o trabajamos y nos respetamos las horas de estudio. Tenemos calefacción individual que cada uno regula. Los suministros de luz y gas van aparte del alquiler divididos entre todos.",
+                "Piso funcional y muy bien ubicado en la calle Marqués de Larios de Málaga, la calle más famosa de la ciudad. Vivir aquí es una pasada por la cercanía absoluta a todo: playas, centro comercial, puerto y zonas de ocio. Tenemos aire acondicionado en todas las habitaciones que es totalmente necesario para sobrevivir al verano malagueño. El mobiliario es nuevo y moderno. Los gastos de electricidad van aparte del alquiler. Buscamos a alguien joven para completar el piso, se pide fianza de un mes.",
+                "Vivienda con sabor canario en el barrio de Vegueta de Las Palmas. Los techos son altísimos de madera y las ventanas enormes dejan entrar una luz natural espectacular durante todo el día. Es un piso con un ambiente zen y tranquilo, ideal para estudiantes que teletrabajen o necesiten mucha concentración. Estamos cerca de la catedral y de la zona de museos. La cocina es amplia y funcional. Los gastos de agua y luz van aparte, aunque aquí no se gasta mucho en calefacción por el clima.",
+                "Piso espacioso y señorial en la calle Real de A Coruña, con vistas laterales al mar y mucha luz natural especialmente por las tardes. La cocina es enorme y está totalmente equipada, nos gusta cocinar juntos los fines de semana y compartir cenas de grupo. El edificio tiene ascensor y portal reformado. Buscamos a alguien que sea limpio, participe de la vida del piso y tenga ganas de buen rollo. Los suministros se dividen entre todos mensualmente.",
+                "Piso en la calle Colón de Valencia, una de las zonas más seguras y bien comunicadas de la ciudad. El piso ha sido decorado por un interiorista y tiene un estilo muy cuidado que combina elegancia y funcionalidad. Tenemos portero físico y servicio de recogida de paquetes. Los gastos de suministros se dividen entre todos cada mes de forma transparente. Buscamos un perfil de estudiante serio o joven trabajador que valore la buena convivencia.",
+                "Vivir en la Avenida de la Libertad de San Sebastián es un auténtico privilegio. Estamos a escasos metros de la Playa de la Concha y del centro de la ciudad. El piso es sobrio, elegante y sorprendentemente silencioso para estar donde está. Tenemos una gran librería en el salón compartida por todos los inquilinos, lo que le da un toque muy acogedor. El ambiente es de estudio serio. No se permite fumar dentro. Los suministros van aparte.",
+                "Piso recién reformado en la calle Toro de Salamanca, a un paseo de la Plaza Mayor y de las facultades del campus centro. Todo el mobiliario, las camas y los electrodomésticos son nuevos de este año. El diseño del piso es funcional y pensado para aprovechar al máximo cada metro cuadrado. Tenemos calefacción central incluida que es importantísima aquí. Los gastos de luz van aparte. Buscamos a alguien joven para el próximo cuatrimestre.",
+                "Apartamento moderno y luminoso en la calle Santiago de Valladolid, una zona céntrica y bien comunicada. El piso tiene bastante altura así que entra mucha luz por las ventanas. El salón es amplio con sofá chaiselongue y televisión 4K para uso común. La cocina tiene placa de inducción, horno y espacio para que cocinemos todos sin agobios. Los gastos de suministros van aparte. Buscamos a alguien para compartir los próximos meses, preferiblemente larga estancia.",
+                "Piso con mucho carácter en el casco antiguo de Oviedo. Las paredes son de piedra vista original y el interior combina ese estilo rústico con una reforma contemporánea y minimalista que queda muy bonita. El piso mantiene una temperatura ideal durante todo el año gracias a los muros gruesos. El ambiente es muy acogedor y tranquilo. La limpieza de zonas comunes se hace por turnos semanales. Los gastos de suministros van aparte entre todos.",
+                "Vivienda práctica y funcional en el centro de Zamora, a pocos minutos de la estación de autobuses y tren. Es ideal para estudiantes que busquen algo con buena relación calidad-precio sin renunciar a vivir cómodos. Las habitaciones son amplias y la cocina tiene mesa de comedor para comer todos juntos. Tenemos WiFi de fibra incluido en el alquiler. Los gastos de luz y agua van aparte y suelen ser bastante económicos.",
+                "Piso con mucho encanto en el centro de Logroño, muy cerca de la calle Laurel. Lo más especial es su galería acristalada llena de plantas que aporta una luz natural preciosa a toda la casa y que cuidamos entre todos. El ambiente entre los compañeros es muy familiar y solemos compartir gastos de limpieza y alguna compra común. La cocina es amplia y está bien equipada. Los suministros de luz y agua van aparte.",
+                "Ático luminoso en Santa Cruz de Tenerife con balcones que ofrecen vistas despejadas al mar, despertarse aquí es una maravilla cada mañana. El piso es muy fresco gracias a la ventilación cruzada natural y los toldos eléctricos para los días de sol intenso. La decoración es fresca y veraniega, con plantas naturales por toda la casa. El ambiente es relajado y sociable. Los gastos de agua y luz van aparte del alquiler, aunque aquí no se gasta prácticamente nada en calefacción."
         };
 
         String[] centrosInteresSeed = {
@@ -252,179 +259,168 @@ public class DatabaseSeeder implements CommandLineRunner {
                 "ESADE Business School", "Universidad de Córdoba", "Universidad de Burgos",
                 "Universidad Autónoma de Madrid", "Universidad Pompeu Fabra", "Universidad de Granada (Cartuja)",
                 "Universidad de Sevilla (Campus Viapol)", "Universidad de Vigo", "Universidad de La Rioja",
-                "Universidad de Zaragoza", "Universidad de Málaga", "Universidad de Las Palmas",
-                "Universidad de A Coruña", "Universidad de Valencia (Tarongers)", "Universidad del País Vasco",
-                "Universidad de Salamanca (Campus Canalejas)", "Universidad de Valladolid", "Universidad de Oviedo",
-                "Universidad de Salamanca (Campus Zamora)", "Universidad de La Rioja", "Universidad de La Laguna"
+                "Universidad Zaragoza", "Universidad Málaga", "Universidad Las Palmas",
+                "Universidad A Coruña", "Universidad Valencia", "Universidad País Vasco",
+                "Univ. Salamanca", "Univ. Valladolid", "Univ. Oviedo", "Univ. Zamora", "Univ. Rioja", "Univ. Laguna"
         };
 
         String[] titulosHabitacion = {
-                "Habitación luminosa con escritorio amplio",
-                "Dormitorio exterior con armario empotrado",
-                "Habitación con balcón y vistas a la calle",
-                "Dormitorio acogedor con buena ventilación",
-                "Habitación espaciosa con vestidor",
-                "Habitación con baño privado incluido",
-                "Dormitorio silencioso orientación norte",
-                "Habitación reformada con suelo de parquet",
-                "Dormitorio principal con dos ventanas",
-                "Habitación con aire acondicionado propio",
-                "Dormitorio ideal para estudiar en paz",
-                "Habitación amueblada lista para entrar a vivir",
-                "Habitación con zona de estudio separada",
-                "Dormitorio con cama doble y mesitas",
-                "Habitación acogedora y muy cálida en invierno",
-                "Dormitorio con vistas al patio interior",
-                "Habitación minimalista y moderna",
-                "Dormitorio con estantería y escritorio de madera",
-                "Habitación con luz natural todo el día",
-                "Dormitorio amplio con espacio para sofá",
-                "Habitación con cama canapé de gran capacidad",
-                "Dormitorio interior muy silencioso",
-                "Habitación ideal para estudiantes de máster",
-                "Dormitorio con televisión inteligente",
-                "Habitación con nevera ejecutiva privada",
-                "Dormitorio tipo suite con zona de estar",
-                "Habitación con decoración industrial",
-                "Dormitorio con gran espejo de cuerpo entero",
-                "Habitación en piso con terraza compartida",
-                "Dormitorio con cerradura independiente"
+                "Habitación luminosa con escritorio grande",
+                "Dormitorio exterior cerca de la universidad",
+                "Habitación cómoda en piso compartido",
+                "Dormitorio con mucha luz y buen ambiente",
+                "Habitación tranquila para estudiantes",
+                "Dormitorio con baño propio y armario",
+                "Habitación con cama doble en el centro",
+                "Dormitorio luminoso con vistas a la calle",
+                "Habitación económica con todo incluido",
+                "Dormitorio moderno en piso reformado",
+                "Habitación con balcón privado",
+                "Habitación para parejas - Muy amplia",
+                "Dormitorio acogedor en zona tranquila",
+                "Habitación con cerradura y WiFi",
+                "Dormitorio con estanterías y luz",
+                "Habitación grande con vistas al centro",
+                "Dormitorio compartido - Ambiente joven",
+                "Habitación para entrar ya - Todo nuevo",
+                "Dormitorio con aire acondicionado",
+                "Habitación amplia cerca del metro",
+                "Habitación para parejas - Bien equipada",
+                "Dormitorio interior pero muy silencioso",
+                "Habitación con vestidor y escritorio",
+                "Dormitorio clásico en piso señorial",
+                "Habitación con nevera pequeña privada",
+                "Dormitorio moderno - Estudiantes máster",
+                "Habitación soleada con buena ventilación",
+                "Dormitorio en piso de trabajadores jóvenes",
+                "Habitación con vistas al mar y terraza",
+                "Habitación segura con llave propia"
         };
 
         String[] descripcionesHabitacion = {
-                "Habitación diseñada para el máximo rendimiento académico. Cuenta con un escritorio de 160cm de largo, silla ergonómica de oficina y una estantería de gran capacidad para libros. La ventana es amplia y recibe luz solar directa desde media mañana, ideal para no encender la luz hasta el atardecer.",
-                "Dormitorio exterior muy espacioso con un armario empotrado de tres cuerpos totalmente vestido por dentro. La cama cuenta con un canapé para almacenamiento extra. Orientación este, por lo que disfrutarás de unos amaneceres espectaculares. Suelo de madera natural que aporta calidez a la estancia.",
-                "Habitación con encanto que dispone de balcón privado hacia la calle peatonal. Incluye mesa y silla de exterior para poder desayunar o estudiar al aire libre. La estancia es muy luminosa y cuenta con cortinas opacas para garantizar el descanso. Techos altos con vigas decorativas.",
-                "Dormitorio muy tranquilo situado en la zona interior del piso, lejos del ruido de la calle. Es ideal para personas con sueño ligero o que necesiten silencio absoluto para concentrarse. Equipada con cama individual de alta gama, cómoda de cuatro cajones y perchero auxiliar para abrigos.",
-                "Habitación tipo suite de grandes dimensiones que incluye un vestidor independiente con espejo de cuerpo entero. La iluminación LED es regulable en intensidad para crear diferentes ambientes. Incluye alfombra de pelo corto y una butaca de lectura junto a la lámpara de pie. Un lujo en el centro.",
-                "Máxima privacidad con tu propio baño integrado en la habitación. El baño ha sido reformado recientemente con plato de ducha de resina y grifería termostática. La habitación cuenta además con un armario de puertas correderas de espejo y cama doble de 135cm con almohada viscoelástica.",
-                "Dormitorio orientado al norte, manteniendo una temperatura fresca y agradable incluso en los meses más calurosos. Cuenta con una decoración en tonos blancos y madera clara que potencia la sensación de amplitud. Escritorio junto al radiador para las sesiones de estudio invernales.",
-                "Estancia recién pintada con suelo de parquet de roble recién pulido. Dispone de un gran espejo de pared y estanterías flotantes para organización. La cama tiene un colchón de muelles ensacados que garantiza un soporte firme y cómodo. Ventana de doble acristalamiento para aislamiento total.",
-                "Dormitorio principal de la vivienda que destaca por tener dos grandes ventanales que inundan la estancia de luz. Cuenta con un rincón de estar con un pequeño sofá y mesa auxiliar. El armario es de estilo vintage restaurado, aportando mucha personalidad a la habitación.",
-                "Habitación equipada con split de aire acondicionado de bajo consumo y mando a distancia. Incluye una Smart TV de 32 pulgadas anclada a la pared para disfrutar de tus series con total comodidad desde la cama. Mobiliario moderno en blanco brillante y escritorio con organizador de cables.",
-                "El rincón perfecto para un opositor o estudiante de máster. La habitación está insonorizada acústicamente y cuenta con iluminación técnica para el estudio. Dispone de una pizarra blanca de cristal y una cajonera con llave para documentos importantes. Ambiente de paz asegurado.",
-                "Habitación totalmente amueblada y equipada con ropa de cama, edredón nórdico y juego de toallas de algodón. El escritorio incluye lámpara flexo y conexión por cable Ethernet además de WiFi. Armario con perchas incluidas y zapatero auxiliar tras la puerta.",
-                "Estancia singular con la zona de estudio claramente diferenciada de la zona de descanso mediante una estantería divisoria. Esto ayuda a desconectar después de las horas de trabajo o estudio. Cama de 105cm con cabecero tapizado en gris y mesita de noche con cargador USB.",
-                "Habitación espaciosa con cama doble de 150cm y mesitas de noche a ambos lados con lámparas de lectura individuales. Ideal para quienes valoran el espacio al dormir. Incluye una cómoda amplia para ropa doblada y un perchero estilo burro para la ropa de diario.",
-                "Dormitorio muy acogedor gracias a su orientación sur y el sistema de calefacción individual. Cuenta con una decoración en tonos cálidos, alfombra de lana y plantas naturales que purifican el aire. Escritorio de madera maciza y silla tapizada muy cómoda.",
-                "Habitación luminosa con vistas al patio interior ajardinado del edificio, lo que garantiza ausencia total de ruidos de tráfico. Despertarás con el sonido de los pájaros en pleno centro. Armario de dos puertas y escritorio de cristal templado muy moderno.",
-                "Estancia de diseño minimalista con muebles de líneas nórdicas y funcionales. Dispone de una gran pizarra de corcho para notas y fotos. La cama cuenta con un protector de colchón de alta calidad y edredón de temporada. Lámpara de techo regulable en temperatura de color.",
-                "Habitación con mobiliario de madera natural que incluye una estantería de pared a pared, ideal para amantes de la lectura o coleccionistas. El escritorio es muy robusto y cuenta con mucha profundidad. Incluye puf de relax en una esquina de la habitación.",
-                "Dormitorio con luz natural radiante durante todo el día gracias a su gran ventanal sin obstáculos enfrente. Cuenta con persianas eléctricas para un control total de la luz. Mesa de estudio amplia con silla de ruedas profesional y cajonera metálica.",
-                "Estancia muy amplia que permite tener una pequeña zona de salón propia con una butaca y mesita de centro. Es casi como un pequeño estudio dentro del piso compartido. Armario empotrado de gran altura que aprovecha hasta el último centímetro de almacenaje.",
-                "Habitación práctica con cama tipo canapé de gran capacidad, ideal para guardar maletas o ropa de otra temporada. El colchón es nuevo y de firmeza media-alta. Escritorio plegable que permite ganar espacio cuando no se está estudiando. Armario de puertas blancas.",
-                "Dormitorio interior muy silencioso y recogido, perfecto para personas que buscan un ambiente de recogimiento. La iluminación artificial ha sido cuidada para que sea cálida y acogedora. Cuenta con un gran espejo vestidor y un armario modular muy bien organizado.",
-                "Estancia pensada para perfiles senior o de postgrado que busquen un entorno serio y profesional. Mobiliario de alta calidad, colores neutros y conexión a internet por cable de alta velocidad. Se requiere un perfil responsable para esta habitación.",
-                "Habitación tecnológica que incluye televisión inteligente con aplicaciones de streaming instaladas, altavoz inteligente y regleta con protección de picos para el ordenador. Escritorio con iluminación LED ambiental personalizable en colores.",
-                "Dormitorio con el lujo de tener una pequeña nevera ejecutiva propia para guardar bebidas y snacks. Ideal para mayor comodidad y privacidad. Incluye también un pequeño microondas personal. Cama individual con canapé y escritorio de esquina.",
-                "Habitación tipo suite con una zona de estar integrada que incluye un sillón orejero y una mesita para el café. Es la habitación más grande del piso y ofrece una independencia total. Armario de cuatro puertas y grandes ventanales con visillos.",
-                "Estancia con una decoración de estilo industrial muy marcada: paredes de ladrillo visto, lámparas de filamento y muebles de hierro y madera. Muy moderna y con mucha personalidad. Escritorio amplio y cama con base tapizada negra.",
-                "Dormitorio que destaca por su gran espejo de cuerpo entero y una zona de tocador o escritorio auxiliar. Muy buena iluminación cenital y lámpara de mesa para ambiente. Armario con puertas correderas de cristal opaco muy elegante.",
-                "Habitación con acceso directo y exclusivo a una parte de la terraza compartida, permitiendo tener tu propio rincón exterior. Cama doble, armario de gran capacidad y mesa de estudio orientada hacia la terraza para disfrutar de las vistas mientras trabajas.",
-                "Máxima seguridad y privacidad para tu tranquilidad: la habitación dispone de puerta con cerradura independiente y llave propia. Estancia totalmente reformada con acabados de primera, mobiliario nuevo y una distribución muy aprovechada."
+                "Hola! Alquilamos esta habitación que es bastante luminosa y da a la calle principal. Tiene una cama de 90cm con un colchón que compramos hace poco y un escritorio grande de madera con mucho espacio para el portátil, apuntes y lo que necesites. El armario es de dos puertas y no está nada mal de tamaño, cabe ropa de invierno y verano sin problemas. Los gastos de luz y agua no están incluidos en el alquiler, solemos pagar unos 35€ al mes cada uno aproximadamente dependiendo de la temporada. Buscamos a alguien que sea limpio, ordenado y buen compañero de piso. Si te interesa no dudes en escribirnos por la plataforma, podemos quedar para que veas el piso en persona sin compromiso.",
+                "Dormitorio exterior que da a una calle tranquila y peatonal. Tiene mucha luz por las mañanas así que prácticamente no necesitas encender la luz artificial hasta que se pone el sol por la tarde. El armario es empotrado de tres cuerpos y cabe muchísima ropa, además tiene cajones interiores para organizar bien tus cosas. La luz y el gas se pagan aparte cada dos meses según la factura real que nos llega, suele salir por poco la verdad porque somos cuidadosos con el consumo. Buscamos a alguien que estudie o trabaje y que quiera un ambiente sano y de respeto en casa. Nos da igual chico o chica.",
+                "Habitación bastante amplia con balcón propio hacia una calle peatonal donde se puede desayunar tranquilamente cuando hace buen tiempo. Tiene cortinas opacas por si quieres dormir a oscuras los fines de semana. El precio del alquiler no incluye los suministros: la luz va aparte según lo que gastemos entre todos dividido de forma equitativa, y el agua está incluida en la comunidad. Somos gente abierta, maja y sociable, buscamos a alguien similar para completar el piso este curso. Lo ideal sería alguien que se quede como mínimo hasta junio.",
+                "Dormitorio interior pero con una ventana grande que da a un patio luminoso lleno de plantas del vecino de abajo. Lo mejor de esta habitación es el silencio absoluto que hay, no se oye absolutamente nada de la calle y eso se nota mucho a la hora de estudiar o dormir. Tenemos WiFi de fibra óptica simétrica de 600Mb que va volando, eso sí está incluido en el precio del alquiler. La luz se paga aparte según consumo real. Buscamos a alguien que respete las horas de sueño del resto de compañeros y que sea responsable con la limpieza.",
+                "Habitación de buen tamaño con un vestidor independiente separado por una cortina donde cabe toda tu ropa perfectamente organizada. Tiene una cama de 105cm con cabecero tapizado y un escritorio funcional junto a la ventana donde entra buena luz para estudiar. Los gastos de agua y luz se dividen equitativamente cada mes entre todos los que vivimos aquí. El ambiente es de estudio y trabajo durante la semana, nada de fiestas ruidosas. Los fines de semana cada uno hace su vida sin problemas, pero a veces nos juntamos para cenar algo.",
+                "Esta habitación tiene su propio baño dentro con ducha, lavabo y espejo grande, que es un lujazo absoluto para un piso compartido porque no tienes que compartirlo con nadie más. Tiene una cama doble de 135cm bastante cómoda y un escritorio nuevo de IKEA con cajones. La luz y el agua se pagan aparte del alquiler, pero al tener baño propio el reparto de gastos se hace de forma diferenciada y justa. Buscamos a alguien para larga estancia, mínimo un curso académico completo porque no queremos estar cambiando de compañero cada dos meses.",
+                "Dormitorio orientado al norte, que en esta ciudad es perfecto porque no hace mucho calor en verano y te ahorras el aire acondicionado. Tiene un armario grande de dos puertas con barra y estantes, además de una estantería auxiliar para libros y apuntes de la carrera. La calefacción es eléctrica con radiadores individuales y la pagamos aparte en los meses de invierno, pero suele ser poco porque el piso conserva bien el calor. Somos dos chicos estudiantes y buscamos a un tercer compañero o compañera que encaje con nuestro estilo de vida tranquilo.",
+                "Habitación recién pintada en blanco que queda muy limpia y con muebles nuevos que compramos este verano pasado. La cama tiene un colchón de firmeza media bastante cómodo y el escritorio es amplio con espacio para dos pantallas si haces teletrabajo. Los gastos de suministros como luz y agua suelen ser unos 40€ al mes por persona y no están incluidos en la renta mensual. Buscamos a alguien joven de entre 20 y 30 años que tenga ganas de buen rollo y que sea cuidadoso con las zonas comunes del piso.",
+                "Esta es la habitación principal del piso y tiene dos ventanales enormes que dan a la calle principal. Entra un sol increíble especialmente por las tardes y la sensación de amplitud es muy agradable. Además del armario tiene una cómoda de cajones y un perchero de pie que queda muy bien. La luz va aparte del alquiler y la dividimos entre todos. Nos gusta hacer vida en el salón compartido pero respetamos muchísimo la intimidad y el espacio de cada uno cuando está en su habitación con la puerta cerrada.",
+                "Dormitorio con aire acondicionado individual tipo split con mando a distancia, que en esta ciudad se agradece muchísimo sobre todo en los meses de julio y agosto. También tiene una televisión pequeña de 32 pulgadas por si quieres ver algo cómodamente antes de dormir sin molestar a nadie. Los gastos de luz no están incluidos en el alquiler mensual ya que cada uno controla su propio consumo y así es más justo para todos. Buscamos a alguien que sea ordenado sobre todo en la cocina y en el baño que compartimos.",
+                "Habitación perfecta para alguien que necesite mucha concentración para estudiar o que esté opositando. Es súper silenciosa porque da al patio interior del edificio y no se oye nada de ruido. Tiene una lámpara de escritorio profesional con luz regulable muy buena para leer y un escritorio amplio donde cabe de todo. Los suministros se pagan aparte cada mes divididos entre los compañeros. Tenemos un cuadrante de limpieza semanal para que las zonas comunes estén siempre impecables. Solo buscamos gente realmente responsable.",
+                "HABITACIÓN PARA PAREJAS. Es bastante grande, de unos 18 metros cuadrados, y tiene una cama de 150cm con colchón nuevo. Si sois dos personas el gasto de suministros sube un poco porque lógicamente se consume más agua y luz, pero se habla tranquilamente entre todos y se llega a un acuerdo justo sin problemas. Tenemos un salón amplio donde hacemos vida. Buscamos a gente sociable y limpia que se integre bien en la dinámica del piso. Venid a conocerlo cuando queráis, sin compromiso.",
+                "Habitación con la zona de estudio y la de descanso claramente separadas gracias a una estantería grande que hace de separador visual. Es casi como tener tu propio mini-apartamento dentro del piso compartido, que mola bastante. Tiene cama de 105cm con cabecero tapizado y una mesa de estudio con flexo. La luz se paga aparte del alquiler mensual. Buscamos a alguien que trabaje o esté haciendo un máster porque somos gente muy tranquila durante la semana y necesitamos ese ambiente para rendir.",
+                "Habitación bastante acogedora con cama doble de 135cm y mesitas de noche a ambos lados con sus lámparas de lectura individuales. Los gastos de suministros se pagan aparte cada mes divididos entre todos los compañeros de piso de forma transparente. El ambiente del piso es dinámico y respetuoso a la vez, nos gusta hacer cenas de grupo de vez en cuando y compartir momentos en el salón. Buscamos a alguien que pueda entrar a vivir ya o en las próximas semanas.",
+                "Dormitorio muy cálido y acogedor con suelo de madera natural que le da un toque especial. Tiene un armario grande de dos puertas con mucho espacio interior y un escritorio moderno con cajones para organizar tus cosas de estudio. La calefacción central está incluida en los gastos de comunidad así que no pagas extra por eso, pero la luz eléctrica sí va aparte y se divide entre todos. Buscamos a alguien que quiera quedarse todo el curso escolar como mínimo para tener estabilidad.",
+                "Habitación luminosa que da al patio de manzanas del edificio, así que es tremendamente tranquila para dormir y no hay absolutamente ningún ruido molesto de tráfico. Los gastos de luz y agua se pagan aparte mensualmente divididos entre todos los inquilinos del piso. Nos gusta hacer planes juntos de vez en cuando como ir de cañas después de clase o cenar fuera los viernes. El buen rollo en el piso está garantizado, llevamos viviendo juntos más de un año y nos va genial.",
+                "Estancia minimalista y funcional con lo justo y necesario para vivir cómodo: cama individual de 90cm, armario amplio de dos cuerpos y mesa de estudio con flexo LED. Los suministros de luz y agua se pagan aparte del alquiler cada mes. Somos todos estudiantes de entre 20 y 25 años y buscamos a alguien de nuestra edad más o menos para que haya buen feeling y la convivencia sea natural. No nos gustan las fiestas en casa pero sí salir juntos de vez en cuando.",
+                "Habitación con muebles de madera muy bonitos estilo nórdico y una estantería enorme de pared a pared con mucho espacio para tus libros, fotos y recuerdos. La luz y el agua no están incluidos en el precio del alquiler pero suele salir bastante económico porque somos pocos viviendo y no gastamos demasiado. Buscamos a alguien que sea educado, tranquilo y que no le importe compartir un rato de charla en la cocina mientras desayunamos por las mañanas.",
+                "Dormitorio con luz natural prácticamente todo el día porque estamos en un quinto piso sin edificios altos enfrente que tapen el sol. No se oyen ruidos de la calle para nada gracias a las ventanas de doble acristalamiento que pusieron en la última reforma. Los gastos de la luz van aparte del alquiler y se dividen entre todos. El WiFi de fibra óptica está incluido en el precio. Buscamos a alguien que sea limpio y ordenado, es lo más importante para nosotros a la hora de elegir compañero.",
+                "Habitación muy amplia de unos 20 metros cuadrados donde cabe perfectamente un sillón o una butaca de lectura además de la cama y el escritorio. Es la habitación más grande de toda la casa y tiene mucha ventilación natural. La luz se paga aparte del alquiler. Somos trabajadores jóvenes de entre 24 y 28 años con horarios normales de oficina y buscamos a alguien en una situación similar. Muy buen rollo garantizado, nos gusta hacer barbacoas en verano.",
+                "HABITACIÓN IDEAL PARA PAREJAS. Tiene muchísimo espacio con una cama de 150cm con canapé abatible para guardar maletas y ropa de temporada debajo. Los gastos de suministros como luz y agua se dividen entre los que vivamos en el piso en ese momento, si sois pareja contáis como dos a la hora de repartir. Buscamos a una pareja joven que sea sociable, limpia y que respete las normas básicas de convivencia del piso que tenemos colgadas en la cocina.",
+                "Dormitorio interior muy recogido y silencioso, perfecto para personas que necesitan dormir bien y descansar de verdad después de un día largo de trabajo o estudio. La iluminación artificial está muy bien pensada con luces cálidas LED que crean un ambiente acogedor por las noches. La luz va aparte del alquiler y se paga cada mes. Tenemos un ambiente de confianza total entre los compañeros y nos gusta sentirnos cómodos en casa como si fuera la de toda la vida.",
+                "Habitación para alguien que busque algo en buen estado y con calidad. El mobiliario está prácticamente nuevo y el colchón es de este año, a estrenar. Los suministros de luz y agua se facturan aparte del alquiler mensual y se reparten de forma justa entre todos. Buscamos preferiblemente a un perfil de postgrado, investigador o joven profesional que valore la tranquilidad. Imprescindible ser una persona ordenada y respetuosa con los horarios de descanso.",
+                "Habitación tecnológica pensada para gente que trabaja o estudia con ordenador. Tiene WiFi de alta velocidad con router en el pasillo que da señal perfecta y varias tomas de corriente junto al escritorio para montar tu setup completo sin problemas. La luz se paga aparte según el consumo que marque la factura bimensual. Ideal si eres gamer con cascos, programador o trabajas desde casa en remoto. Buscamos a alguien respetuoso con los horarios nocturnos porque el resto madrugamos bastante.",
+                "Esta habitación tiene su propia nevera pequeña tipo minibar dentro para que tengas tus bebidas y snacks siempre a mano sin ocupar espacio en la nevera grande de la cocina que compartimos entre todos. Es muy cómoda y práctica para el día a día. La luz se paga aparte del alquiler dividida entre los compañeros. Somos gente abierta y con buen rollo, buscamos a alguien que aporte buena energía al piso. Se pide un mes de fianza al entrar que se devuelve íntegra al irse.",
+                "Dormitorio moderno y bien organizado con un estilo tipo estudio independiente dentro del piso compartido. Tienes mucha autonomía y espacio propio con escritorio grande, armario empotrado y una zona de relax con un puf. Los suministros de luz y agua no están incluidos en el precio del alquiler mensual y se dividen entre todos. Buscamos a alguien joven y responsable que quiera una estancia larga y estable con nosotros, preferiblemente de varios meses como mínimo.",
+                "Habitación con un estilo industrial bastante original que le da mucha personalidad: paredes blancas, muebles en tonos oscuros de hierro y madera, y una lámpara de filamento en la mesita de noche que queda muy bien. La luz va aparte del alquiler y se paga cada mes. Tenemos una cocina muy bien equipada con lavavajillas, vitrocerámica y horno, y nos gusta mantenerla siempre impecable. Buscamos a alguien que comparta ese mismo hábito de limpieza y orden en las zonas comunes.",
+                "Habitación en un piso que cuenta con portero físico y mucha seguridad en el portal, es un barrio residencial muy tranquilo donde se puede pasear a cualquier hora sin problemas. Los gastos de suministros se reparten mensualmente entre todos de forma justa y transparente con una hoja de cálculo compartida. Buscamos a alguien educado y maduro que valore la buena convivencia, el silencio por las noches entre semana y la limpieza de las zonas comunes.",
+                "Habitación con vistas al mar si te asomas al balcón, que es una maravilla despertarse así cada mañana con la brisa marina y la luz del amanecer. La habitación es fresca y luminosa durante todo el día. La luz y el agua se pagan aparte del alquiler pero aquí no se gasta mucho la verdad porque el clima es suave y no necesitamos calefacción prácticamente nunca. Buscamos a alguien con buena onda que quiera disfrutar de la vida compartida en la isla.",
+                "Habitación segura con cerradura propia y llave independiente para tu total tranquilidad y privacidad. Está recién reformada con pintura nueva, enchufes nuevos y todo está listo para entrar a vivir mañana mismo sin necesidad de comprar nada. Los gastos de luz y agua no están incluidos en el alquiler y se dividen entre todos los compañeros. Buscamos a alguien que busque estabilidad, larga estancia y un buen ambiente entre compañeros de piso."
         };
 
         int totalHabitacionesCreadas = 0;
         for (int i = 0; i < 20; i++) {
-            // Asignar un usuario dueño aleatorio de los 30 creados
             Usuario dueno = usuarios.get(random.nextInt(usuarios.size()));
 
-            int numBanos = 1 + random.nextInt(2); // 1 o 2
-            int planta = random.nextInt(6);       // 0 a 5
-            double superficie = 55 + random.nextInt(71); // 55-125 m²
+            int numBanos = 1 + random.nextInt(2); 
+            int planta = random.nextInt(6);       
+            double superficie = 55 + random.nextInt(71); 
 
             Piso piso = Piso.builder()
                     .usuario(dueno)
                     .direccion(pisoData[i][0])
                     .ciudad(pisoData[i][1])
                     .codigoPostal(pisoData[i][2])
-                    .numHabitacionesTotal((i < 10) ? 2 : 1) // Sincronizado con las habitaciones reales
+                    .numHabitacionesTotal((i < 10) ? 2 : 1) 
                     .numBanos(numBanos)
                     .planta(planta)
                     .superficieTotalM2(superficie)
                     .tieneWifi(true)
                     .tieneAscensor(planta > 1 || random.nextBoolean())
                     .descripcionGlobal(descripcionesPiso[i])
-                    .admiteFumadores(random.nextInt(4) == 0)   // ~25%
-                    .admiteMascotas(random.nextInt(3) == 0)     // ~33%
+                    .admiteFumadores(random.nextInt(4) == 0)   
+                    .admiteMascotas(random.nextInt(3) == 0)     
                     .admiteParejas(random.nextBoolean())
-                    .lgtbiFriendly(random.nextInt(3) != 0)      // ~66%
+                    .lgtbiFriendly(random.nextInt(3) != 0)      
                     .centroInteres(centrosInteresSeed[i % centrosInteresSeed.length])
                     .build();
 
             Piso pisoGuardado = pisoRepository.save(piso);
 
-            // ───────────────────────────────────────────────────
-            // 2.1 FOTOS DEL PISO (3 fotos por piso)
-            // ───────────────────────────────────────────────────
             int pisoNum = i + 1;
             for (int f = 1; f <= 3; f++) {
                 Foto fotoPiso = Foto.builder()
                         .piso(pisoGuardado)
                         .habitacion(null)
                         .urlAlmacenamiento("/api/uploads/fotos/piso-" + pisoNum + "/" + f + ".jpg")
-                        .esPrincipal(f == 1) // La primera foto es la portada del piso
+                        .esPrincipal(f == 1) 
                         .build();
                 fotoRepository.save(fotoPiso);
             }
 
-            // ───────────────────────────────────────────────────
-            // 2.2 HABITACIONES (Total 30 entre los 20 pisos)
-            // ───────────────────────────────────────────────────
-            int numHabs = (i < 10) ? 2 : 1; // 10 pisos con 2 habs y 10 con 1 hab = 30 total
+            int numHabs = (i < 10) ? 2 : 1; 
             
             for (int h = 0; h < numHabs; h++) {
-                totalHabitacionesCreadas++; // Contador global para las carpetas 1-30
+                totalHabitacionesCreadas++; 
                 
-                int tituloIdx = random.nextInt(titulosHabitacion.length);
-                int descIdx = random.nextInt(descripcionesHabitacion.length);
-                BigDecimal precio = BigDecimal.valueOf(180 + random.nextInt(221)); // 180-400 €
+                int tituloIdx = totalHabitacionesCreadas - 1; 
+                int descIdx = totalHabitacionesCreadas - 1;   
+                BigDecimal precio = BigDecimal.valueOf(250 + random.nextInt(251)); 
+
+                boolean aceptaParejas = (totalHabitacionesCreadas % 5 == 0); 
 
                 Habitacion hab = Habitacion.builder()
                         .piso(pisoGuardado)
                         .tituloAnuncio(titulosHabitacion[tituloIdx])
                         .precioMensual(precio)
                         .descripcionEspecifica(descripcionesHabitacion[descIdx])
-                        .estaDisponible(random.nextInt(5) != 0) // 80% disponibles
-                        .superficieM2(8.0 + random.nextInt(13))  // 8-20 m²
-                        .tieneBanoPrivado(random.nextInt(4) == 0) // ~25%
-                        .amueblada(random.nextInt(3) != 0)        // ~66%
+                        .estaDisponible(random.nextInt(10) != 0) 
+                        .superficieM2(10.0 + random.nextInt(15)) 
+                        .tieneBanoPrivado(totalHabitacionesCreadas % 4 == 0) 
+                        .amueblada(true)
                         .exterior(random.nextBoolean())
-                        .tieneCalefaccion(random.nextBoolean())
+                        .tieneCalefaccion(true)
                         .tieneAireAcondicionado(random.nextBoolean())
                         .build();
 
+                if (aceptaParejas) {
+                    pisoGuardado.setAdmiteParejas(true);
+                    pisoRepository.save(pisoGuardado);
+                }
+
                 Habitacion habGuardada = habitacionRepository.save(hab);
 
-                // ─────────────────────────────────────────────
-                // 2.3 FOTOS DE HABITACIÓN (Secuencial 1-30)
-                // ─────────────────────────────────────────────
                 int carpetaHab = totalHabitacionesCreadas; 
                 for (int fh = 1; fh <= 2; fh++) {
                     Foto fotoHab = Foto.builder()
                             .piso(pisoGuardado)
                             .habitacion(habGuardada)
                             .urlAlmacenamiento("/api/uploads/fotos/hab-" + carpetaHab + "/" + fh + ".jpg")
-                            .esPrincipal(false) // Solo los pisos tienen foto principal en el E-R
+                            .esPrincipal(false) 
                             .build();
                     fotoRepository.save(fotoHab);
                 }
             }
         }
 
-        System.out.println("✅ DataLoader: 20 pisos con habitaciones y fotos creados correctamente en toda España.");
-        System.out.println("🏠 DataLoader: Seed completado. Base de datos lista.");
+        System.out.println("✅ DataLoader: 20 pisos con 30 anuncios REALISTAS y datos de contacto creados.");
+        System.out.println("🏠 DataLoader: Seed completado con teléfonos y emails en las descripciones.");
     }
 
-    /**
-     * Devuelve un color hex aleatorio (sin #) para los avatares de UI Avatars.
-     */
     private String getRandomColor(Random random) {
-        String[] colores = {
-                "6366f1", "ec4899", "f59e0b", "10b981", "3b82f6",
-                "8b5cf6", "ef4444", "14b8a6", "f97316", "06b6d4",
-                "a855f7", "84cc16", "e11d48", "0ea5e9", "d946ef"
-        };
+        String[] colores = {"6366f1", "ec4899", "f59e0b", "10b981", "3b82f6", "8b5cf6", "ef4444", "14b8a6", "f97316", "06b6d4", "a855f7", "84cc16", "e11d48", "0ea5e9", "d946ef"};
         return colores[random.nextInt(colores.length)];
     }
 }
