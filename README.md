@@ -1,7 +1,7 @@
-<![CDATA[<div align="center">
+<div align="center">
 
 # 🏠 PisoFácil
-
+        
 ### Plataforma de búsqueda de habitaciones en pisos compartidos
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.13-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
@@ -578,4 +578,3 @@ Este proyecto está bajo la licencia **MIT**. Ver el archivo [LICENSE](LICENSE) 
 <div align="center">
   <p><strong>PisoFácil</strong> — Hecho con ❤️ como TFG de 2.º DAM</p>
 </div>
-]]>
