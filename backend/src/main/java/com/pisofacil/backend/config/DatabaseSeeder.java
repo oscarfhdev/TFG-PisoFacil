@@ -336,14 +336,16 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             int numBanos = 1 + random.nextInt(2); 
             int planta = random.nextInt(6);       
-            double superficie = 55 + random.nextInt(71); 
+            double superficie = 55 + random.nextInt(71);
+            // Variedad de 1 a 4 habitaciones para que todos los filtros devuelvan resultados
+            int numHabsTotal = (i % 4) + 1;
 
             Piso piso = Piso.builder()
                     .usuario(dueno)
                     .direccion(pisoData[i][0])
                     .ciudad(pisoData[i][1])
                     .codigoPostal(pisoData[i][2])
-                    .numHabitacionesTotal(i < 10 ? 2 : 1) 
+                    .numHabitacionesTotal(numHabsTotal) 
                     .numBanos(numBanos)
                     .planta(planta)
                     .superficieTotalM2(superficie)
@@ -370,8 +372,9 @@ public class DatabaseSeeder implements CommandLineRunner {
                 fotoRepository.save(fotoPiso);
             }
 
-            int numHabs = i < 10 ? 2 : 1;
-            
+            // Crear al menos 1 habitación, y hasta numHabsTotal (máx 2 para el seeder)
+            int numHabs = Math.min(numHabsTotal, 2);
+
             for (int h = 0; h < numHabs; h++) {
                 totalHabitacionesCreadas++; 
                 

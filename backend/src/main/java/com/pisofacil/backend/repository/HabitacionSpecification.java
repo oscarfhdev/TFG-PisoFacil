@@ -72,10 +72,10 @@ public class HabitacionSpecification {
                 predicate = cb.and(predicate, cb.isTrue(piso.get("tieneAscensor")));
             }
 
-            // --- Filtro de número de habitaciones máximo del piso (para pisos pequeños) ---
+            // --- Filtro de número de habitaciones del piso (exacto) ---
             if (numHabitacionesMax != null && numHabitacionesMax > 0) {
                 predicate = cb.and(predicate,
-                    cb.lessThanOrEqualTo(piso.get("numHabitacionesTotal"), numHabitacionesMax));
+                    cb.equal(piso.get("numHabitacionesTotal"), numHabitacionesMax));
             }
 
             // --- Centro de interés ---
