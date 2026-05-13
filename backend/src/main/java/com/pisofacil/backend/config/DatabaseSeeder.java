@@ -378,8 +378,8 @@ public class DatabaseSeeder implements CommandLineRunner {
             for (int h = 0; h < numHabs; h++) {
                 totalHabitacionesCreadas++; 
                 
-                int tituloIdx = totalHabitacionesCreadas - 1;
-                int descIdx = totalHabitacionesCreadas - 1;
+                int tituloIdx = (totalHabitacionesCreadas - 1) % titulosHabitacion.length;
+                int descIdx = (totalHabitacionesCreadas - 1) % descripcionesHabitacion.length;
                 BigDecimal precio = BigDecimal.valueOf(250 + random.nextInt(251)); 
 
                 boolean aceptaParejas = (totalHabitacionesCreadas % 5 == 0); 
@@ -405,7 +405,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
                 Habitacion habGuardada = habitacionRepository.save(hab);
 
-                int carpetaHab = totalHabitacionesCreadas; 
+                int carpetaHab = ((totalHabitacionesCreadas - 1) % 30) + 1; // Ciclar entre hab-1 y hab-30
                 for (int fh = 1; fh <= 2; fh++) {
                     Foto fotoHab = Foto.builder()
                             .piso(pisoGuardado)
